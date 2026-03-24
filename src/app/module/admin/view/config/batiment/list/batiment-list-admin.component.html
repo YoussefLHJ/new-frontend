@@ -1,0 +1,296 @@
+<div class="grid"  *ngIf="listActionIsValid">
+    <div class="col-12">
+        <p-toast></p-toast>
+        <div class="card">
+            <p-toolbar styleClass="mb-4">
+                <ng-template pTemplate="left">
+                                            <button pButton pRipple label=" {{'new' | translate}}" icon="pi pi-plus" class="p-button-info mr-2 mb-2" (click)="openCreate()" *ngIf="createActionIsValid"></button>
+                    <button [disabled]="isSelectionDisabled()" pButton pRipple label=" {{'delete' | translate}}" icon="pi pi-trash" class="p-button-danger mr-2 mb-2" (click)=deleteMultiple()  *ngIf="deleteActionIsValid"></button>
+                    <button pButton pRipple label=" {{'search' | translate}}" icon="pi pi-{{findByCriteriaShow?'angle-down':'angle-right'}}" class="p-button-secondary mr-2 mb-2" (click)="this.showSearch()"></button>
+                </ng-template>
+                <ng-template pTemplate="right">
+                    <div class="flex">
+                        <p-splitButton label=" {{'export' | translate}}" icon="pi pi-download" styleClass="p-button-secondary" [model]="excelPdfButons"></p-splitButton>
+                            <button type="button" pButton label="Select File" icon="pi pi-cloud-upload" class="p-button-outlined" (click)="fileInput.click()" style="margin-right: 2%;margin-left:2%;min-width: 100px; display: flex; align-items: center; white-space: nowrap; padding-right:20px"></button>
+                            <input #fileInput id="file-upload" type="file" (change)="onExcelFileSelected($event)" accept=".xlsx, .xls" style="display: none;">
+                            <button pButton  (click)="importExcel()" *ngIf="excelFile" label="{{ 'Import' | translate }}" icon="pi pi-upload" styleClass="p-button-help" style="margin-right: 2%; padding-right:20px;"></button>
+                    </div>
+                </ng-template>
+
+            </p-toolbar>
+            <div *ngIf="findByCriteriaShow" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-4 border border-surface rounded-lg">
+
+
+                            <div class="flex flex-col gap-2">
+                                <label  class="text-sm font-semibold" for="1">{{'batiment.codeBatiment' | translate}}</label>
+                                <input  pInputText id="1" type="text"  [(ngModel)]="criteria.codeBatimentLike">
+                            </div>
+                            <div class="flex flex-col gap-2">
+                                <label  class="text-sm font-semibold" for="2">{{'batiment.complementAdresse' | translate}}</label>
+                                <input  pInputText id="2" type="text"  [(ngModel)]="criteria.complementAdresseLike">
+                            </div>
+                            <div class="flex flex-col gap-2">
+                                <label  class="text-sm font-semibold" for="3">{{'batiment.libelle' | translate}}</label>
+                                <input  pInputText id="3" type="text"  [(ngModel)]="criteria.libelleLike">
+                            </div>
+                                <div class="flex flex-col gap-2">
+                                    <label  class="text-sm font-semibold" for="4-1">{{'batiment.nombreEtagesMin' | translate}}</label>
+                                    <p-inputNumber  mode="decimal" [(ngModel)]="criteria.nombreEtagesMin" id="4-1"></p-inputNumber>
+                                </div>
+                                <div class="flex flex-col gap-2">
+                                    <label  class="text-sm font-semibold" for="4-2">{{'batiment.nombreEtagesMax' | translate}}</label>
+                                    <p-inputNumber  mode="decimal" [(ngModel)]="criteria.nombreEtagesMax" id="4-2"></p-inputNumber>
+                                </div>
+                                <div class="flex flex-col gap-2">
+                                    <label  class="text-sm font-semibold" for="5-1">{{'batiment.nombrePointsLivraisonMin' | translate}}</label>
+                                    <p-inputNumber  mode="decimal" [(ngModel)]="criteria.nombrePointsLivraisonMin" id="5-1"></p-inputNumber>
+                                </div>
+                                <div class="flex flex-col gap-2">
+                                    <label  class="text-sm font-semibold" for="5-2">{{'batiment.nombrePointsLivraisonMax' | translate}}</label>
+                                    <p-inputNumber  mode="decimal" [(ngModel)]="criteria.nombrePointsLivraisonMax" id="5-2"></p-inputNumber>
+                                </div>
+                                <div class="flex flex-col gap-2">
+                                    <label  class="text-sm font-semibold" for="6-1">{{'batiment.nombreLieuxReleveMin' | translate}}</label>
+                                    <p-inputNumber  mode="decimal" [(ngModel)]="criteria.nombreLieuxReleveMin" id="6-1"></p-inputNumber>
+                                </div>
+                                <div class="flex flex-col gap-2">
+                                    <label  class="text-sm font-semibold" for="6-2">{{'batiment.nombreLieuxReleveMax' | translate}}</label>
+                                    <p-inputNumber  mode="decimal" [(ngModel)]="criteria.nombreLieuxReleveMax" id="6-2"></p-inputNumber>
+                                </div>
+                                <div class="flex flex-col gap-2">
+                                    <label  class="text-sm font-semibold" for="7-1">{{'batiment.nombreLieuxConsommationMin' | translate}}</label>
+                                    <p-inputNumber  mode="decimal" [(ngModel)]="criteria.nombreLieuxConsommationMin" id="7-1"></p-inputNumber>
+                                </div>
+                                <div class="flex flex-col gap-2">
+                                    <label  class="text-sm font-semibold" for="7-2">{{'batiment.nombreLieuxConsommationMax' | translate}}</label>
+                                    <p-inputNumber  mode="decimal" [(ngModel)]="criteria.nombreLieuxConsommationMax" id="7-2"></p-inputNumber>
+                                </div>
+
+                            <div class="flex flex-col gap-2">
+                                <label class="text-sm font-semibold" for="8-1">{{'batiment.dateCreationMin' | translate}}</label>
+                                <p-calendar class="w-full" [(ngModel)]="criteria.dateCreationFrom"
+                                            id="8-1" dateFormat="dd-MM-yy"  [showIcon]="true"  class="p-fluid"></p-calendar>
+                            </div>
+
+                            <div class="flex flex-col gap-2">
+                                <label  class="text-sm font-semibold" for="8-2">{{'batiment.dateCreationMax' | translate}}</label>
+                                <p-calendar class="w-full" [(ngModel)]="criteria.dateCreationTo"
+                                            id="8-2" dateFormat="dd-MM-yy"  [showIcon]="true" class="p-fluid"></p-calendar>
+                            </div>
+
+                        <div class="flex flex-col gap-2">
+                            <label  class="text-sm font-semibold" for="10-2">{{'batiment.commune' | translate}}</label>
+                                <p-dropdown [options]="communes" [(ngModel)]="criteria.commune" id="10" [filter]="true" class="w-full"
+                                            [showClear]="true"  placeholder="{{'batiment.commune' | translate}}" optionLabel="libelle">
+                                </p-dropdown>
+                        </div>
+                            <div class="flex flex-col gap-2">
+                                <label  class="text-sm font-semibold" for="11">{{'batiment.actif' | translate}}</label>
+                                <p-dropdown id="11" [options]="yesOrNoActif" [(ngModel)]="criteria.actif" class="w-full"
+                                            [filter]="false" [showClear]="true"  placeholder="{{'batiment.actif' | translate}}" optionLabel="label" optionValue="value">
+                                </p-dropdown>
+                            </div>
+                        <div class="flex flex-col gap-2">
+                            <label  class="text-sm font-semibold" for="12-2">{{'batiment.lotReleve' | translate}}</label>
+                                <p-dropdown [options]="lotReleves" [(ngModel)]="criteria.lotReleve" id="12" [filter]="true" class="w-full"
+                                            [showClear]="true"  placeholder="{{'batiment.lotReleve' | translate}}" optionLabel="numero">
+                                </p-dropdown>
+                        </div>
+
+                <div class="col-span-full flex justify-end mt-4">
+                    <button pButton pRipple label="{{'validate' | translate}}" class="px-4 py-2 rounded-md" (click)="findPaginatedByCriteria()">
+                        <i class="pi pi-sort-amount-down"></i> {{'validate' | translate}}
+                    </button>
+                </div>
+            </div>
+
+                <p-table #dt [value]="items" [columns]="cols" [rows]="8" [paginator]="false"
+                         [globalFilterFields]="['codeBatiment', 'complementAdresse', 'libelle', 'nombreEtages', 'nombrePointsLivraison', 'nombreLieuxReleve', 'nombreLieuxConsommation', 'dateCreation', 'communelibelle', 'actif', 'lotRelevenumero']" [(selection)]="selections"
+                         [rowHover]="true" dataKey="id" styleClass="p-datatable-customers"
+                         currentPageReportTemplate="{{'les éléments de {first} à {last} sur {totalRecords} ' | translate}}"
+                         [showCurrentPageReport]="true" [rowsPerPageOptions]="[10,25,50]" selectionMode="multiple">
+                    <ng-template pTemplate="caption">
+                        <div class="flex flex-col md:flex-row justify-between items-center p-2 gap-4">
+                            <h5 class="text-center md:text-left">{{'batiment.header' | translate}}</h5>
+                            <span class="relative w-full md:w-auto">
+                            <p-iconfield iconPosition="left" class="w-full md:w-auto">
+							  <p-inputicon class="pi pi-search" />
+                              <input pInputText type="text" placeholder="{{'searchInput' | translate}}"
+                                     (input)="dt.filterGlobal($event.target.value, 'contains')"
+                                     class="w-full md:w-72 border border-gray-300 rounded-md p-2 focus:ring focus:ring-blue-300" />
+                            </p-iconfield>
+						</span>
+                        </div>
+                    </ng-template>
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th style="width: 3rem">
+                                <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                            </th>
+                                    
+                        <th pSortableColumn="codeBatiment">
+                            <div class="p-d-flex p-jc-between p-ai-center">
+                                <span class="mr-2">{{'batiment.codeBatiment' | translate}}</span>
+                                <p-sortIcon field="codeBatiment"></p-sortIcon>
+                                <p-columnFilter type="text" field="element.codeBatiment" display="menu" class="ml-auto"></p-columnFilter>
+                            </div>
+                        </th>
+                                
+                                    
+                        <th pSortableColumn="complementAdresse">
+                            <div class="p-d-flex p-jc-between p-ai-center">
+                                <span class="mr-2">{{'batiment.complementAdresse' | translate}}</span>
+                                <p-sortIcon field="complementAdresse"></p-sortIcon>
+                                <p-columnFilter type="text" field="element.complementAdresse" display="menu" class="ml-auto"></p-columnFilter>
+                            </div>
+                        </th>
+                                
+                                    
+                        <th pSortableColumn="libelle">
+                            <div class="p-d-flex p-jc-between p-ai-center">
+                                <span class="mr-2">{{'batiment.libelle' | translate}}</span>
+                                <p-sortIcon field="libelle"></p-sortIcon>
+                                <p-columnFilter type="text" field="element.libelle" display="menu" class="ml-auto"></p-columnFilter>
+                            </div>
+                        </th>
+                                
+                                    
+                        <th pSortableColumn="nombreEtages">
+                            <div class="p-d-flex p-jc-between p-ai-center">
+                                <span class="mr-2">{{'batiment.nombreEtages' | translate}}</span>
+                                <p-sortIcon field="nombreEtages"></p-sortIcon>
+                            </div>
+                        </th>
+                                
+                                    
+                        <th pSortableColumn="nombrePointsLivraison">
+                            <div class="p-d-flex p-jc-between p-ai-center">
+                                <span class="mr-2">{{'batiment.nombrePointsLivraison' | translate}}</span>
+                                <p-sortIcon field="nombrePointsLivraison"></p-sortIcon>
+                            </div>
+                        </th>
+                                
+                                    
+                        <th pSortableColumn="nombreLieuxReleve">
+                            <div class="p-d-flex p-jc-between p-ai-center">
+                                <span class="mr-2">{{'batiment.nombreLieuxReleve' | translate}}</span>
+                                <p-sortIcon field="nombreLieuxReleve"></p-sortIcon>
+                            </div>
+                        </th>
+                                
+                                    
+                        <th pSortableColumn="nombreLieuxConsommation">
+                            <div class="p-d-flex p-jc-between p-ai-center">
+                                <span class="mr-2">{{'batiment.nombreLieuxConsommation' | translate}}</span>
+                                <p-sortIcon field="nombreLieuxConsommation"></p-sortIcon>
+                            </div>
+                        </th>
+                                
+                                    
+                        <th pSortableColumn="dateCreation">
+                            <div class="p-d-flex p-jc-between p-ai-center">
+                                <span class="mr-2">{{'batiment.dateCreation' | translate}}</span>
+                                <p-sortIcon field="dateCreation"></p-sortIcon>
+                            </div>
+                        </th>
+                                
+                                    
+                        <th pSortableColumn="commune">
+                            <div class="p-d-flex p-jc-between p-ai-center">
+                                <span class="mr-2">{{'batiment.commune' | translate}}</span>
+                                <p-sortIcon field="commune"></p-sortIcon>
+                            </div>
+                        </th>
+                                
+                                    <!-- 
+                        <th pSortableColumn="actif">
+                            <div class="p-d-flex p-jc-between p-ai-center">
+                                <span class="mr-2">{{'batiment.actif' | translate}}</span>
+                                <p-sortIcon field="actif"></p-sortIcon>
+                            </div>
+                        </th>
+                                --> 
+                                    <!-- 
+                        <th pSortableColumn="lotReleve">
+                            <div class="p-d-flex p-jc-between p-ai-center">
+                                <span class="mr-2">{{'batiment.lotReleve' | translate}}</span>
+                                <p-sortIcon field="lotReleve"></p-sortIcon>
+                            </div>
+                        </th>
+                                --> 
+                            <th>Actions</th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-element>
+                        <tr>
+                            <td>
+                                <p-tableCheckbox [value]="element"></p-tableCheckbox>
+                            </td>
+                                    
+                        <td>{{element.codeBatiment}}</td>
+                            
+                                    
+                        <td>{{element.complementAdresse}}</td>
+                            
+                                    
+                        <td>{{element.libelle}}</td>
+                            
+                                    
+                        <td>{{element.nombreEtages}}</td>
+                            
+                                    
+                        <td>{{element.nombrePointsLivraison}}</td>
+                            
+                                    
+                        <td>{{element.nombreLieuxReleve}}</td>
+                            
+                                    
+                        <td>{{element.nombreLieuxConsommation}}</td>
+                            
+                                    
+                        <td>{{element.dateCreation | date :'dd/MM/yyyy HH:mm' }}</td>
+                            
+                                    
+                        <td>{{element.commune?.libelle}}</td>
+                            
+                                     <!-- 
+                        <td><i *ngIf="element.actif" class="pi pi-check checked-toogle"></i>
+                            <i *ngIf="!element.actif" class="pi pi-times unchecked-toogle"></i>
+                        </td>
+                             --> 
+                                     <!-- 
+                        <td>{{element.lotReleve?.numero}}</td>
+                             --> 
+                            <td>
+                                <button pButton pRipple icon="pi pi-pencil"  class="p-button-rounded p-button-info mr-2" (click)="edit(element)"  *ngIf="editActionIsValid"></button>
+                                <button pButton pRipple icon="pi pi-list" class="p-button-rounded p-button-secondary mr-2" (click)="view(element)"  *ngIf="viewActionIsValid"></button>
+                                    <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger mr-2" (click)="delete(element)"  *ngIf="deleteActionIsValid"></button>
+                                <button pButton pRipple icon="pi pi-copy" class="p-button-rounded p-button-raised p-button-warning mr-2" (click)="duplicate(element)"  *ngIf="duplicateActionIsValid"></button>
+                                    <button pButton pRipple icon="pi pi-download" class="p-button-rounded p-button-secondary" (click)="exportPdf(element)"></button>
+                            </td>
+                        </tr>
+                    </ng-template>
+
+                    <ng-template pTemplate="summary">
+                        <p-paginator  [rows]="10" [totalRecords]="totalRecords" (onPageChange)="onPage($event)"></p-paginator>
+                        <div class="p-d-flex p-ai-center p-jc-between">
+                            En totale il {{items ? totalRecords == 1 ? 'y a' : 'y a' : 'y a' }} {{items ? totalRecords : 0 }} {{items ? totalRecords == 1 ? 'batiment' : 'batiments' : 0 }}.
+                        </div>
+                    </ng-template>
+                </p-table>
+
+
+        </div>
+
+            <app-batiment-create-admin  *ngIf="createDialog  && createActionIsValid"></app-batiment-create-admin>
+            <app-batiment-edit-admin  *ngIf="editDialog  && editActionIsValid"></app-batiment-edit-admin>
+        <app-batiment-view-admin  *ngIf="viewDialog  && viewActionIsValid"></app-batiment-view-admin>
+        <p-confirmDialog [style]="{width: '450px'}"></p-confirmDialog>
+    </div>
+</div>
+
+<p-card header="Permission not allowed" *ngIf="!listActionIsValid">
+    <p class="m-0">
+        You don't have permission to access !
+    </p>
+</p-card>

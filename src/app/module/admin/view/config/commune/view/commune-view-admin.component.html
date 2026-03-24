@@ -1,0 +1,49 @@
+<p-dialog [(visible)]="viewDialog" [style]="{width: '70vw'}" header="{{'commune.tabPan' | translate}}" [modal]="true" styleClass="p-fluid">
+    <ng-template pTemplate="content">
+        <p-tabView>
+            <p-tabPanel header="{{'commune.tabPan' | translate}}">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 p-4">
+                                <div class="flex flex-col gap-2">
+                                    <label class="text-sm font-semibold" for="1">{{'commune.code' | translate}}</label>
+                                    <input  type="text" pInputText [disabled]="true" placeholder="{{'commune.code' | translate}}" autofocus  id="1" [ngModel]="item.code">
+                                </div>
+                                <div class="flex flex-col gap-2">
+                                    <label class="text-sm font-semibold" for="2">{{'commune.libelle' | translate}}</label>
+                                    <input  type="text" pInputText [disabled]="true" placeholder="{{'commune.libelle' | translate}}" autofocus  id="2" [ngModel]="item.libelle">
+                                </div>
+                                <div class="flex flex-col gap-2">
+                                    <label class="text-sm font-semibold" for="3">{{'commune.description' | translate}}</label>
+                                    <textarea id="3" pTextarea rows="5" cols="30" [disabled]="true" placeholder="{{'commune.description' | translate}}"  [ngModel]="item.description"></textarea>
+                                </div>
+                                <div class="flex flex-col gap-2">
+
+                                    <label class="text-sm font-semibold" for="4">{{'commune.actif' | translate}}</label>
+
+                                    <p-inputSwitch id="4"  [disabled]="true" [ngModel]="item.actif"></p-inputSwitch>
+
+                                </div>
+                                <div class="flex flex-col gap-2">
+                                    <label class="text-sm font-semibold" for="5">{{'commune.dateCreation' | translate}}</label>
+                                    <p-calendar class="w-full" id="5" [disabled]="true"  [showTime]="true" [showSeconds]="false" placeholder="{{'commune.dateCreation' | translate}}"  [ngModel]="item.dateCreation" dateFormat="{{dateFormat}}"></p-calendar>
+                                </div>
+                                <div class="flex flex-col gap-2">
+                                    <label class="text-sm font-semibold" for="6">{{'commune.dateMiseAJour' | translate}}</label>
+                                    <p-calendar class="w-full" id="6" [disabled]="true"  [showTime]="true" [showSeconds]="false" placeholder="{{'commune.dateMiseAJour' | translate}}"  [ngModel]="item.dateMiseAJour" dateFormat="{{dateFormat}}"></p-calendar>
+                                </div>
+                </div>
+            </p-tabPanel>
+
+        </p-tabView>
+
+    </ng-template>
+
+    <ng-template pTemplate="footer" >
+        <div class="flex justify-end p-4">
+            <div>
+                <button class="border border-gray-400 font-semibold py-2 px-4 rounded shadow" (click)="hideViewDialog()">
+                    <i class="pi pi-times"></i> Annuler
+                </button>
+            </div>
+        </div>
+    </ng-template>
+</p-dialog>

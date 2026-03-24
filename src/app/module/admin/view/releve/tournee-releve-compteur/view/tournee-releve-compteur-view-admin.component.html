@@ -1,0 +1,54 @@
+<p-dialog [(visible)]="viewDialog" [style]="{width: '70vw'}" header="{{'tourneeReleveCompteur.tabPan' | translate}}" [modal]="true" styleClass="p-fluid">
+    <ng-template pTemplate="content">
+        <p-tabView>
+            <p-tabPanel header="{{'tourneeReleveCompteur.tabPan' | translate}}">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 p-4">
+                            <div class="flex flex-col gap-2">
+                                <label class="text-sm font-semibold" for="1">{{'tourneeReleveCompteur.appareil' | translate}}</label>
+                                <input type="text" pInputText [disabled]="true" placeholder="{{'tourneeReleveCompteur.appareil' | translate}}" autofocus  id="1" [ngModel]="item.appareil?.numeroAppareil">
+                            </div>
+                                <div class="flex flex-col gap-2">
+                                    <label class="text-sm font-semibold" for="2">{{'tourneeReleveCompteur.indice' | translate}}</label>
+                                    <p-inputNumber id="2" [disabled]="true" placeholder="{{'tourneeReleveCompteur.indice' | translate}}" [ngModel]="item.indice"></p-inputNumber>
+                                </div>
+                                <div class="flex flex-col gap-2">
+                                    <label class="text-sm font-semibold" for="3">{{'tourneeReleveCompteur.indicePrecedent' | translate}}</label>
+                                    <p-inputNumber id="3" [disabled]="true" placeholder="{{'tourneeReleveCompteur.indicePrecedent' | translate}}" [ngModel]="item.indicePrecedent"></p-inputNumber>
+                                </div>
+                                <div class="flex flex-col gap-2">
+                                    <label class="text-sm font-semibold" for="4">{{'tourneeReleveCompteur.consommation' | translate}}</label>
+                                    <p-inputNumber id="4" [disabled]="true" placeholder="{{'tourneeReleveCompteur.consommation' | translate}}" [ngModel]="item.consommation"></p-inputNumber>
+                                </div>
+                                <div class="flex flex-col gap-2">
+                                    <label class="text-sm font-semibold" for="5">{{'tourneeReleveCompteur.seuilComsommation' | translate}}</label>
+                                    <p-inputNumber id="5" [disabled]="true" placeholder="{{'tourneeReleveCompteur.seuilComsommation' | translate}}" [ngModel]="item.seuilComsommation"></p-inputNumber>
+                                </div>
+                                <div class="flex flex-col gap-2">
+                                    <label class="text-sm font-semibold" for="6">{{'tourneeReleveCompteur.commentaire' | translate}}</label>
+                                    <textarea id="6" pTextarea rows="5" cols="30" [disabled]="true" placeholder="{{'tourneeReleveCompteur.commentaire' | translate}}"  [ngModel]="item.commentaire"></textarea>
+                                </div>
+                                <div class="flex flex-col gap-2">
+                                    <label class="text-sm font-semibold" for="7">{{'tourneeReleveCompteur.photo' | translate}}</label>
+                                    <input  type="text" pInputText [disabled]="true" placeholder="{{'tourneeReleveCompteur.photo' | translate}}" autofocus  id="7" [ngModel]="item.photo">
+                                </div>
+                            <div class="flex flex-col gap-2">
+                                <label class="text-sm font-semibold" for="8">{{'tourneeReleveCompteur.tourneeReleveDetail' | translate}}</label>
+                                <input type="text" pInputText [disabled]="true" placeholder="{{'tourneeReleveCompteur.tourneeReleveDetail' | translate}}" autofocus  id="8" [ngModel]="item.tourneeReleveDetail?.id">
+                            </div>
+                </div>
+            </p-tabPanel>
+
+        </p-tabView>
+
+    </ng-template>
+
+    <ng-template pTemplate="footer" >
+        <div class="flex justify-end p-4">
+            <div>
+                <button class="border border-gray-400 font-semibold py-2 px-4 rounded shadow" (click)="hideViewDialog()">
+                    <i class="pi pi-times"></i> Annuler
+                </button>
+            </div>
+        </div>
+    </ng-template>
+</p-dialog>

@@ -1,0 +1,103 @@
+<p-dialog [(visible)]="viewDialog" [style]="{width: '70vw'}" header="{{'tourneeLotReleve.tabPan' | translate}}" [modal]="true" styleClass="p-fluid">
+    <ng-template pTemplate="content">
+        <p-tabView>
+            <p-tabPanel header="{{'tourneeLotReleve.tabPan' | translate}}">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 p-4">
+                                <div class="flex flex-col gap-2">
+                                    <label class="text-sm font-semibold" for="1">{{'tourneeLotReleve.numero' | translate}}</label>
+                                    <input  type="text" pInputText [disabled]="true" placeholder="{{'tourneeLotReleve.numero' | translate}}" autofocus  id="1" [ngModel]="item.numero">
+                                </div>
+                                <div class="flex flex-col gap-2">
+                                    <label class="text-sm font-semibold" for="2">{{'tourneeLotReleve.libelle' | translate}}</label>
+                                    <input  type="text" pInputText [disabled]="true" placeholder="{{'tourneeLotReleve.libelle' | translate}}" autofocus  id="2" [ngModel]="item.libelle">
+                                </div>
+                                <div class="flex flex-col gap-2">
+                                    <label class="text-sm font-semibold" for="3">{{'tourneeLotReleve.annee' | translate}}</label>
+                                    <p-inputNumber id="3" [disabled]="true" placeholder="{{'tourneeLotReleve.annee' | translate}}" [ngModel]="item.annee"></p-inputNumber>
+                                </div>
+                                <div class="flex flex-col gap-2">
+                                    <label class="text-sm font-semibold" for="4">{{'tourneeLotReleve.period' | translate}}</label>
+                                    <p-inputNumber id="4" [disabled]="true" placeholder="{{'tourneeLotReleve.period' | translate}}" [ngModel]="item.period"></p-inputNumber>
+                                </div>
+                                <div class="flex flex-col gap-2">
+                                    <label class="text-sm font-semibold" for="5">{{'tourneeLotReleve.jourDebutReleve' | translate}}</label>
+                                    <p-inputNumber id="5" [disabled]="true" placeholder="{{'tourneeLotReleve.jourDebutReleve' | translate}}" [ngModel]="item.jourDebutReleve"></p-inputNumber>
+                                </div>
+                                <div class="flex flex-col gap-2">
+                                    <label class="text-sm font-semibold" for="6">{{'tourneeLotReleve.moisDebutReleve' | translate}}</label>
+                                    <p-inputNumber id="6" [disabled]="true" placeholder="{{'tourneeLotReleve.moisDebutReleve' | translate}}" [ngModel]="item.moisDebutReleve"></p-inputNumber>
+                                </div>
+                                <div class="flex flex-col gap-2">
+                                    <label class="text-sm font-semibold" for="7">{{'tourneeLotReleve.nbLots' | translate}}</label>
+                                    <p-inputNumber id="7" [disabled]="true" placeholder="{{'tourneeLotReleve.nbLots' | translate}}" [ngModel]="item.nbLots"></p-inputNumber>
+                                </div>
+                                <div class="flex flex-col gap-2">
+                                    <label class="text-sm font-semibold" for="8">{{'tourneeLotReleve.nbBatiments' | translate}}</label>
+                                    <p-inputNumber id="8" [disabled]="true" placeholder="{{'tourneeLotReleve.nbBatiments' | translate}}" [ngModel]="item.nbBatiments"></p-inputNumber>
+                                </div>
+                                <div class="flex flex-col gap-2">
+                                    <label class="text-sm font-semibold" for="9">{{'tourneeLotReleve.nbCompteurs' | translate}}</label>
+                                    <p-inputNumber id="9" [disabled]="true" placeholder="{{'tourneeLotReleve.nbCompteurs' | translate}}" [ngModel]="item.nbCompteurs"></p-inputNumber>
+                                </div>
+                                <div class="flex flex-col gap-2">
+                                    <label class="text-sm font-semibold" for="10">{{'tourneeLotReleve.nbCompteursBatiment' | translate}}</label>
+                                    <p-inputNumber id="10" [disabled]="true" placeholder="{{'tourneeLotReleve.nbCompteursBatiment' | translate}}" [ngModel]="item.nbCompteursBatiment"></p-inputNumber>
+                                </div>
+                            <div class="flex flex-col gap-2">
+                                <label class="text-sm font-semibold" for="11">{{'tourneeLotReleve.lotReleve' | translate}}</label>
+                                <input type="text" pInputText [disabled]="true" placeholder="{{'tourneeLotReleve.lotReleve' | translate}}" autofocus  id="11" [ngModel]="item.lotReleve?.numero">
+                            </div>
+                                <div class="flex flex-col gap-2">
+
+                                    <label class="text-sm font-semibold" for="12">{{'tourneeLotReleve.actif' | translate}}</label>
+
+                                    <p-inputSwitch id="12"  [disabled]="true" [ngModel]="item.actif"></p-inputSwitch>
+
+                                </div>
+                                <div class="flex flex-col gap-2">
+                                    <label class="text-sm font-semibold" for="13">{{'tourneeLotReleve.dateCreation' | translate}}</label>
+                                    <p-calendar class="w-full" id="13" [disabled]="true"  [showTime]="true" [showSeconds]="false" placeholder="{{'tourneeLotReleve.dateCreation' | translate}}"  [ngModel]="item.dateCreation" dateFormat="{{dateFormat}}"></p-calendar>
+                                </div>
+                                <div class="flex flex-col gap-2">
+                                    <label class="text-sm font-semibold" for="14">{{'tourneeLotReleve.dateMiseAJour' | translate}}</label>
+                                    <p-calendar class="w-full" id="14" [disabled]="true"  [showTime]="true" [showSeconds]="false" placeholder="{{'tourneeLotReleve.dateMiseAJour' | translate}}"  [ngModel]="item.dateMiseAJour" dateFormat="{{dateFormat}}"></p-calendar>
+                                </div>
+                </div>
+            </p-tabPanel>
+
+                    <p-tabPanel header="{{'tourneeLotReleve.tourneeReleveDetails' | translate}}">
+                        <div class="card p-4">
+                            <p-table [value]="item.tourneeReleveDetails" [scrollable]="true" scrollHeight="200px">
+                                <ng-template pTemplate="header">
+                                    <tr>
+                                                    <th>Lot releve</th>
+                                                    <th>Nb batiments</th>
+                                                    <th>Nb compteurs</th>
+                                                    <th>Nb compteurs batiment</th>
+                                    </tr>
+                                </ng-template>
+                                <ng-template pTemplate="body" let-p>
+                                    <tr>
+                                                <td>{{p.lotReleve?.numero}}</td>
+                                                    <td>{{p.nbBatiments}}</td>
+                                                    <td>{{p.nbCompteurs}}</td>
+                                                    <td>{{p.nbCompteursBatiment}}</td>
+                                    </tr>
+                                </ng-template>
+                            </p-table>
+                        </div>
+                    </p-tabPanel>
+        </p-tabView>
+
+    </ng-template>
+
+    <ng-template pTemplate="footer" >
+        <div class="flex justify-end p-4">
+            <div>
+                <button class="border border-gray-400 font-semibold py-2 px-4 rounded shadow" (click)="hideViewDialog()">
+                    <i class="pi pi-times"></i> Annuler
+                </button>
+            </div>
+        </div>
+    </ng-template>
+</p-dialog>

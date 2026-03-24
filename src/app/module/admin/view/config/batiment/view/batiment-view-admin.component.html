@@ -1,0 +1,85 @@
+<p-dialog [(visible)]="viewDialog" [style]="{width: '70vw'}" header="{{'batiment.tabPan' | translate}}" [modal]="true" styleClass="p-fluid">
+    <ng-template pTemplate="content">
+        <p-tabView>
+            <p-tabPanel header="{{'batiment.tabPan' | translate}}">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 p-4">
+                                <div class="flex flex-col gap-2">
+                                    <label class="text-sm font-semibold" for="1">{{'batiment.codeBatiment' | translate}}</label>
+                                    <input  type="text" pInputText [disabled]="true" placeholder="{{'batiment.codeBatiment' | translate}}" autofocus  id="1" [ngModel]="item.codeBatiment">
+                                </div>
+                                <div class="flex flex-col gap-2">
+                                    <label class="text-sm font-semibold" for="2">{{'batiment.complementAdresse' | translate}}</label>
+                                    <input  type="text" pInputText [disabled]="true" placeholder="{{'batiment.complementAdresse' | translate}}" autofocus  id="2" [ngModel]="item.complementAdresse">
+                                </div>
+                                <div class="flex flex-col gap-2">
+                                    <label class="text-sm font-semibold" for="3">{{'batiment.libelle' | translate}}</label>
+                                    <input  type="text" pInputText [disabled]="true" placeholder="{{'batiment.libelle' | translate}}" autofocus  id="3" [ngModel]="item.libelle">
+                                </div>
+                                <div class="flex flex-col gap-2">
+                                    <label class="text-sm font-semibold" for="4">{{'batiment.nombreEtages' | translate}}</label>
+                                    <p-inputNumber id="4" [disabled]="true" placeholder="{{'batiment.nombreEtages' | translate}}" [ngModel]="item.nombreEtages"></p-inputNumber>
+                                </div>
+                                <div class="flex flex-col gap-2">
+                                    <label class="text-sm font-semibold" for="5">{{'batiment.nombrePointsLivraison' | translate}}</label>
+                                    <p-inputNumber id="5" [disabled]="true" placeholder="{{'batiment.nombrePointsLivraison' | translate}}" [ngModel]="item.nombrePointsLivraison"></p-inputNumber>
+                                </div>
+                                <div class="flex flex-col gap-2">
+                                    <label class="text-sm font-semibold" for="6">{{'batiment.nombreLieuxReleve' | translate}}</label>
+                                    <p-inputNumber id="6" [disabled]="true" placeholder="{{'batiment.nombreLieuxReleve' | translate}}" [ngModel]="item.nombreLieuxReleve"></p-inputNumber>
+                                </div>
+                                <div class="flex flex-col gap-2">
+                                    <label class="text-sm font-semibold" for="7">{{'batiment.nombreLieuxConsommation' | translate}}</label>
+                                    <p-inputNumber id="7" [disabled]="true" placeholder="{{'batiment.nombreLieuxConsommation' | translate}}" [ngModel]="item.nombreLieuxConsommation"></p-inputNumber>
+                                </div>
+                                <div class="flex flex-col gap-2">
+                                    <label class="text-sm font-semibold" for="8">{{'batiment.dateCreation' | translate}}</label>
+                                    <p-calendar class="w-full" id="8" [disabled]="true"  [showTime]="true" [showSeconds]="false" placeholder="{{'batiment.dateCreation' | translate}}"  [ngModel]="item.dateCreation" dateFormat="{{dateFormat}}"></p-calendar>
+                                </div>
+                            <div class="flex flex-col gap-2">
+                                <label class="text-sm font-semibold" for="10">{{'batiment.commune' | translate}}</label>
+                                <input type="text" pInputText [disabled]="true" placeholder="{{'batiment.commune' | translate}}" autofocus  id="10" [ngModel]="item.commune?.libelle">
+                            </div>
+                                <div class="flex flex-col gap-2">
+
+                                    <label class="text-sm font-semibold" for="11">{{'batiment.actif' | translate}}</label>
+
+                                    <p-inputSwitch id="11"  [disabled]="true" [ngModel]="item.actif"></p-inputSwitch>
+
+                                </div>
+                            <div class="flex flex-col gap-2">
+                                <label class="text-sm font-semibold" for="12">{{'batiment.lotReleve' | translate}}</label>
+                                <input type="text" pInputText [disabled]="true" placeholder="{{'batiment.lotReleve' | translate}}" autofocus  id="12" [ngModel]="item.lotReleve?.numero">
+                            </div>
+                </div>
+            </p-tabPanel>
+
+                    <p-tabPanel header="{{'batiment.appareil' | translate}}">
+                        <div class="card p-4">
+                            <p-table [value]="item.appareil" [scrollable]="true" scrollHeight="200px">
+                                <ng-template pTemplate="header">
+                                    <tr>
+                                                    <th>Numero appareil</th>
+                                    </tr>
+                                </ng-template>
+                                <ng-template pTemplate="body" let-p>
+                                    <tr>
+                                                    <td>{{p.numeroAppareil}}</td>
+                                    </tr>
+                                </ng-template>
+                            </p-table>
+                        </div>
+                    </p-tabPanel>
+        </p-tabView>
+
+    </ng-template>
+
+    <ng-template pTemplate="footer" >
+        <div class="flex justify-end p-4">
+            <div>
+                <button class="border border-gray-400 font-semibold py-2 px-4 rounded shadow" (click)="hideViewDialog()">
+                    <i class="pi pi-times"></i> Annuler
+                </button>
+            </div>
+        </div>
+    </ng-template>
+</p-dialog>

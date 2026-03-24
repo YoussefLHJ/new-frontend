@@ -1,0 +1,79 @@
+    <p-dialog [(visible)]="editDialog" [style]="{width: '70vw'}" header="{{'commune.tabPan' | translate}}" [modal]="true" styleClass="p-fluid" [maximizable]="true" [draggable]="false" [resizable]="false">
+<ng-template pTemplate="content" >
+        <p-tabView>
+            <p-tabPanel header="{{'commune.tabPan' | translate}}">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 p-4">
+
+                                <div class="flex flex-col gap-2">
+                                    <label class="text-sm font-semibold" for="1">{{'commune.code' | translate}}<span class="text-red-500">*</span></label>
+                                    <input type="text" pInputText  placeholder="{{'commune.code' | translate}}" id="1" [(ngModel)]="item.code"
+                                           [ngClass]="{'ng-invalid ng-dirty' : !validCommuneCode}"  />
+                                    <small class="text-red-500" *ngIf='!validCommuneCode'>Code is obligatory.</small>
+                                </div>
+
+
+                                <div class="flex flex-col gap-2">
+                                    <label class="text-sm font-semibold" for="2">{{'commune.libelle' | translate}}<span class="text-red-500">*</span></label>
+                                    <input type="text" pInputText  placeholder="{{'commune.libelle' | translate}}" id="2" [(ngModel)]="item.libelle"
+                                           [ngClass]="{'ng-invalid ng-dirty' : !validCommuneLibelle}"  />
+                                    <small class="text-red-500" *ngIf='!validCommuneLibelle'>Libelle is obligatory.</small>
+                                </div>
+
+
+                                <div class="flex flex-col gap-2">
+                                    <label class="text-sm font-semibold" for="3">{{'commune.description' | translate}}</label>
+                                    <textarea id="3" pTextarea rows="5" cols="30" placeholder="{{'commune.description' | translate}}"  [(ngModel)]="item.description"
+                                               ></textarea>
+                                    
+                                </div>
+
+                                <div class="flex flex-col gap-2">
+
+                                    <label class="text-sm font-semibold" for="4">{{'commune.actif' | translate}}</label>
+
+                                    <p-inputSwitch id="4"  [(ngModel)]="item.actif"
+                                                    >
+                                    </p-inputSwitch>
+                                    
+
+                                </div>
+
+
+                                <div class="flex flex-col gap-2">
+                                    <label class="text-sm font-semibold" for="5">{{'commune.dateCreation' | translate}}</label>
+                                    <p-calendar class="w-full" appendTo="body" id="5"  [showTime]="true" [showSeconds]="false" placeholder="{{'commune.dateCreation' | translate}}"  [(ngModel)]="item.dateCreation"
+                                                dateFormat="{{dateFormat}}"  >
+                                    </p-calendar>
+                                    
+                                </div>
+
+                                <div class="flex flex-col gap-2">
+                                    <label class="text-sm font-semibold" for="6">{{'commune.dateMiseAJour' | translate}}</label>
+                                    <p-calendar class="w-full" appendTo="body" id="6"  [showTime]="true" [showSeconds]="false" placeholder="{{'commune.dateMiseAJour' | translate}}"  [(ngModel)]="item.dateMiseAJour"
+                                                dateFormat="{{dateFormat}}"  >
+                                    </p-calendar>
+                                    
+                                </div>
+
+                </div>
+            </p-tabPanel>
+
+        </p-tabView>
+
+</ng-template>
+
+<ng-template pTemplate="footer" >
+    <div class="flex justify-end space-x-3 p-4">
+
+            <button class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-primary" label="{{'validate' | translate}}"  (click)="edit()">
+                <i class="pi pi-check"></i> {{'validate' | translate}}
+            </button>
+
+                <button (click)="hideEditDialog()" class="border border-gray-400 text-gray-600 hover:bg-gray-200 px-4 py-2 rounded-md">
+                    <i class="pi pi-times"></i> {{'cancel' | translate}}
+                </button>
+
+    </div>
+</ng-template>
+
+    </p-dialog>

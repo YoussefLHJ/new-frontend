@@ -1,0 +1,65 @@
+<p-dialog [(visible)]="viewDialog" [style]="{width: '70vw'}" header="{{'zoneVilleReleve.tabPan' | translate}}" [modal]="true" styleClass="p-fluid">
+    <ng-template pTemplate="content">
+        <p-tabView>
+            <p-tabPanel header="{{'zoneVilleReleve.tabPan' | translate}}">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 p-4">
+                                <div class="flex flex-col gap-2">
+                                    <label class="text-sm font-semibold" for="1">{{'zoneVilleReleve.numero' | translate}}</label>
+                                    <input  type="text" pInputText [disabled]="true" placeholder="{{'zoneVilleReleve.numero' | translate}}" autofocus  id="1" [ngModel]="item.numero">
+                                </div>
+                                <div class="flex flex-col gap-2">
+                                    <label class="text-sm font-semibold" for="2">{{'zoneVilleReleve.libelle' | translate}}</label>
+                                    <input  type="text" pInputText [disabled]="true" placeholder="{{'zoneVilleReleve.libelle' | translate}}" autofocus  id="2" [ngModel]="item.libelle">
+                                </div>
+                                <div class="flex flex-col gap-2">
+                                    <label class="text-sm font-semibold" for="3">{{'zoneVilleReleve.description' | translate}}</label>
+                                    <textarea id="3" pTextarea rows="5" cols="30" [disabled]="true" placeholder="{{'zoneVilleReleve.description' | translate}}"  [ngModel]="item.description"></textarea>
+                                </div>
+                                <div class="flex flex-col gap-2">
+
+                                    <label class="text-sm font-semibold" for="5">{{'zoneVilleReleve.actif' | translate}}</label>
+
+                                    <p-inputSwitch id="5"  [disabled]="true" [ngModel]="item.actif"></p-inputSwitch>
+
+                                </div>
+                </div>
+            </p-tabPanel>
+
+                    <p-tabPanel header="{{'zoneVilleReleve.zoneVilleRegionReleves' | translate}}">
+                        <div class="card p-4">
+                            <p-table [value]="item.zoneVilleRegionReleves" [scrollable]="true" scrollHeight="200px">
+                                <ng-template pTemplate="header">
+                                    <tr>
+                                                    <th>Numero</th>
+                                                    <th>Libelle</th>
+                                                    <th>Description</th>
+                                                    <th>Actif</th>
+                                    </tr>
+                                </ng-template>
+                                <ng-template pTemplate="body" let-p>
+                                    <tr>
+                                                    <td>{{p.numero}}</td>
+                                                    <td>{{p.libelle}}</td>
+                                                    <td>{{p.description}}</td>
+                                                    <td><i *ngIf="p.actif" class="pi pi-check checked-toogle"></i>
+                                                        <i *ngIf="!p.actif" class="pi pi-times unchecked-toogle"></i>
+                                                    </td>
+                                    </tr>
+                                </ng-template>
+                            </p-table>
+                        </div>
+                    </p-tabPanel>
+        </p-tabView>
+
+    </ng-template>
+
+    <ng-template pTemplate="footer" >
+        <div class="flex justify-end p-4">
+            <div>
+                <button class="border border-gray-400 font-semibold py-2 px-4 rounded shadow" (click)="hideViewDialog()">
+                    <i class="pi pi-times"></i> Annuler
+                </button>
+            </div>
+        </div>
+    </ng-template>
+</p-dialog>
