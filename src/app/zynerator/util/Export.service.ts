@@ -1,284 +1,214 @@
-import {Injectable} from '@angular/core';
-
+import { Injectable } from '@angular/core';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
-import {saveAs} from 'file-saver';
-import {Workbook} from 'exceljs/dist/exceljs.min.js';
-
+import { saveAs } from 'file-saver';
+import { Workbook } from 'exceljs';
 @Injectable({
     providedIn: 'root'
 })
 export class ExportService {
-    constructor() {
-    }
 
-    exporterExcel(criteriaData: any[], exportData: any[], filename: string) {
-        //Excel Title, Header, Data
-        const title = filename;
-        const header = Object.keys(exportData[0]);
-        const data = exportData;
-        //Create workbook and worksheet
-        let workbook = new Workbook();
+    exportExcel(title: string, data: Record<string, any>[], criteria: string[], filename: string, filterLabel = 'Filters') {
+        if (!data.length) return;
 
-        let worksheet = workbook.addWorksheet('liste des ' + filename);
+        const workbook = new Workbook();
+        const worksheet = workbook.addWorksheet(title);
+        const headers = Object.keys(data[0]);
+        const colCount = headers.length;
 
+        // Title
+        const titleRow = worksheet.addRow([title]);
+        titleRow.font = { name: 'Calibri', size: 14, bold: true, color: { argb: 'FF1E293B' } };
+        titleRow.height = 28;
+        if (colCount > 1) worksheet.mergeCells(1, 1, 1, colCount);
 
-        //Add criteria title 
-        let titleRowCR = worksheet.addRow(['Critères']);
-        titleRowCR.font = {name: 'Calibri', family: 4, size: 14, underline: 'single', bold: true};
+        // Date
+        const dateRow = worksheet.addRow([new Date().toLocaleString()]);
+        dateRow.font = { name: 'Calibri', size: 9, italic: true, color: { argb: 'FF6B7280' } };
+        if (colCount > 1) worksheet.mergeCells(2, 1, 2, colCount);
+
         worksheet.addRow([]);
-        const headerCr = Object.keys(criteriaData[0]);
-        let headerRowCr = worksheet.addRow(headerCr);
-        // Cell Style : Fill and Border
-        headerRowCr.eachCell((cell, number) => {
-            cell.fill = {type: 'pattern', pattern: 'solid', fgColor: {argb: '03FCF4'}}
-            cell.border = {top: {style: 'thin'}, left: {style: 'thin'}, bottom: {style: 'thin'}, right: {style: 'thin'}}
-        });
-        criteriaData.forEach(d => {
-            let row = worksheet.addRow(Object.values(d));
-        });
-        //Add Row and formatting
-        worksheet.addRow([]);
-        let titleRow = worksheet.addRow([title]);
-        titleRow.font = {name: 'Calibri', family: 4, size: 14, underline: 'single', bold: true};
 
-        // let subTitleRow = worksheet.addRow(['Date : ' + this.datePipe.transform(new Date(), 'medium')])
+        // Filter criteria
+        if (criteria.length) {
+            const filterTitleRow = worksheet.addRow([filterLabel]);
+            filterTitleRow.font = { name: 'Calibri', size: 10, bold: true, color: { argb: 'FF374151' } };
+            if (colCount > 1) worksheet.mergeCells(filterTitleRow.number, 1, filterTitleRow.number, colCount);
 
-        // worksheet.mergeCells('A1:D2');
-        //Blank Row 
-        worksheet.addRow([]);
-        //Add Header Row
-        let headerRow = worksheet.addRow(header);
+            criteria.forEach(c => {
+                const row = worksheet.addRow([`  \u2022 ${c}`]);
+                row.font = { name: 'Calibri', size: 9, color: { argb: 'FF6B7280' } };
+                if (colCount > 1) worksheet.mergeCells(row.number, 1, row.number, colCount);
+            });
 
-        // Cell Style : Fill and Border
-        headerRow.eachCell((cell, number) => {
-            cell.fill = {type: 'pattern', pattern: 'solid', fgColor: {argb: '03FCF4'}}
-            cell.border = {top: {style: 'thin'}, left: {style: 'thin'}, bottom: {style: 'thin'}, right: {style: 'thin'}}
-        });
-        // worksheet.addRows(data);
-        // Add Data and Conditional Formatting
-        data.forEach(d => {
-            let row = worksheet.addRow(Object.values(d));
-        });
-        for (let i = 1; i <= header.length; i++) {
-            worksheet.getColumn(i).width = 36;
+            worksheet.addRow([]);
         }
-        worksheet.addRow([]);
-        //Footer Row
-        let footerRow = worksheet.addRow(['Description']);
-        footerRow.getCell(1).fill = {
-            type: 'pattern',
-            pattern: 'solid',
-            fgColor: {argb: 'FFCCFFE5'}
-        };
-        //footerRow.getCell(1).border = { top: { style: 'thin' }, left: { style: 'thin' }, bottom: { style: 'thin' }, right: { style: 'thin' } }
-        //Merge Cells
-        // worksheet.mergeCells(`A${footerRow.number}:F${footerRow.number}`);
-        //Generate Excel File with given name
-        workbook.xlsx.writeBuffer().then((data) => {
-            this.saveAsExcelFile(data, filename);
-        })
-    }
 
-    exportCustomizeExcel(compagneData: any[], distinctionsData: any[], boursesData: any[], gestionEquipeData: any[], filename: string) {
-        //Excel Title, Header, Data
-        const title = filename;
-
-        //Create workbook and worksheet
-        let workbook = new Workbook();
-
-        let worksheet = workbook.addWorksheet('liste des ' + filename);
-        let worksheetDistinctions = workbook.addWorksheet('liste des distinctions');
-        let worksheetBourses = workbook.addWorksheet('liste des bourses');
-        let worksheetGestionEquipes = workbook.addWorksheet('liste des equipes');
-
-
-        //Add criteria title
-        let titleRowCR = worksheet.addRow(['Compagne ']);
-        titleRowCR.font = {name: 'Calibri', family: 4, size: 14, underline: 'single', bold: true};
-        worksheet.addRow([]);
-        const headerCr = Object.keys(compagneData[0]);
-        let headerRowCr = worksheet.addRow(headerCr);
-        // Cell Style : Fill and Border
-        headerRowCr.eachCell((cell, number) => {
-            cell.fill = {type: 'pattern', pattern: 'solid', fgColor: {argb: '03FCF4'}}
-            cell.border = {top: {style: 'thin'}, left: {style: 'thin'}, bottom: {style: 'thin'}, right: {style: 'thin'}}
+        // Column headers
+        const headerRow = worksheet.addRow(headers);
+        headerRow.height = 24;
+        headerRow.eachCell((cell: any) => {
+            cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FF3B82F6' } };
+            cell.font = { name: 'Calibri', size: 10, bold: true, color: { argb: 'FFFFFFFF' } };
+            cell.alignment = { vertical: 'middle', horizontal: 'center' };
+            cell.border = {
+                top: { style: 'thin', color: { argb: 'FF2563EB' } },
+                bottom: { style: 'thin', color: { argb: 'FF2563EB' } },
+                left: { style: 'thin', color: { argb: 'FF2563EB' } },
+                right: { style: 'thin', color: { argb: 'FF2563EB' } }
+            };
         });
-        compagneData.forEach(d => {
-            let row = worksheet.addRow(Object.values(d));
-        });
-        //Add Row and formatting
-        worksheet.addRow([]);
-        let titleRow = worksheetDistinctions.addRow(['Distinction ']);
-        titleRow.font = {name: 'Calibri', family: 4, size: 14, underline: 'single', bold: true};
 
-        let titleRowBourse = worksheetBourses.addRow(['Bourses ']);
-        titleRowBourse.font = {name: 'Calibri', family: 4, size: 14, underline: 'single', bold: true};
-
-        let titleRowGestionEquipe = worksheetGestionEquipes.addRow(['Gestion Equipes ']);
-        titleRowGestionEquipe.font = {name: 'Calibri', family: 4, size: 14, underline: 'single', bold: true};
-
-        // let subTitleRow = worksheet.addRow(['Date : ' + this.datePipe.transform(new Date(), 'medium')])
-
-        // worksheet.mergeCells('A1:D2');
-        //Blank Row 
-        worksheetDistinctions.addRow([]);
-        worksheetBourses.addRow([]);
-        worksheetGestionEquipes.addRow([]);
-
-        //Add Header Row
-        let headerRow = worksheetDistinctions.addRow(Object.keys(distinctionsData[0]));
-
-        // Cell Style : Fill and Border
-        headerRow.eachCell((cell, number) => {
-            cell.fill = {type: 'pattern', pattern: 'solid', fgColor: {argb: '03FCF4'}}
-            cell.border = {top: {style: 'thin'}, left: {style: 'thin'}, bottom: {style: 'thin'}, right: {style: 'thin'}}
-        });
-        // worksheet.addRows(data);
-        // Add Data and Conditional Formatting
-        distinctionsData.forEach(d => {
-            let row = worksheetDistinctions.addRow(Object.values(d));
-        });
-        for (let i = 1; i <= Object.keys(distinctionsData[0]).length; i++) {
-            worksheetDistinctions.getColumn(i).width = 36;
-        }
-        worksheetDistinctions.addRow([]);
-        if (boursesData.length > 0) {
-            //Add Header Row
-            let headerBoursesRow = worksheetBourses.addRow(Object.keys(boursesData[0]));
-
-            // Cell Style : Fill and Border
-            headerBoursesRow.eachCell((cell, number) => {
-                cell.fill = {type: 'pattern', pattern: 'solid', fgColor: {argb: '03FCF4'}}
+        // Data rows with alternating colors
+        data.forEach((item, idx) => {
+            const row = worksheet.addRow(headers.map(h => item[h] ?? ''));
+            row.eachCell((cell: any) => {
+                cell.font = { name: 'Calibri', size: 10 };
+                cell.alignment = { vertical: 'middle' };
                 cell.border = {
-                    top: {style: 'thin'},
-                    left: {style: 'thin'},
-                    bottom: {style: 'thin'},
-                    right: {style: 'thin'}
+                    top: { style: 'thin', color: { argb: 'FFE5E7EB' } },
+                    bottom: { style: 'thin', color: { argb: 'FFE5E7EB' } },
+                    left: { style: 'thin', color: { argb: 'FFE5E7EB' } },
+                    right: { style: 'thin', color: { argb: 'FFE5E7EB' } }
+                };
+                if (idx % 2 === 0) {
+                    cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFF8FAFC' } };
                 }
             });
-            // worksheet.addRows(data);
-            // Add Data and Conditional Formatting
-            boursesData.forEach(d => {
-                let row = worksheetBourses.addRow(Object.values(d));
-            });
-            for (let i = 1; i <= Object.keys(boursesData[0]).length; i++) {
-                worksheetBourses.getColumn(i).width = 36;
-            }
-            worksheetBourses.addRow([]);
-        }
-        if (gestionEquipeData.length > 0) {
-            //Add Header Row
-            let headerGestionEquipesRow = worksheetGestionEquipes.addRow(Object.keys(gestionEquipeData[0]));
+        });
 
-            // Cell Style : Fill and Border
-            headerGestionEquipesRow.eachCell((cell, number) => {
-                cell.fill = {type: 'pattern', pattern: 'solid', fgColor: {argb: '03FCF4'}}
-                cell.border = {
-                    top: {style: 'thin'},
-                    left: {style: 'thin'},
-                    bottom: {style: 'thin'},
-                    right: {style: 'thin'}
-                }
+        // Auto-fit column widths
+        headers.forEach((h, i) => {
+            let maxLen = h.length;
+            data.forEach(item => {
+                const len = String(item[h] ?? '').length;
+                if (len > maxLen) maxLen = len;
             });
-            // worksheet.addRows(data);
-            // Add Data and Conditional Formatting
-            gestionEquipeData.forEach(d => {
-                let row = worksheetGestionEquipes.addRow(Object.values(d));
+            worksheet.getColumn(i + 1).width = Math.min(Math.max(maxLen + 3, 12), 45);
+        });
+
+        // Generate file
+        workbook.xlsx.writeBuffer().then((buffer: ArrayBuffer) => {
+            const blob = new Blob([buffer], {
+                type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8'
             });
-            for (let i = 1; i <= Object.keys(gestionEquipeData[0]).length; i++) {
-                worksheetGestionEquipes.getColumn(i).width = 36;
-            }
-            worksheetGestionEquipes.addRow([]);
-        }
-        //Footer Row
-        let footerRow = worksheet.addRow(['Description']);
-        footerRow.getCell(1).fill = {
-            type: 'pattern',
-            pattern: 'solid',
-            fgColor: {argb: 'FFCCFFE5'}
-        };
-        //footerRow.getCell(1).border = { top: { style: 'thin' }, left: { style: 'thin' }, bottom: { style: 'thin' }, right: { style: 'thin' } }
-        //Merge Cells
-        // worksheet.mergeCells(`A${footerRow.number}:F${footerRow.number}`);
-        //Generate Excel File with given name
-        workbook.xlsx.writeBuffer().then((data) => {
-            this.saveAsExcelFile(data, filename);
-        })
-    }
-
-    saveAsExcelFile(buffer: any, fileName: string): void {
-        import('file-saver').then(FileSaver => {
-            const EXCEL_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
-            const data: Blob = new Blob([buffer], {type: EXCEL_TYPE});
-            saveAs(data, fileName + '.xlsx');
-
+            saveAs(blob, `${filename}.xlsx`);
         });
     }
 
-    exporterPdf(criteriaData: any[], exportData: any[], filename: string): void {
+    exportPdf(title: string, data: Record<string, any>[], criteria: string[], filename: string, filterLabel = 'Filters') {
+        if (!data.length) return;
+
         const doc = new jsPDF();
-        let columnsCriteria: any[] = [];
-        let columnsData: any[] = [];
+        const pageWidth = doc.internal.pageSize.getWidth();
+        const pageHeight = doc.internal.pageSize.getHeight();
 
-        Object.keys(criteriaData[0]).forEach(e => {
-            let headerObject: any = {};
-            headerObject.header = e;
-            headerObject.dataKey = e;
-            columnsCriteria.push(headerObject);
-        });
-        Object.keys(exportData[0]).forEach(e => {
-            let headerData: any = {};
-            headerData.header = e;
-            headerData.dataKey = e;
-            columnsData.push(headerData);
-        });
+        // Title
+        doc.setFontSize(16);
+        doc.setFont('helvetica', 'bold');
+        doc.setTextColor(30, 41, 59);
+        doc.text(title, 14, 20);
+
+        // Date (right-aligned)
+        doc.setFontSize(9);
+        doc.setFont('helvetica', 'normal');
+        doc.setTextColor(107, 114, 128);
+        doc.text(new Date().toLocaleString(), pageWidth - 14, 20, { align: 'right' });
+
+        // Separator line
+        doc.setDrawColor(229, 231, 235);
+        doc.setLineWidth(0.5);
+        doc.line(14, 25, pageWidth - 14, 25);
+
+        let startY = 32;
+
+        // Filter criteria
+        if (criteria.length) {
+            doc.setFontSize(10);
+            doc.setFont('helvetica', 'bold');
+            doc.setTextColor(55, 65, 81);
+            doc.text(filterLabel, 14, startY);
+            startY += 6;
+
+            doc.setFontSize(8);
+            doc.setFont('helvetica', 'normal');
+            doc.setTextColor(107, 114, 128);
+            criteria.forEach(c => {
+                doc.text(`\u2022 ${c}`, 18, startY);
+                startY += 5;
+            });
+            startY += 4;
+        }
+
+        // Data table
+        const headers = Object.keys(data[0]);
         autoTable(doc, {
-            columns: columnsCriteria,
-            body: criteriaData,
-            startY: 25,
-            margin: {horizontal: 10},
-            styles: {overflow: "linebreak", fontSize: 5},
-            bodyStyles: {valign: "top"},
-            theme: "striped",
-            showHead: "everyPage", didDrawPage: function (data) {
-                // Header
-                doc.setFontSize(10);
-                doc.setTextColor(40);
-                doc.text("Critères :", data.settings.margin.left, 22);
-            }
+            head: [headers],
+            body: data.map(row => headers.map(h => String(row[h] ?? ''))),
+            startY,
+            margin: { left: 14, right: 14 },
+            styles: {
+                fontSize: 7,
+                cellPadding: 2.5,
+                overflow: 'linebreak',
+                lineColor: [229, 231, 235],
+                lineWidth: 0.3
+            },
+            headStyles: {
+                fillColor: [59, 130, 246],
+                textColor: 255,
+                fontStyle: 'bold',
+                halign: 'center'
+            },
+            alternateRowStyles: { fillColor: [248, 250, 252] },
+            theme: 'grid',
+            showHead: 'everyPage'
         });
-        autoTable(doc, {
-            columns: columnsData,
-            body: exportData,
-            startY: 41,
-            margin: {horizontal: 10},
-            styles: {overflow: "linebreak", fontSize: 5},
-            bodyStyles: {valign: "top"},
-            theme: "striped",
-            showHead: "everyPage", didDrawPage: function (data) {
-                // Header
-                doc.setFontSize(10);
-                doc.setTextColor(40);
-                doc.text("Liste des " + filename, data.settings.margin.left, 40);
-            }
-        });
-        doc.save(filename + '.pdf');
+
+        // Page numbers on all pages
+        const totalPages = (doc as any).internal.getNumberOfPages();
+        for (let i = 1; i <= totalPages; i++) {
+            doc.setPage(i);
+            doc.setFontSize(8);
+            doc.setTextColor(156, 163, 175);
+            doc.text(`${i} / ${totalPages}`, pageWidth / 2, pageHeight - 10, { align: 'center' });
+        }
+
+        doc.save(`${filename}.pdf`);
     }
 
-    exporterCSV(criteriaData: any[], exportData: any[], filename: string) {
-        const replacer = (key, value) => value === null ? '' : value; // specify how you want to handle null values here
-        const headerCr = Object.keys(criteriaData[0]);
-        const header = Object.keys(exportData[0]);
+    exportCsv(title: string, data: Record<string, any>[], criteria: string[], filename: string, filterLabel = 'Filters') {
+        if (!data.length) return;
 
-        let csvCr = criteriaData.map(row => headerCr.map(fieldName => JSON.stringify(row[fieldName], replacer)).join(';'));
-        csvCr.unshift(headerCr.join(';'));
-        let csvCrArray = csvCr.join('\r\n');
+        const BOM = '\uFEFF';
+        const sep = ';';
+        const headers = Object.keys(data[0]);
+        const lines: string[] = [];
 
-        let csv = exportData.map(row => header.map(fieldName => JSON.stringify(row[fieldName], replacer)).join(';'));
-        csv.unshift(header.join(';'));
-        let csvArray = csv.join('\r\n');
-        var blob = new Blob([csvCrArray, '\n', '\n', csvArray], {type: 'text/csv'})
-        saveAs(blob, filename + ".csv");
+        // Metadata header
+        lines.push(`# ${title}`);
+        lines.push(`# ${new Date().toLocaleString()}`);
+        if (criteria.length) {
+            lines.push(`# ${filterLabel}: ${criteria.join(' | ')}`);
+        }
+        lines.push('');
+
+        // Column headers
+        lines.push(headers.map(h => this.escapeCsvValue(h, sep)).join(sep));
+
+        // Data rows
+        data.forEach(row => {
+            lines.push(headers.map(h => this.escapeCsvValue(String(row[h] ?? ''), sep)).join(sep));
+        });
+
+        const blob = new Blob([BOM + lines.join('\r\n')], { type: 'text/csv;charset=utf-8' });
+        saveAs(blob, `${filename}.csv`);
+    }
+
+    private escapeCsvValue(value: string, sep: string): string {
+        if (value.includes(sep) || value.includes('"') || value.includes('\n') || value.includes('\r')) {
+            return `"${value.replace(/"/g, '""')}"`;
+        }
+        return value;
     }
 }

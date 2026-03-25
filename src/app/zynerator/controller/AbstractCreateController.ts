@@ -11,6 +11,7 @@ import {BaseCriteria} from 'src/app/zynerator/criteria/BaseCriteria.model';
 import {StringUtilService} from 'src/app/zynerator/util/StringUtil.service';
 import {FileTempDto} from 'src/app/zynerator/dto/FileTempDto.model';
 import {ServiceLocator} from 'src/app/zynerator/service/ServiceLocator';
+
 @Injectable()
 export class AbstractCreateController<DTO extends BaseDto, CRITERIA extends BaseCriteria, SERVICE extends AbstractService<DTO, CRITERIA>> {
 
@@ -27,7 +28,7 @@ export class AbstractCreateController<DTO extends BaseDto, CRITERIA extends Base
 
 
 
-    public constructor(service: SERVICE, @Inject(PLATFORM_ID) private platformId?) {
+    public constructor(service: any, @Inject(PLATFORM_ID) private platformId?: Object) {
         this.service = service;
         this.datePipe = ServiceLocator.injector.get(DatePipe);
         this.messageService = ServiceLocator.injector.get(MessageService);
@@ -67,14 +68,15 @@ export class AbstractCreateController<DTO extends BaseDto, CRITERIA extends Base
             console.log(error);
         });
     }
-    public uploadOne(event, i: number): void{
+
+    public uploadOne(event: any, i: number): void{
         console.log(event.files[0]);
         let formData = new FormData();
         formData.append('file',event.files[0]);
         this.service.upload(formData,i);
     }
 
-    public uploadMultiple(event, i: number): void{
+    public uploadMultiple(event: any, i: number): void{
         console.log(event.files);
         const formData: FormData = new FormData();
         for (let i = 0; i < event.files.length; i++) {

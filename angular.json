@@ -20,21 +20,22 @@
                         "outputPath": "dist/sakai-ng",
                         "index": "src/index.html",
                         "browser": "src/main.ts",
-                        "polyfills": [
-                            "zone.js"
-                        ],
                         "tsConfig": "tsconfig.app.json",
                         "inlineStyleLanguage": "scss",
                         "assets": [
-                            "src/favicon.ico",
-                            "src/assets",
                             {
                                 "glob": "**/*",
                                 "input": "public"
+                            },
+                            {
+                                "glob": "**/*",
+                                "input": "src/assets",
+                                "output": "assets"
                             }
                         ],
                         "styles": [
-                            "src/styles.scss"
+                            "src/assets/styles.scss",
+                            "src/assets/tailwind.css"
                         ],
                         "scripts": []
                     },
@@ -43,15 +44,14 @@
                             "budgets": [
                                 {
                                     "type": "initial",
-                                    "maximumWarning": "3mb",
+                                    "maximumWarning": "1mb",
                                     "maximumError": "5mb"
                                 },
                                 {
                                     "type": "anyComponentStyle",
-                                    "maximumWarning": "6kb",
-                                    "maximumError": "8kb"
+                                    "maximumWarning": "2kb",
+                                    "maximumError": "4kb"
                                 }
-
                             ],
                             "outputHashing": "all"
                         },
@@ -81,48 +81,22 @@
                 "test": {
                     "builder": "@angular-devkit/build-angular:karma",
                     "options": {
-                        "polyfills": [
-                            "zone.js",
-                            "zone.js/testing"
-                        ],
                         "tsConfig": "tsconfig.spec.json",
                         "inlineStyleLanguage": "scss",
                         "assets": [
                             "src/favicon.ico",
-                            "src/assets",
-                            {
-                                "glob": "**/*",
-                                "input": "public"
-                            }
+                            "src/assets"
                         ],
                         "styles": [
-                            "src/styles.scss"
+                            "src/assets/styles.scss"
                         ],
                         "scripts": []
-                    }
-                },
-                "lint": {
-                    "builder": "@angular-devkit/build-angular:tslint",
-                    "options": {
-                        "tsConfig": [
-                            "tsconfig.app.json",
-                            "tsconfig.spec.json"
-                        ],
-                        "exclude": [
-                            "**/node_modules/**"
-                        ]
                     }
                 }
             }
         }
     },
     "cli": {
-        "analytics": false,
-        "schematics": {
-            "@schematics/angular:component": {
-                "standalone":false
-
-            }
-        }
+        "analytics": false
     }
 }

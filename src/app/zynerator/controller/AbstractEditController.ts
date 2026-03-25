@@ -30,7 +30,7 @@ export class AbstractEditController<DTO extends BaseDto, CRITERIA extends BaseCr
     private _file: any;
     private _files: any;
 
-    public constructor(service: SERVICE, @Inject(PLATFORM_ID) private platformId?) {
+    public constructor(service: any, @Inject(PLATFORM_ID) private platformId?: Object) {
         this.datePipe = ServiceLocator.injector.get(DatePipe);
         this.service = service;
         this.messageService = ServiceLocator.injector.get(MessageService);
@@ -72,7 +72,7 @@ export class AbstractEditController<DTO extends BaseDto, CRITERIA extends BaseCr
     public prepareEdit() {
 
     }
-    public uploadOne(event, i: number): void{
+    public uploadOne(event: any, i: number): void{
         this.file = event.files[0];
         console.log(event.files[0]);
         console.log(this.file);
@@ -81,7 +81,7 @@ export class AbstractEditController<DTO extends BaseDto, CRITERIA extends BaseCr
         this.service.upload(formData,i);
     }
 
-    public uploadMultiple(event, i: number): void{
+    public uploadMultiple(event: any, i: number): void{
         this.files = event.files;
         console.log(event.files);
         const formData: FormData = new FormData();

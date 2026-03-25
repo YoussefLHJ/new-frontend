@@ -27,7 +27,7 @@ export class AbstractViewController<DTO extends BaseDto, CRITERIA extends BaseCr
     protected router: Router;
     protected stringUtilService: StringUtilService;
 
-    public constructor(service: SERVICE, @Inject(PLATFORM_ID) private platformId?) {
+    public constructor(service: any, @Inject(PLATFORM_ID) private platformId?: Object) {
         this.datePipe = ServiceLocator.injector.get(DatePipe);
         this.service = service;
         this.messageService = ServiceLocator.injector.get(MessageService);

@@ -1,7 +1,6 @@
 import {ConfirmationService, MenuItem, MessageService} from 'primeng/api';
 import {DatePipe} from '@angular/common';
 import {Router} from '@angular/router';
-import {Injectable} from '@angular/core';
 
 import {environment} from 'src/environments/environment';
 
@@ -17,7 +16,6 @@ import {AuthService} from 'src/app/zynerator/security/shared/service/Auth.servic
 import {catchError, forkJoin, Observable, of, tap} from "rxjs";
 
 
-@Injectable()
 export class AbstractListController<DTO extends BaseDto, CRITERIA extends BaseCriteria, SERVICE extends AbstractService<DTO, CRITERIA>> {
 
     protected findByCriteriaShow = false;
@@ -63,12 +61,12 @@ export class AbstractListController<DTO extends BaseDto, CRITERIA extends BaseCr
 
     public activateSecurityConstraint(entityName: string) {
         this.entityName = entityName;
-        let createActionPermission = of(true);
-        let editActionPermission = of(true);
-        let deleteActionPermission = of(true);
-        let listActionPermission = of(true);
-        let duplicateActionPermission = of(true);
-        let viewActionPermission = of(true);
+        let createActionPermission: Observable<boolean | null> = of(true);
+        let editActionPermission: Observable<boolean | null> = of(true);
+        let deleteActionPermission: Observable<boolean | null> = of(true);
+        let listActionPermission: Observable<boolean | null> = of(true);
+        let duplicateActionPermission: Observable<boolean | null> = of(true);
+        let viewActionPermission: Observable<boolean | null> = of(true);
         if (this.enableSecurity){
             createActionPermission = this.hasCreateActionPermission(this.createAction);
             editActionPermission = this.hasEditeActionPermission(this.editAction);
@@ -96,7 +94,7 @@ export class AbstractListController<DTO extends BaseDto, CRITERIA extends BaseCr
     }
 
 
-    public hasCreateActionPermission(action: string) {
+    public hasCreateActionPermission(action: string): Observable<boolean | null> {
         const username = this.authService.authenticatedUser.username;
         return this.service.hasActionPermission(username, action).pipe(
             tap(data => this.createActionIsValid = data),
@@ -106,7 +104,7 @@ export class AbstractListController<DTO extends BaseDto, CRITERIA extends BaseCr
             })
         );
     }
-    public hasEditeActionPermission(action: string) {
+    public hasEditeActionPermission(action: string): Observable<boolean | null> {
         const username = this.authService.authenticatedUser.username;
         return this.service.hasActionPermission(username, action).pipe(
             tap(data => this.editActionIsValid = data),
@@ -117,7 +115,7 @@ export class AbstractListController<DTO extends BaseDto, CRITERIA extends BaseCr
         );
     }
 
-    public hasDeleteActionPermission(action: string) {
+    public hasDeleteActionPermission(action: string): Observable<boolean | null> {
         const username = this.authService.authenticatedUser.username;
         return this.service.hasActionPermission(username, action).pipe(
             tap(data => this.deleteActionIsValid = data),
@@ -128,7 +126,7 @@ export class AbstractListController<DTO extends BaseDto, CRITERIA extends BaseCr
         );
     }
 
-    public hasListActionPermission(action: string) {
+    public hasListActionPermission(action: string): Observable<boolean | null> {
         const username = this.authService.authenticatedUser.username;
         return this.service.hasActionPermission(username, action).pipe(
             tap(data => this.listActionIsValid = data),
@@ -139,7 +137,7 @@ export class AbstractListController<DTO extends BaseDto, CRITERIA extends BaseCr
         );
     }
 
-    public hasDuplicateActionPermission(action: string) {
+    public hasDuplicateActionPermission(action: string): Observable<boolean | null> {
         const username = this.authService.authenticatedUser.username;
         return this.service.hasActionPermission(username, action).pipe(
             tap(data => this.duplicateActionIsValid = data),
@@ -150,7 +148,7 @@ export class AbstractListController<DTO extends BaseDto, CRITERIA extends BaseCr
         );
     }
 
-    public hasViewActionPermission(action: string) {
+    public hasViewActionPermission(action: string): Observable<boolean | null> {
         const username = this.authService.authenticatedUser.username;
         return this.service.hasActionPermission(username, action).pipe(
             tap(data => this.viewActionIsValid = data),
@@ -300,7 +298,7 @@ export class AbstractListController<DTO extends BaseDto, CRITERIA extends BaseCr
             res => {
                 this.initDuplicate(res);
                 this.item = res;
-                this.item.id = null;
+                this.item.id = undefined as any;
                 this.createDialog = true;
             });
     }
@@ -314,19 +312,19 @@ export class AbstractListController<DTO extends BaseDto, CRITERIA extends BaseCr
             {
                 label: 'CSV', icon: 'pi pi-file', command: () => {
                     this.prepareColumnExport();
-                    this.exportService.exporterCSV(this.criteriaData, this.exportData, this.fileName);
+                    this.exportService.exportCsv(this.fileName, this.criteriaData, this.exportData, this.fileName);
                 }
             },
             {
                 label: 'XLS', icon: 'pi pi-file-excel', command: () => {
                     this.prepareColumnExport();
-                    this.exportService.exporterExcel(this.criteriaData, this.exportData, this.fileName);
+                    this.exportService.exportExcel(this.fileName, this.criteriaData, this.exportData, this.fileName);
                 }
             },
             {
                 label: 'PDF', icon: 'pi pi-file-pdf', command: () => {
                     this.prepareColumnExport();
-                    this.exportService.exporterPdf(this.criteriaData, this.exportData, this.fileName);
+                    this.exportService.exportPdf(this.fileName, this.criteriaData, this.exportData, this.fileName);
                 }
             }
         ];
