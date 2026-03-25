@@ -1,5 +1,3 @@
-# CHANGES.md
-
 ## 🧩 1. Root (Project Configuration & DevOps)
 
 ### New Files
