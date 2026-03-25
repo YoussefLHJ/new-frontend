@@ -26,7 +26,7 @@ import { ActionPermissionService } from 'src/app/zynerator/security/shared/servi
 export class UserViewComponent extends AbstractViewController<UserDto, UserCriteria, UserService> implements OnInit {
     modelPermissionUsers = new ModelPermissionUserDto();
     modelPermissionUserss: Array<ModelPermissionUserDto> = [];
-    roleUsers = new RoleUserDto();
+    roleUsers: Array<RoleUserDto> = [];
     roleUserss: Array<RoleUserDto> = [];
 
     constructor(

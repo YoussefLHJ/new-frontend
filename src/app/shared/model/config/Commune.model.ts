@@ -12,9 +12,9 @@ export class CommuneDto extends BaseDto{
 
    public actif: null | boolean;
 
-   public dateCreation: Date;
+   public dateCreation: Date | null;
 
-   public dateMiseAJour: Date;
+   public dateMiseAJour: Date | null;
 
 
 

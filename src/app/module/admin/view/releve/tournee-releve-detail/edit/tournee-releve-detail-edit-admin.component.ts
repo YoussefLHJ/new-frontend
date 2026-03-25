@@ -63,7 +63,7 @@ export class TourneeReleveDetailEditAdminComponent implements OnInit {
 
 
 
-    constructor(private service: TourneeReleveDetailAdminService , private tourneeLotReleveService: TourneeLotReleveAdminService, private appareilService: AppareilAdminService, private lotReleveService: LotReleveAdminService, private tourneeReleveCompteurService: TourneeReleveCompteurAdminService, @Inject(PLATFORM_ID) private platformId?) {
+    constructor(private service: TourneeReleveDetailAdminService , private tourneeLotReleveService: TourneeLotReleveAdminService, private appareilService: AppareilAdminService, private lotReleveService: LotReleveAdminService, private tourneeReleveCompteurService: TourneeReleveCompteurAdminService, @Inject(PLATFORM_ID) private platformId?: Object) {
         this.datePipe = ServiceLocator.injector.get(DatePipe);
         this.messageService = ServiceLocator.injector.get(MessageService);
         this.confirmationService = ServiceLocator.injector.get(ConfirmationService);

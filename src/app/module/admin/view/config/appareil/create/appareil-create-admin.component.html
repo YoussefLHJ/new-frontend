@@ -1,7 +1,11 @@
     <p-dialog [(visible)]="createDialog" [style]="{width: '70vw'}" header="{{'appareil.tabPan' | translate}}" [modal]="true" styleClass="p-fluid" [maximizable]="true" [draggable]="false" [resizable]="false">
 <ng-template pTemplate="content" >
-        <p-tabView>
-            <p-tabPanel header="{{'appareil.tabPan' | translate}}">
+        <p-tabs [value]="0">
+<p-tablist>
+<p-tab [value]="0">{{'appareil.tabPan' | translate}}</p-tab>
+</p-tablist>
+<p-tabpanels>
+<p-tabpanel [value]="0">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 p-4">
 
                                 <div class="flex flex-col gap-2">
@@ -14,23 +18,23 @@
 
                             <div class="flex flex-col gap-2">
                                 <label class="text-sm font-semibold" for="2">{{'appareil.batiment' | translate}}</label>
-                                <p-dropdown class="w-full"  appendTo="body"  [options]="batiments" [(ngModel)]="item.batiment" id="2" [filter]="true" filterMatchMode="contains"
+                                <p-select class="w-full"  appendTo="body"  [options]="batiments" [(ngModel)]="item.batiment" id="2" [filter]="true" filterMatchMode="contains"
                                             [showClear]="true" optionLabel="libelle" placeholder="{{'appareil.batiment' | translate}}"  >
-                                </p-dropdown>
+                                </p-select>
                                 
                             </div>
 
                 </div>
-            </p-tabPanel>
-
-        </p-tabView>
+            </p-tabpanel>
+</p-tabpanels>
+</p-tabs>
 
 </ng-template>
 
 <ng-template pTemplate="footer" >
     <div class="flex justify-end space-x-3 p-4">
 
-            <button (click)="save()" label="{{'validate' | translate}}"  class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-primary">
+            <button (click)="save()"  class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-primary">
                 <i class="pi pi-check"></i> {{'validate' | translate}}
             </button>
 

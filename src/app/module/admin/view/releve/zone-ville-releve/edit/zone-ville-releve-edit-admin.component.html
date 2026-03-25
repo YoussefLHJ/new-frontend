@@ -1,7 +1,12 @@
     <p-dialog [(visible)]="editDialog" [style]="{width: '70vw'}" header="{{'zoneVilleReleve.tabPan' | translate}}" [modal]="true" styleClass="p-fluid" [maximizable]="true" [draggable]="false" [resizable]="false">
 <ng-template pTemplate="content" >
-        <p-tabView>
-            <p-tabPanel header="{{'zoneVilleReleve.tabPan' | translate}}">
+        <p-tabs [value]="0">
+<p-tablist>
+<p-tab [value]="0">{{'zoneVilleReleve.tabPan' | translate}}</p-tab>
+<p-tab [value]="1">{{'zoneVilleReleve.zoneVilleRegionReleves' | translate}}</p-tab>
+</p-tablist>
+<p-tabpanels>
+<p-tabpanel [value]="0">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 p-4">
 
                                 <div class="flex flex-col gap-2">
@@ -24,26 +29,30 @@
                                     <label class="text-sm font-semibold" for="3">{{'zoneVilleReleve.description' | translate}}</label>
                                     <textarea id="3" pTextarea rows="5" cols="30" placeholder="{{'zoneVilleReleve.description' | translate}}"  [(ngModel)]="item.description"
                                                ></textarea>
-                                    
+
                                 </div>
 
                                 <div class="flex flex-col gap-2">
 
                                     <label class="text-sm font-semibold" for="5">{{'zoneVilleReleve.actif' | translate}}</label>
 
-                                    <p-inputSwitch id="5"  [(ngModel)]="item.actif"
+                                    <p-toggleswitch id="5"  [(ngModel)]="item.actif"
                                                     >
-                                    </p-inputSwitch>
-                                    
+                                    </p-toggleswitch>
+
 
                                 </div>
 
 
                 </div>
-            </p-tabPanel>
-                    <p-tabPanel header="{{'zoneVilleReleve.zoneVilleRegionReleves' | translate}}">
-                        <p-tabView [(activeIndex)]="activeTab">
-                            <p-tabPanel header="Création">
+            </p-tabpanel>
+<p-tabpanel [value]="1">
+                        <p-tabs [(value)]="activeTab">
+<p-tablist>
+<p-tab [value]="0">Création</p-tab>
+<p-tab [value]="1">{{'zoneVilleReleve.zoneVilleRegionReleves' | translate}} {{ (item.zoneVilleRegionReleves?.length ?? 0) > 0 ? '(' + (item.zoneVilleRegionReleves?.length ?? 0) + ')' : '' }}</p-tab></p-tablist>
+<p-tabpanels>
+<p-tabpanel [value]="0">
 
                                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4 p-4">
 
@@ -64,12 +73,12 @@
                                                     <label class="text-sm font-semibold" for="3">{{'zoneVilleRegionReleve.description' | translate}}</label>
                                                     <textarea id="3" pTextarea rows="5" cols="30" placeholder="{{'zoneVilleRegionReleve.description' | translate}}"  [(ngModel)]="zoneVilleRegionRelevesElement.description"
                                                                ></textarea>
-                                                    
+
                                                 </div>
                                                 <div class="flex flex-col gap-2">
                                                     <label class="text-sm font-semibold" for="6">Actif</label>
 
-                                                    <p-inputSwitch id="6"  [(ngModel)]="zoneVilleRegionRelevesElement.actif"></p-inputSwitch>
+                                                    <p-toggleswitch id="6"  [(ngModel)]="zoneVilleRegionRelevesElement.actif"></p-toggleswitch>
 
                                                 </div>
                                     <div class="flex justify-end md:col-span-3">
@@ -79,8 +88,8 @@
                                     </div>
 
                                 </div>
-                            </p-tabPanel>
-                            <p-tabPanel header="Liste {{item.zoneVilleRegionReleves?.length > 0 ? '(' + item.zoneVilleRegionReleves?.length + ')' : ''}}">
+                            </p-tabpanel>
+<p-tabpanel [value]="1">
                                 <div class="card p-4">
                                     <p-table [value]="item.zoneVilleRegionReleves" [scrollable]="true" scrollHeight="200px">
                                         <ng-template pTemplate="header">
@@ -109,19 +118,19 @@
                                     </p-table>
                                 </div>
 
-                            </p-tabPanel>
-                        </p-tabView>
-                    </p-tabPanel>
-
-
-        </p-tabView>
+                            </p-tabpanel>
+</p-tabpanels>
+</p-tabs>
+                    </p-tabpanel>
+</p-tabpanels>
+</p-tabs>
 
 </ng-template>
 
 <ng-template pTemplate="footer" >
     <div class="flex justify-end space-x-3 p-4">
 
-            <button class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-primary" label="{{'validate' | translate}}"  (click)="edit()">
+            <button class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-primary"  (click)="edit()">
                 <i class="pi pi-check"></i> {{'validate' | translate}}
             </button>
 

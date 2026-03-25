@@ -13,6 +13,8 @@ export class UniteReleveCriteria extends BaseCriteria {
     public description: string;
     public descriptionLike: string;
     public actif: null | boolean;
+  public zoneAgenceReleve: ZoneAgenceReleveCriteria ;
+  public zoneAgenceReleves: Array<ZoneAgenceReleveCriteria> ;
       public lotReleves: Array<LotReleveCriteria>;
 
 }

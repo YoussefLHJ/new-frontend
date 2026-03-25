@@ -140,7 +140,7 @@ constructor(public layoutService: LayoutService, public app: AppComponent, publi
         }
   }
 
-    getRole(text){
+    getRole(text: any){
         const [role, ...rest] = text.split('_');
         return this.upperCaseFirstLetter(rest.join(''));
     }

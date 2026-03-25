@@ -31,13 +31,13 @@
                             </div>
                             <div class="flex flex-col gap-2">
                                 <label  class="text-sm font-semibold" for="5">{{'zoneVilleReleve.actif' | translate}}</label>
-                                <p-dropdown id="5" [options]="yesOrNoActif" [(ngModel)]="criteria.actif" class="w-full"
+                                <p-select id="5" [options]="yesOrNoActif" [(ngModel)]="criteria.actif" class="w-full"
                                             [filter]="false" [showClear]="true"  placeholder="{{'zoneVilleReleve.actif' | translate}}" optionLabel="label" optionValue="value">
-                                </p-dropdown>
+                                </p-select>
                             </div>
 
                 <div class="col-span-full flex justify-end mt-4">
-                    <button pButton pRipple label="{{'validate' | translate}}" class="px-4 py-2 rounded-md" (click)="findPaginatedByCriteria()">
+                    <button pButton pRipple class="px-4 py-2 rounded-md" (click)="findPaginatedByCriteria()">
                         <i class="pi pi-sort-amount-down"></i> {{'validate' | translate}}
                     </button>
                 </div>
@@ -55,7 +55,7 @@
                             <p-iconfield iconPosition="left" class="w-full md:w-auto">
 							  <p-inputicon class="pi pi-search" />
                               <input pInputText type="text" placeholder="{{'searchInput' | translate}}"
-                                     (input)="dt.filterGlobal($event.target.value, 'contains')"
+                                     (input)="dt.filterGlobal(($any($event.target)).value, 'contains')"
                                      class="w-full md:w-72 border border-gray-300 rounded-md p-2 focus:ring focus:ring-blue-300" />
                             </p-iconfield>
 						</span>

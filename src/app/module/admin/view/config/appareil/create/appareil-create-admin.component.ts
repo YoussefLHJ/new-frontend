@@ -44,7 +44,7 @@ export class AppareilCreateAdminComponent  implements OnInit {
     private _validBatimentCodeBatiment = true;
     private _validBatimentLibelle = true;
 
-	constructor(private service: AppareilAdminService , private batimentService: BatimentAdminService, @Inject(PLATFORM_ID) private platformId? ) {
+	constructor(private service: AppareilAdminService , private batimentService: BatimentAdminService, @Inject(PLATFORM_ID) private platformId?: Object ) {
         this.datePipe = ServiceLocator.injector.get(DatePipe);
         this.messageService = ServiceLocator.injector.get(MessageService);
         this.confirmationService = ServiceLocator.injector.get(ConfirmationService);

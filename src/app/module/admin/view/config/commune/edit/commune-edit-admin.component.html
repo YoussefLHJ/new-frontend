@@ -1,7 +1,11 @@
     <p-dialog [(visible)]="editDialog" [style]="{width: '70vw'}" header="{{'commune.tabPan' | translate}}" [modal]="true" styleClass="p-fluid" [maximizable]="true" [draggable]="false" [resizable]="false">
 <ng-template pTemplate="content" >
-        <p-tabView>
-            <p-tabPanel header="{{'commune.tabPan' | translate}}">
+        <p-tabs [value]="0">
+<p-tablist>
+<p-tab [value]="0">{{'commune.tabPan' | translate}}</p-tab>
+</p-tablist>
+<p-tabpanels>
+<p-tabpanel [value]="0">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 p-4">
 
                                 <div class="flex flex-col gap-2">
@@ -31,9 +35,9 @@
 
                                     <label class="text-sm font-semibold" for="4">{{'commune.actif' | translate}}</label>
 
-                                    <p-inputSwitch id="4"  [(ngModel)]="item.actif"
+                                    <p-toggleswitch id="4"  [(ngModel)]="item.actif"
                                                     >
-                                    </p-inputSwitch>
+                                    </p-toggleswitch>
                                     
 
                                 </div>
@@ -41,31 +45,31 @@
 
                                 <div class="flex flex-col gap-2">
                                     <label class="text-sm font-semibold" for="5">{{'commune.dateCreation' | translate}}</label>
-                                    <p-calendar class="w-full" appendTo="body" id="5"  [showTime]="true" [showSeconds]="false" placeholder="{{'commune.dateCreation' | translate}}"  [(ngModel)]="item.dateCreation"
+                                    <p-datepicker class="w-full" appendTo="body" id="5"  [showTime]="true" [showSeconds]="false" placeholder="{{'commune.dateCreation' | translate}}"  [(ngModel)]="item.dateCreation"
                                                 dateFormat="{{dateFormat}}"  >
-                                    </p-calendar>
+                                    </p-datepicker>
                                     
                                 </div>
 
                                 <div class="flex flex-col gap-2">
                                     <label class="text-sm font-semibold" for="6">{{'commune.dateMiseAJour' | translate}}</label>
-                                    <p-calendar class="w-full" appendTo="body" id="6"  [showTime]="true" [showSeconds]="false" placeholder="{{'commune.dateMiseAJour' | translate}}"  [(ngModel)]="item.dateMiseAJour"
+                                    <p-datepicker class="w-full" appendTo="body" id="6"  [showTime]="true" [showSeconds]="false" placeholder="{{'commune.dateMiseAJour' | translate}}"  [(ngModel)]="item.dateMiseAJour"
                                                 dateFormat="{{dateFormat}}"  >
-                                    </p-calendar>
+                                    </p-datepicker>
                                     
                                 </div>
 
                 </div>
-            </p-tabPanel>
-
-        </p-tabView>
+            </p-tabpanel>
+</p-tabpanels>
+</p-tabs>
 
 </ng-template>
 
 <ng-template pTemplate="footer" >
     <div class="flex justify-end space-x-3 p-4">
 
-            <button class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-primary" label="{{'validate' | translate}}"  (click)="edit()">
+            <button class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-primary"  (click)="edit()">
                 <i class="pi pi-check"></i> {{'validate' | translate}}
             </button>
 

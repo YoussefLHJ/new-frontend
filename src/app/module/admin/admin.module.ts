@@ -4,13 +4,13 @@ import { CommonModule } from '@angular/common';
 import {ToastModule} from 'primeng/toast';
 import {ToolbarModule} from 'primeng/toolbar';
 import {TableModule} from 'primeng/table';
-import {DropdownModule} from 'primeng/dropdown';
-import {InputSwitchModule} from 'primeng/inputswitch';
+import {SelectModule} from 'primeng/select';
+import {ToggleSwitchModule} from 'primeng/toggleswitch';
 import {TextareaModule} from 'primeng/textarea';
 
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { DialogModule } from 'primeng/dialog';
-import {CalendarModule} from 'primeng/calendar';
+import {DatePickerModule} from 'primeng/datepicker';
 import {PanelModule} from 'primeng/panel';
 import {InputNumberModule} from 'primeng/inputnumber';
 import {BadgeModule} from 'primeng/badge';
@@ -21,10 +21,9 @@ import { InputTextModule } from 'primeng/inputtext';
 import {ButtonModule} from 'primeng/button';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {RouterModule} from '@angular/router';
-import {TabViewModule} from 'primeng/tabview';
+import {TabsModule} from 'primeng/tabs';
 import { SplitButtonModule } from 'primeng/splitbutton';
 import { MessageModule } from 'primeng/message';
-import {MessagesModule} from 'primeng/messages';
 import { IconField } from 'primeng/iconfield';
 import { InputIcon } from 'primeng/inputicon';
 import { LoginAdminComponent } from './login-admin/login-admin.component';
@@ -65,14 +64,13 @@ import {SecurityRoutingModule} from 'src/app/module/security/security-routing.mo
     ReactiveFormsModule,
     RouterModule,
     SplitButtonModule,
-    DropdownModule,
-    TabViewModule,
-    InputSwitchModule,
+    SelectModule,
+    TabsModule,
+    ToggleSwitchModule,
     TextareaModule,
-    CalendarModule,
+    DatePickerModule,
     PanelModule,
     MessageModule,
-    MessagesModule,
     InputNumberModule,
     BadgeModule,
     MultiSelectModule,

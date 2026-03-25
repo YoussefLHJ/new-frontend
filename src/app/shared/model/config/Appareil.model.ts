@@ -7,13 +7,14 @@ export class AppareilDto extends BaseDto{
 
     public numeroAppareil: string;
 
-    public batiment: BatimentDto ;
+    public batiment: BatimentDto | null;
 
 
     constructor() {
         super();
 
         this.numeroAppareil = '';
+        this.batiment = null;
 
         }
 

@@ -1,7 +1,12 @@
 <p-dialog [(visible)]="viewDialog" [style]="{width: '70vw'}" header="{{'zoneVilleRegionReleve.tabPan' | translate}}" [modal]="true" styleClass="p-fluid">
     <ng-template pTemplate="content">
-        <p-tabView>
-            <p-tabPanel header="{{'zoneVilleRegionReleve.tabPan' | translate}}">
+        <p-tabs [value]="0">
+<p-tablist>
+<p-tab [value]="0">{{'zoneVilleRegionReleve.tabPan' | translate}}</p-tab>
+<p-tab [value]="1">{{'zoneVilleRegionReleve.zoneAgenceReleves' | translate}}</p-tab>
+</p-tablist>
+<p-tabpanels>
+<p-tabpanel [value]="0">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 p-4">
                                 <div class="flex flex-col gap-2">
                                     <label class="text-sm font-semibold" for="1">{{'zoneVilleRegionReleve.numero' | translate}}</label>
@@ -23,13 +28,12 @@
 
                                     <label class="text-sm font-semibold" for="6">{{'zoneVilleRegionReleve.actif' | translate}}</label>
 
-                                    <p-inputSwitch id="6"  [disabled]="true" [ngModel]="item.actif"></p-inputSwitch>
+                                    <p-toggleswitch id="6"  [disabled]="true" [ngModel]="item.actif"></p-toggleswitch>
 
                                 </div>
                 </div>
-            </p-tabPanel>
-
-                    <p-tabPanel header="{{'zoneVilleRegionReleve.zoneAgenceReleves' | translate}}">
+            </p-tabpanel>
+<p-tabpanel [value]="1">
                         <div class="card p-4">
                             <p-table [value]="item.zoneAgenceReleves" [scrollable]="true" scrollHeight="200px">
                                 <ng-template pTemplate="header">
@@ -52,8 +56,9 @@
                                 </ng-template>
                             </p-table>
                         </div>
-                    </p-tabPanel>
-        </p-tabView>
+                    </p-tabpanel>
+</p-tabpanels>
+</p-tabs>
 
     </ng-template>
 

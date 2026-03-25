@@ -1,7 +1,7 @@
 import {ConfirmationService, MessageService} from 'primeng/api';
 import {DatePipe} from '@angular/common';
 import {Router} from '@angular/router';
-import {Inject, Injectable, PLATFORM_ID} from '@angular/core';
+import {Inject, PLATFORM_ID} from '@angular/core';
 
 import {environment} from 'src/environments/environment';
 
@@ -13,7 +13,6 @@ import {StringUtilService} from 'src/app/zynerator/util/StringUtil.service';
 import {ServiceLocator} from 'src/app/zynerator/service/ServiceLocator';
 
 
-@Injectable()
 export class AbstractEditController<DTO extends BaseDto, CRITERIA extends BaseCriteria, SERVICE extends AbstractService<DTO, CRITERIA>> {
 
     protected _submitted = false;

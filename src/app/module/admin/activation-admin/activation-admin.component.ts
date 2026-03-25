@@ -16,7 +16,7 @@ import { ActivationDto } from 'src/app/zynerator/security/shared/model/Activatio
   styleUrls: ['./activation-admin.component.css']
 })
 export class ActivationAdminComponent implements OnInit {
-      public error: string = null;
+      public error: string | null = null;
     readonly API = environment.loginUrl;
     activationDto = new ActivationDto();
     clicked = false;

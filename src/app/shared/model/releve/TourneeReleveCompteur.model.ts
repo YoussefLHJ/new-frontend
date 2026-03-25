@@ -18,8 +18,8 @@ export class TourneeReleveCompteurDto extends BaseDto{
 
     public photo: string;
 
-    public appareil: AppareilDto ;
-    public tourneeReleveDetail: TourneeReleveDetailDto ;
+    public appareil: AppareilDto | null;
+    public tourneeReleveDetail: TourneeReleveDetailDto | null;
 
 
     constructor() {
@@ -31,7 +31,8 @@ export class TourneeReleveCompteurDto extends BaseDto{
         this.seuilComsommation = null;
         this.commentaire = '';
         this.photo = '';
-        this.appareil = new AppareilDto() ;
+        this.appareil = null;
+        this.tourneeReleveDetail = null;
 
         }
 

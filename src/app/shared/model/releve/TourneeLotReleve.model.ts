@@ -28,11 +28,11 @@ export class TourneeLotReleveDto extends BaseDto{
 
    public actif: null | boolean;
 
-   public dateCreation: Date;
+   public dateCreation: Date | null;
 
-   public dateMiseAJour: Date;
+   public dateMiseAJour: Date | null;
 
-    public lotReleve: LotReleveDto ;
+    public lotReleve: LotReleveDto | null;
      public tourneeReleveDetails: Array<TourneeReleveDetailDto>;
 
 

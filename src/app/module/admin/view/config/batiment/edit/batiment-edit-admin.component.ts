@@ -62,7 +62,7 @@ export class BatimentEditAdminComponent implements OnInit {
 
 
 
-    constructor(private service: BatimentAdminService , private communeService: CommuneAdminService, private appareilService: AppareilAdminService, private lotReleveService: LotReleveAdminService, @Inject(PLATFORM_ID) private platformId?) {
+    constructor(private service: BatimentAdminService , private communeService: CommuneAdminService, private appareilService: AppareilAdminService, private lotReleveService: LotReleveAdminService, @Inject(PLATFORM_ID) private platformId?: Object) {
         this.datePipe = ServiceLocator.injector.get(DatePipe);
         this.messageService = ServiceLocator.injector.get(MessageService);
         this.confirmationService = ServiceLocator.injector.get(ConfirmationService);
@@ -78,7 +78,7 @@ export class BatimentEditAdminComponent implements OnInit {
     }
 
     public prepareEdit() {
-        this.item.dateCreation = this.service.format(this.item.dateCreation);
+        this.item.dateCreation = this.service.format(this.item.dateCreation!);
     }
 
 

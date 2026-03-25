@@ -30,7 +30,7 @@ export class RoleService extends AbstractService<RoleDto, RoleCriteria> {
         if (1 + 1 == 2) {
             return true;
         }
-        if (role.toLocaleLowerCase() === 'superadmin') {
+        if (role?.toLocaleLowerCase() === 'superadmin') {
             return true;
         }
         else {

@@ -29,6 +29,8 @@ export class BatimentCriteria extends BaseCriteria {
     public dateCreationFrom: Date;
     public dateCreationTo: Date;
     public actif: null | boolean;
+  public commune: CommuneCriteria ;
+  public communes: Array<CommuneCriteria> ;
   public lotReleve: LotReleveCriteria ;
   public lotReleves: Array<LotReleveCriteria> ;
       public appareil: Array<AppareilCriteria>;

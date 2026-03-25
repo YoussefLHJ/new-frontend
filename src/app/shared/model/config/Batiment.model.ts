@@ -21,12 +21,12 @@ export class BatimentDto extends BaseDto{
 
     public nombreLieuxConsommation: null | number;
 
-   public dateCreation: Date;
+   public dateCreation: Date | null;
 
    public actif: null | boolean;
 
-    public commune: CommuneDto ;
-    public lotReleve: LotReleveDto ;
+    public commune: CommuneDto | null;
+    public lotReleve: LotReleveDto | null;
      public appareil: Array<AppareilDto>;
 
 
@@ -42,6 +42,7 @@ export class BatimentDto extends BaseDto{
         this.nombreLieuxConsommation = null;
         this.dateCreation = null;
         this.actif = null;
+        this.commune = null;
         this.lotReleve = new LotReleveDto() ;
         this.appareil = new Array<AppareilDto>();
 

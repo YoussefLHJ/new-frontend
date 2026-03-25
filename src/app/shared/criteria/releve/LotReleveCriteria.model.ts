@@ -26,6 +26,8 @@ export class LotReleveCriteria extends BaseCriteria {
     public dateMiseAJourFrom: Date;
     public dateMiseAJourTo: Date;
     public actif: null | boolean;
+  public uniteReleve: UniteReleveCriteria ;
+  public uniteReleves: Array<UniteReleveCriteria> ;
       public batiments: Array<BatimentCriteria>;
 
 }

@@ -66,7 +66,7 @@ export class BatimentListAdminComponent implements OnInit {
     lotReleves: Array<LotReleveDto>;
 
 
-    constructor( private service: BatimentAdminService  , private communeService: CommuneAdminService, private appareilService: AppareilAdminService, private lotReleveService: LotReleveAdminService, @Inject(PLATFORM_ID) private platformId?) {
+    constructor( private service: BatimentAdminService  , private communeService: CommuneAdminService, private appareilService: AppareilAdminService, private lotReleveService: LotReleveAdminService, @Inject(PLATFORM_ID) private platformId?: Object) {
         this.datePipe = ServiceLocator.injector.get(DatePipe);
         this.messageService = ServiceLocator.injector.get(MessageService);
         this.confirmationService = ServiceLocator.injector.get(ConfirmationService);
@@ -232,7 +232,7 @@ export class BatimentListAdminComponent implements OnInit {
             res => {
                 this.initDuplicate(res);
                 this.item = res;
-                this.item.id = null;
+                this.item.id = null as any;
                 this.createDialog = true;
             });
     }
@@ -243,19 +243,19 @@ export class BatimentListAdminComponent implements OnInit {
             {
                 label: 'CSV', icon: 'pi pi-file', command: () => {
                     this.prepareColumnExport();
-                    this.exportService.exporterCSV(this.criteriaData, this.exportData, this.fileName);
+                    this.exportService.exportCsv(this.fileName, this.criteriaData, this.exportData, this.fileName);
                 }
             },
             {
                 label: 'XLS', icon: 'pi pi-file-excel', command: () => {
                     this.prepareColumnExport();
-                    this.exportService.exporterExcel(this.criteriaData, this.exportData, this.fileName);
+                    this.exportService.exportExcel(this.fileName, this.criteriaData, this.exportData, this.fileName);
                 }
             },
             {
                 label: 'PDF', icon: 'pi pi-file-pdf', command: () => {
                     this.prepareColumnExport();
-                    this.exportService.exporterPdf(this.criteriaData, this.exportData, this.fileName);
+                    this.exportService.exportPdf(this.fileName, this.criteriaData, this.exportData, this.fileName);
                 }
             }
         ];
@@ -338,7 +338,7 @@ export class BatimentListAdminComponent implements OnInit {
 
 	public initDuplicate(res: BatimentDto) {
         if (res.appareil != null) {
-             res.appareil.forEach(d => { d.batiment = null; d.id = null; });
+             res.appareil.forEach(d => { d.batiment = null as any; d.id = null as any; });
         }
 	}
 

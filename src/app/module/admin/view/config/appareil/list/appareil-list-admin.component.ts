@@ -60,7 +60,7 @@ export class AppareilListAdminComponent implements OnInit {
     batiments: Array<BatimentDto>;
 
 
-    constructor( private service: AppareilAdminService  , private batimentService: BatimentAdminService, @Inject(PLATFORM_ID) private platformId?) {
+    constructor( private service: AppareilAdminService  , private batimentService: BatimentAdminService, @Inject(PLATFORM_ID) private platformId?: Object) {
         this.datePipe = ServiceLocator.injector.get(DatePipe);
         this.messageService = ServiceLocator.injector.get(MessageService);
         this.confirmationService = ServiceLocator.injector.get(ConfirmationService);
@@ -224,7 +224,7 @@ export class AppareilListAdminComponent implements OnInit {
             res => {
                 this.initDuplicate(res);
                 this.item = res;
-                this.item.id = null;
+                this.item.id = null as any;
                 this.createDialog = true;
             });
     }
@@ -235,19 +235,19 @@ export class AppareilListAdminComponent implements OnInit {
             {
                 label: 'CSV', icon: 'pi pi-file', command: () => {
                     this.prepareColumnExport();
-                    this.exportService.exporterCSV(this.criteriaData, this.exportData, this.fileName);
+                    this.exportService.exportCsv(this.fileName, this.criteriaData, this.exportData, this.fileName);
                 }
             },
             {
                 label: 'XLS', icon: 'pi pi-file-excel', command: () => {
                     this.prepareColumnExport();
-                    this.exportService.exporterExcel(this.criteriaData, this.exportData, this.fileName);
+                    this.exportService.exportExcel(this.fileName, this.criteriaData, this.exportData, this.fileName);
                 }
             },
             {
                 label: 'PDF', icon: 'pi pi-file-pdf', command: () => {
                     this.prepareColumnExport();
-                    this.exportService.exporterPdf(this.criteriaData, this.exportData, this.fileName);
+                    this.exportService.exportPdf(this.fileName, this.criteriaData, this.exportData, this.fileName);
                 }
             }
         ];

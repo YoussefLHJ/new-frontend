@@ -1,7 +1,12 @@
     <p-dialog [(visible)]="editDialog" [style]="{width: '70vw'}" header="{{'lotReleve.tabPan' | translate}}" [modal]="true" styleClass="p-fluid" [maximizable]="true" [draggable]="false" [resizable]="false">
 <ng-template pTemplate="content" >
-        <p-tabView>
-            <p-tabPanel header="{{'lotReleve.tabPan' | translate}}">
+        <p-tabs [value]="0">
+<p-tablist>
+<p-tab [value]="0">{{'lotReleve.tabPan' | translate}}</p-tab>
+<p-tab [value]="1">{{'lotReleve.batiments' | translate}}</p-tab>
+</p-tablist>
+<p-tabpanels>
+<p-tabpanel [value]="0">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 p-4">
 
                                 <div class="flex flex-col gap-2">
@@ -24,64 +29,69 @@
                                     <label class="text-sm font-semibold" for="3">{{'lotReleve.nbBatiments' | translate}}</label>
                                     <p-inputNumber  id="3" placeholder="{{'lotReleve.nbBatiments' | translate}}" [(ngModel)]="item.nbBatiments"  >
                                     </p-inputNumber>
-                                    
+
                                 </div>
 
                                 <div class="flex flex-col gap-2">
                                     <label class="text-sm font-semibold" for="4">{{'lotReleve.nbCompteursALire' | translate}}</label>
                                     <p-inputNumber  id="4" placeholder="{{'lotReleve.nbCompteursALire' | translate}}" [(ngModel)]="item.nbCompteursALire"  >
                                     </p-inputNumber>
-                                    
+
                                 </div>
 
                                 <div class="flex flex-col gap-2">
                                     <label class="text-sm font-semibold" for="5">{{'lotReleve.nbCompteursCharges' | translate}}</label>
                                     <p-inputNumber  id="5" placeholder="{{'lotReleve.nbCompteursCharges' | translate}}" [(ngModel)]="item.nbCompteursCharges"  >
                                     </p-inputNumber>
-                                    
+
                                 </div>
 
                                 <div class="flex flex-col gap-2">
                                     <label class="text-sm font-semibold" for="6">{{'lotReleve.dateCreation' | translate}}</label>
-                                    <p-calendar class="w-full" appendTo="body" id="6"  [showTime]="true" [showSeconds]="false" placeholder="{{'lotReleve.dateCreation' | translate}}"  [(ngModel)]="item.dateCreation"
+                                    <p-datepicker class="w-full" appendTo="body" id="6"  [showTime]="true" [showSeconds]="false" placeholder="{{'lotReleve.dateCreation' | translate}}"  [(ngModel)]="item.dateCreation"
                                                 dateFormat="{{dateFormat}}"  >
-                                    </p-calendar>
-                                    
+                                    </p-datepicker>
+
                                 </div>
 
                                 <div class="flex flex-col gap-2">
                                     <label class="text-sm font-semibold" for="7">{{'lotReleve.dateMiseAJour' | translate}}</label>
-                                    <p-calendar class="w-full" appendTo="body" id="7"  [showTime]="true" [showSeconds]="false" placeholder="{{'lotReleve.dateMiseAJour' | translate}}"  [(ngModel)]="item.dateMiseAJour"
+                                    <p-datepicker class="w-full" appendTo="body" id="7"  [showTime]="true" [showSeconds]="false" placeholder="{{'lotReleve.dateMiseAJour' | translate}}"  [(ngModel)]="item.dateMiseAJour"
                                                 dateFormat="{{dateFormat}}"  >
-                                    </p-calendar>
-                                    
+                                    </p-datepicker>
+
                                 </div>
 
                             <div class="flex flex-col gap-2">
                                 <label class="text-sm font-semibold" for="8">{{'lotReleve.uniteReleve' | translate}}</label>
-                                <p-dropdown class="w-full"  appendTo="body"  [options]="uniteReleves" [(ngModel)]="item.uniteReleve" id="8" [filter]="true" filterMatchMode="contains"
+                                <p-select class="w-full"  appendTo="body"  [options]="uniteReleves" [(ngModel)]="item.uniteReleve" id="8" [filter]="true" filterMatchMode="contains"
                                             [showClear]="true" optionLabel="libelle" placeholder="{{'lotReleve.uniteReleve' | translate}}"  >
-                                </p-dropdown>
-                                
+                                </p-select>
+
                             </div>
 
                                 <div class="flex flex-col gap-2">
 
                                     <label class="text-sm font-semibold" for="10">{{'lotReleve.actif' | translate}}</label>
 
-                                    <p-inputSwitch id="10"  [(ngModel)]="item.actif"
+                                    <p-toggleswitch id="10"  [(ngModel)]="item.actif"
                                                     >
-                                    </p-inputSwitch>
-                                    
+                                    </p-toggleswitch>
+
 
                                 </div>
 
 
                 </div>
-            </p-tabPanel>
-                    <p-tabPanel header="{{'lotReleve.batiments' | translate}}">
-                        <p-tabView [(activeIndex)]="activeTab">
-                            <p-tabPanel header="Création">
+            </p-tabpanel>
+<p-tabpanel [value]="1">
+                        <p-tabs [(value)]="activeTab">
+<p-tablist>
+<p-tab [value]="0">Création</p-tab>
+<p-tab [value]="1">Liste {{ (item.batiments?.length ?? 0) > 0 ? '(' + (item.batiments?.length ?? 0) + ')' : '' }}</p-tab>
+</p-tablist>
+<p-tabpanels>
+<p-tabpanel [value]="0">
 
                                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4 p-4">
 
@@ -96,7 +106,7 @@
                                                     <label class="text-sm font-semibold" for="2">Complement adresse</label>
                                                     <input type="text" pInputText placeholder="Complement adresse"
                                                            id="2" [(ngModel)]="batimentsElement.complementAdresse" autofocus   >
-                                                    
+
                                                 </div>
                                                 <div class="flex flex-col gap-2">
                                                     <label class="text-sm font-semibold" for="3">Libelle<span class="text-red-500">*</span></label>
@@ -107,42 +117,42 @@
                                                 <div class="flex flex-col gap-2">
                                                     <label class="text-sm font-semibold" for="4">Nombre etages</label>
                                                     <p-inputNumber id="nombreEtages" placeholder="Nombre etages"  [(ngModel)]="batimentsElement.nombreEtages"></p-inputNumber>
-                                                    
+
                                                 </div>
                                                 <div class="flex flex-col gap-2">
                                                     <label class="text-sm font-semibold" for="5">Nombre points livraison</label>
                                                     <p-inputNumber id="nombrePointsLivraison" placeholder="Nombre points livraison"  [(ngModel)]="batimentsElement.nombrePointsLivraison"></p-inputNumber>
-                                                    
+
                                                 </div>
                                                 <div class="flex flex-col gap-2">
                                                     <label class="text-sm font-semibold" for="6">Nombre lieux releve</label>
                                                     <p-inputNumber id="nombreLieuxReleve" placeholder="Nombre lieux releve"  [(ngModel)]="batimentsElement.nombreLieuxReleve"></p-inputNumber>
-                                                    
+
                                                 </div>
                                                 <div class="flex flex-col gap-2">
                                                     <label class="text-sm font-semibold" for="7">Nombre lieux consommation</label>
                                                     <p-inputNumber id="nombreLieuxConsommation" placeholder="Nombre lieux consommation"  [(ngModel)]="batimentsElement.nombreLieuxConsommation"></p-inputNumber>
-                                                    
+
                                                 </div>
                                                 <div class="flex flex-col gap-2">
                                                     <label class="text-sm font-semibold" for="8">Date creation</label>
-                                                    <p-calendar class="w-full" appendTo="body" id="8"  [showTime]="true" [showSeconds]="false" placeholder="Date creation" [(ngModel)]="batimentsElement.dateCreation"
-                                                                dateFormat="{{dateFormat}}" [showIcon]="true"  ></p-calendar>
-                                                    
+                                                    <p-datepicker class="w-full" appendTo="body" id="8"  [showTime]="true" [showSeconds]="false" placeholder="Date creation" [(ngModel)]="batimentsElement.dateCreation"
+                                                                dateFormat="{{dateFormat}}" [showIcon]="true"  ></p-datepicker>
+
                                                 </div>
                                                 <div class="flex flex-col gap-2">
                                                     <label class="text-sm font-semibold">Commune</label>
-                                                    <p-dropdown class="w-full"  appendTo="body"  [options]="communes" [(ngModel)]="batimentsElement.commune"
+                                                    <p-select class="w-full"  appendTo="body"  [options]="communes" [(ngModel)]="batimentsElement.commune"
                                                                 id="10"  [filter]="true" filterMatchMode="contains" [showClear]="true" optionLabel="libelle"
                                                                 placeholder="Commune"  >
-                                                    </p-dropdown>
-                                                    
+                                                    </p-select>
+
                                                 </div>
 
                                                 <div class="flex flex-col gap-2">
                                                     <label class="text-sm font-semibold" for="11">Actif</label>
 
-                                                    <p-inputSwitch id="11"  [(ngModel)]="batimentsElement.actif"></p-inputSwitch>
+                                                    <p-toggleswitch id="11"  [(ngModel)]="batimentsElement.actif"></p-toggleswitch>
 
                                                 </div>
                                     <div class="flex justify-end md:col-span-3">
@@ -152,8 +162,8 @@
                                     </div>
 
                                 </div>
-                            </p-tabPanel>
-                            <p-tabPanel header="Liste {{item.batiments?.length > 0 ? '(' + item.batiments?.length + ')' : ''}}">
+                            </p-tabpanel>
+<p-tabpanel [value]="1">
                                 <div class="card p-4">
                                     <p-table [value]="item.batiments" [scrollable]="true" scrollHeight="200px">
                                         <ng-template pTemplate="header">
@@ -194,19 +204,19 @@
                                     </p-table>
                                 </div>
 
-                            </p-tabPanel>
-                        </p-tabView>
-                    </p-tabPanel>
-
-
-        </p-tabView>
+                            </p-tabpanel>
+</p-tabpanels>
+</p-tabs>
+                    </p-tabpanel>
+</p-tabpanels>
+</p-tabs>
 
 </ng-template>
 
 <ng-template pTemplate="footer" >
     <div class="flex justify-end space-x-3 p-4">
 
-            <button class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-primary" label="{{'validate' | translate}}"  (click)="edit()">
+            <button class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-primary"  (click)="edit()">
                 <i class="pi pi-check"></i> {{'validate' | translate}}
             </button>
 

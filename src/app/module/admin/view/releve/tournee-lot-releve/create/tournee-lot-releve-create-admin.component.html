@@ -1,7 +1,12 @@
     <p-dialog [(visible)]="createDialog" [style]="{width: '70vw'}" header="{{'tourneeLotReleve.tabPan' | translate}}" [modal]="true" styleClass="p-fluid" [maximizable]="true" [draggable]="false" [resizable]="false">
 <ng-template pTemplate="content" >
-        <p-tabView>
-            <p-tabPanel header="{{'tourneeLotReleve.tabPan' | translate}}">
+        <p-tabs [value]="0">
+<p-tablist>
+<p-tab [value]="0">{{'tourneeLotReleve.tabPan' | translate}}</p-tab>
+<p-tab [value]="1">{{'tourneeLotReleve.tourneeReleveDetails' | translate}}</p-tab>
+</p-tablist>
+<p-tabpanels>
+<p-tabpanel [value]="0">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 p-4">
 
                                 <div class="flex flex-col gap-2">
@@ -38,112 +43,117 @@
                                     <label class="text-sm font-semibold" for="5">{{'tourneeLotReleve.jourDebutReleve' | translate}}</label>
                                     <p-inputNumber  id="5" placeholder="{{'tourneeLotReleve.jourDebutReleve' | translate}}" [(ngModel)]="item.jourDebutReleve"  >
                                     </p-inputNumber>
-                                    
+
                                 </div>
 
                                 <div class="flex flex-col gap-2">
                                     <label class="text-sm font-semibold" for="6">{{'tourneeLotReleve.moisDebutReleve' | translate}}</label>
                                     <p-inputNumber  id="6" placeholder="{{'tourneeLotReleve.moisDebutReleve' | translate}}" [(ngModel)]="item.moisDebutReleve"  >
                                     </p-inputNumber>
-                                    
+
                                 </div>
 
                                 <div class="flex flex-col gap-2">
                                     <label class="text-sm font-semibold" for="7">{{'tourneeLotReleve.nbLots' | translate}}</label>
                                     <p-inputNumber  id="7" placeholder="{{'tourneeLotReleve.nbLots' | translate}}" [(ngModel)]="item.nbLots"  >
                                     </p-inputNumber>
-                                    
+
                                 </div>
 
                                 <div class="flex flex-col gap-2">
                                     <label class="text-sm font-semibold" for="8">{{'tourneeLotReleve.nbBatiments' | translate}}</label>
                                     <p-inputNumber  id="8" placeholder="{{'tourneeLotReleve.nbBatiments' | translate}}" [(ngModel)]="item.nbBatiments"  >
                                     </p-inputNumber>
-                                    
+
                                 </div>
 
                                 <div class="flex flex-col gap-2">
                                     <label class="text-sm font-semibold" for="9">{{'tourneeLotReleve.nbCompteurs' | translate}}</label>
                                     <p-inputNumber  id="9" placeholder="{{'tourneeLotReleve.nbCompteurs' | translate}}" [(ngModel)]="item.nbCompteurs"  >
                                     </p-inputNumber>
-                                    
+
                                 </div>
 
                                 <div class="flex flex-col gap-2">
                                     <label class="text-sm font-semibold" for="10">{{'tourneeLotReleve.nbCompteursBatiment' | translate}}</label>
                                     <p-inputNumber  id="10" placeholder="{{'tourneeLotReleve.nbCompteursBatiment' | translate}}" [(ngModel)]="item.nbCompteursBatiment"  >
                                     </p-inputNumber>
-                                    
+
                                 </div>
 
                             <div class="flex flex-col gap-2">
                                 <label class="text-sm font-semibold" for="11">{{'tourneeLotReleve.lotReleve' | translate}}</label>
-                                <p-dropdown class="w-full"  appendTo="body"  [options]="lotReleves" [(ngModel)]="item.lotReleve" id="11" [filter]="true" filterMatchMode="contains"
+                                <p-select class="w-full"  appendTo="body"  [options]="lotReleves" [(ngModel)]="item.lotReleve" id="11" [filter]="true" filterMatchMode="contains"
                                             [showClear]="true" optionLabel="numero" placeholder="{{'tourneeLotReleve.lotReleve' | translate}}"  >
-                                </p-dropdown>
-                                
+                                </p-select>
+
                             </div>
 
                                 <div class="flex flex-col gap-2">
 
                                     <label class="text-sm font-semibold" for="12">{{'tourneeLotReleve.actif' | translate}}</label>
 
-                                    <p-inputSwitch id="12"  [(ngModel)]="item.actif"
+                                    <p-toggleswitch id="12"  [(ngModel)]="item.actif"
                                                     >
-                                    </p-inputSwitch>
-                                    
+                                    </p-toggleswitch>
+
 
                                 </div>
 
 
                                 <div class="flex flex-col gap-2">
                                     <label class="text-sm font-semibold" for="13">{{'tourneeLotReleve.dateCreation' | translate}}</label>
-                                    <p-calendar class="w-full" appendTo="body" id="13"  [showTime]="true" [showSeconds]="false" placeholder="{{'tourneeLotReleve.dateCreation' | translate}}"  [(ngModel)]="item.dateCreation"
+                                    <p-datepicker class="w-full" appendTo="body" id="13"  [showTime]="true" [showSeconds]="false" placeholder="{{'tourneeLotReleve.dateCreation' | translate}}"  [(ngModel)]="item.dateCreation"
                                                 dateFormat="{{dateFormat}}"  >
-                                    </p-calendar>
-                                    
+                                    </p-datepicker>
+
                                 </div>
 
                                 <div class="flex flex-col gap-2">
                                     <label class="text-sm font-semibold" for="14">{{'tourneeLotReleve.dateMiseAJour' | translate}}</label>
-                                    <p-calendar class="w-full" appendTo="body" id="14"  [showTime]="true" [showSeconds]="false" placeholder="{{'tourneeLotReleve.dateMiseAJour' | translate}}"  [(ngModel)]="item.dateMiseAJour"
+                                    <p-datepicker class="w-full" appendTo="body" id="14"  [showTime]="true" [showSeconds]="false" placeholder="{{'tourneeLotReleve.dateMiseAJour' | translate}}"  [(ngModel)]="item.dateMiseAJour"
                                                 dateFormat="{{dateFormat}}"  >
-                                    </p-calendar>
-                                    
+                                    </p-datepicker>
+
                                 </div>
 
                 </div>
-            </p-tabPanel>
-                    <p-tabPanel header="{{'tourneeLotReleve.tourneeReleveDetails' | translate}}">
-                        <p-tabView [(activeIndex)]="activeTab">
-                            <p-tabPanel header="Création">
+            </p-tabpanel>
+<p-tabpanel [value]="1">
+                        <p-tabs [(value)]="activeTab">
+<p-tablist>
+<p-tab [value]="0">Création</p-tab>
+    <p-tab [value]="1">Liste {{ (item.tourneeReleveDetails?.length ?? 0) > 0 ? '(' + (item.tourneeReleveDetails?.length ?? 0) + ')' : '' }}</p-tab>
+</p-tablist>
+<p-tabpanels>
+<p-tabpanel [value]="0">
 
                                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4 p-4">
 
 
                                                 <div class="flex flex-col gap-2">
                                                     <label class="text-sm font-semibold">Lot releve</label>
-                                                    <p-dropdown class="w-full"  appendTo="body"  [options]="lotReleves" [(ngModel)]="tourneeReleveDetailsElement.lotReleve"
+                                                    <p-select class="w-full"  appendTo="body"  [options]="lotReleves" [(ngModel)]="tourneeReleveDetailsElement.lotReleve"
                                                                 id="2"  [filter]="true" filterMatchMode="contains" [showClear]="true" optionLabel="numero"
                                                                 placeholder="Lot releve"  >
-                                                    </p-dropdown>
-                                                    
+                                                    </p-select>
+
                                                 </div>
 
                                                 <div class="flex flex-col gap-2">
                                                     <label class="text-sm font-semibold" for="3">Nb batiments</label>
                                                     <p-inputNumber id="nbBatiments" placeholder="Nb batiments"  [(ngModel)]="tourneeReleveDetailsElement.nbBatiments"></p-inputNumber>
-                                                    
+
                                                 </div>
                                                 <div class="flex flex-col gap-2">
                                                     <label class="text-sm font-semibold" for="4">Nb compteurs</label>
                                                     <p-inputNumber id="nbCompteurs" placeholder="Nb compteurs"  [(ngModel)]="tourneeReleveDetailsElement.nbCompteurs"></p-inputNumber>
-                                                    
+
                                                 </div>
                                                 <div class="flex flex-col gap-2">
                                                     <label class="text-sm font-semibold" for="5">Nb compteurs batiment</label>
                                                     <p-inputNumber id="nbCompteursBatiment" placeholder="Nb compteurs batiment"  [(ngModel)]="tourneeReleveDetailsElement.nbCompteursBatiment"></p-inputNumber>
-                                                    
+
                                                 </div>
                                     <div class="flex justify-end md:col-span-3">
                                         <button pButton type="button" class="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-700" (click)="addTourneeReleveDetails()">
@@ -152,8 +162,8 @@
                                     </div>
 
                                 </div>
-                            </p-tabPanel>
-                            <p-tabPanel header="Liste {{item.tourneeReleveDetails?.length > 0 ? '(' + item.tourneeReleveDetails?.length + ')' : ''}}">
+                            </p-tabpanel>
+<p-tabpanel [value]="1">
                                 <div class="card p-4">
                                     <p-table [value]="item.tourneeReleveDetails" [scrollable]="true" scrollHeight="200px">
                                         <ng-template pTemplate="header">
@@ -180,19 +190,19 @@
                                     </p-table>
                                 </div>
 
-                            </p-tabPanel>
-                        </p-tabView>
-                    </p-tabPanel>
-
-
-        </p-tabView>
+                            </p-tabpanel>
+</p-tabpanels>
+</p-tabs>
+                    </p-tabpanel>
+</p-tabpanels>
+</p-tabs>
 
 </ng-template>
 
 <ng-template pTemplate="footer" >
     <div class="flex justify-end space-x-3 p-4">
 
-            <button (click)="save()" label="{{'validate' | translate}}"  class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-primary">
+            <button (click)="save()"  class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-primary">
                 <i class="pi pi-check"></i> {{'validate' | translate}}
             </button>
 

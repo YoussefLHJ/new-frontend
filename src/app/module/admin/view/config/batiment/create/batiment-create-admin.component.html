@@ -1,7 +1,12 @@
     <p-dialog [(visible)]="createDialog" [style]="{width: '70vw'}" header="{{'batiment.tabPan' | translate}}" [modal]="true" styleClass="p-fluid" [maximizable]="true" [draggable]="false" [resizable]="false">
 <ng-template pTemplate="content" >
-        <p-tabView>
-            <p-tabPanel header="{{'batiment.tabPan' | translate}}">
+        <p-tabs [value]="0">
+<p-tablist>
+<p-tab [value]="0">{{'batiment.tabPan' | translate}}</p-tab>
+<p-tab [value]="1">{{'batiment.appareil' | translate}}</p-tab>
+</p-tablist>
+<p-tabpanels>
+<p-tabpanel [value]="0">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 p-4">
 
                                 <div class="flex flex-col gap-2">
@@ -58,17 +63,17 @@
 
                                 <div class="flex flex-col gap-2">
                                     <label class="text-sm font-semibold" for="8">{{'batiment.dateCreation' | translate}}</label>
-                                    <p-calendar class="w-full" appendTo="body" id="8"  [showTime]="true" [showSeconds]="false" placeholder="{{'batiment.dateCreation' | translate}}"  [(ngModel)]="item.dateCreation"
+                                    <p-datepicker class="w-full" appendTo="body" id="8"  [showTime]="true" [showSeconds]="false" placeholder="{{'batiment.dateCreation' | translate}}"  [(ngModel)]="item.dateCreation"
                                                 dateFormat="{{dateFormat}}"  >
-                                    </p-calendar>
+                                    </p-datepicker>
                                     
                                 </div>
 
                             <div class="flex flex-col gap-2">
                                 <label class="text-sm font-semibold" for="10">{{'batiment.commune' | translate}}</label>
-                                <p-dropdown class="w-full"  appendTo="body"  [options]="communes" [(ngModel)]="item.commune" id="10" [filter]="true" filterMatchMode="contains"
+                                <p-select class="w-full"  appendTo="body"  [options]="communes" [(ngModel)]="item.commune" id="10" [filter]="true" filterMatchMode="contains"
                                             [showClear]="true" optionLabel="libelle" placeholder="{{'batiment.commune' | translate}}"  >
-                                </p-dropdown>
+                                </p-select>
                                 
                             </div>
 
@@ -76,9 +81,9 @@
 
                                     <label class="text-sm font-semibold" for="11">{{'batiment.actif' | translate}}</label>
 
-                                    <p-inputSwitch id="11"  [(ngModel)]="item.actif"
+                                    <p-toggleswitch id="11"  [(ngModel)]="item.actif"
                                                     >
-                                    </p-inputSwitch>
+                                    </p-toggleswitch>
                                     
 
                                 </div>
@@ -86,15 +91,15 @@
 
                             <div class="flex flex-col gap-2">
                                 <label class="text-sm font-semibold" for="12">{{'batiment.lotReleve' | translate}}</label>
-                                <p-dropdown class="w-full"  appendTo="body"  [options]="lotReleves" [(ngModel)]="item.lotReleve" id="12" [filter]="true" filterMatchMode="contains"
+                                <p-select class="w-full"  appendTo="body"  [options]="lotReleves" [(ngModel)]="item.lotReleve" id="12" [filter]="true" filterMatchMode="contains"
                                             [showClear]="true" optionLabel="numero" placeholder="{{'batiment.lotReleve' | translate}}"  >
-                                </p-dropdown>
+                                </p-select>
                                 
                             </div>
 
                 </div>
-            </p-tabPanel>
-                    <p-tabPanel header="{{'batiment.appareil' | translate}}">
+            </p-tabpanel>
+<p-tabpanel [value]="1">
 
 
                                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4 p-4">
@@ -136,17 +141,16 @@
                                 </div>
 
 
-                    </p-tabPanel>
-
-
-        </p-tabView>
+                    </p-tabpanel>
+</p-tabpanels>
+</p-tabs>
 
 </ng-template>
 
 <ng-template pTemplate="footer" >
     <div class="flex justify-end space-x-3 p-4">
 
-            <button (click)="save()" label="{{'validate' | translate}}"  class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-primary">
+            <button (click)="save()"  class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-primary">
                 <i class="pi pi-check"></i> {{'validate' | translate}}
             </button>
 

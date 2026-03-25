@@ -28,6 +28,6 @@ export class TokenService {
     public getUsername(): string {
         const tokenDecoded = this.decode();
         return tokenDecoded.sub;
-    }xx
+    }
 
 }

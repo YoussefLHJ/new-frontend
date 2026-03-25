@@ -12,11 +12,11 @@ import { StyleClass } from 'primeng/styleclass';
 import { AppConfigurator } from './app.configurator';
 import { Popover } from 'primeng/popover';
 import { Dialog } from 'primeng/dialog';
-import { TabPanel, TabView } from 'primeng/tabview';
+import { Tab, TabPanel, Tabs, TabList, TabPanels } from 'primeng/tabs';
 import { FormsModule } from '@angular/forms';
 @Component({
     selector: 'app-topbar',
-    imports: [AppConfigurator, Popover, Dialog, TabView, TabPanel, TranslateModule, NgClass, StyleClass, FormsModule, NgForOf],
+    imports: [AppConfigurator, Popover, Dialog, Tabs, TabList, Tab, TabPanels, TabPanel, TranslateModule, NgClass, StyleClass, FormsModule, NgForOf],
     templateUrl: './app.topbar.component.html'
 })
 export class AppTopBarComponent implements OnInit{

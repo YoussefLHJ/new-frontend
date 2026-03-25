@@ -24,10 +24,10 @@ export class AuthService {
     public _user = new UserDto();
     private _adminConnected = false;
     private _authenticatedUser = new UserDto();
-    private _authenticated = (JSON.parse(localStorage.getItem('autenticated')) as boolean) || false;
+    private _authenticated = (JSON.parse(localStorage.getItem('autenticated')!) as boolean) || false;
     public _loggedIn = new BehaviorSubject<boolean>(false);
     public loggedIn$ = this._loggedIn.asObservable();
-    public error: string = null;
+    public error: string | null = null;
     private _sharedUserName = '';
     private _sharedPassword = '';
     private _sharedEmail = '';
@@ -172,7 +172,7 @@ export class AuthService {
         this._authenticatedUser.firstName = firstName;
         this._authenticatedUser.lastName = lastName;
         this._authenticatedUser.email = email;
-        roles.forEach(role => {
+        roles.forEach((role: any) => {
             const roleUser = new RoleUserDto();
             roleUser.role.authority = role;
             this._authenticatedUser.roleUsers.push(roleUser);

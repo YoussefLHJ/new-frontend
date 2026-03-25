@@ -57,7 +57,7 @@ export class ZoneVilleReleveEditAdminComponent implements OnInit {
 
 
 
-    constructor(private service: ZoneVilleReleveAdminService , private zoneVilleRegionReleveService: ZoneVilleRegionReleveAdminService, @Inject(PLATFORM_ID) private platformId?) {
+    constructor(private service: ZoneVilleReleveAdminService , private zoneVilleRegionReleveService: ZoneVilleRegionReleveAdminService, @Inject(PLATFORM_ID) private platformId?: Object) {
         this.datePipe = ServiceLocator.injector.get(DatePipe);
         this.messageService = ServiceLocator.injector.get(MessageService);
         this.confirmationService = ServiceLocator.injector.get(ConfirmationService);

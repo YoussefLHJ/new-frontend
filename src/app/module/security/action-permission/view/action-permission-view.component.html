@@ -4,8 +4,12 @@
           [maximizable]="true" [draggable]="false" [resizable]="false">
 
     <ng-template pTemplate="content">
-        <p-tabView>
-            <p-tabPanel header="{{'actionPermission.tabPan' | translate}}">
+        <p-tabs [value]="0">
+<p-tablist>
+<p-tab [value]="0">{{'actionPermission.tabPan' | translate}}</p-tab>
+</p-tablist>
+<p-tabpanels>
+<p-tabpanel [value]="0">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 p-4">
 
                     <!-- Référence -->
@@ -31,8 +35,9 @@
                     </div>
 
                 </div>
-            </p-tabPanel>
-        </p-tabView>
+            </p-tabpanel>
+</p-tabpanels>
+</p-tabs>
     </ng-template>
 
     <ng-template pTemplate="footer">

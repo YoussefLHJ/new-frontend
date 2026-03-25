@@ -13,6 +13,8 @@ export class ZoneAgenceReleveCriteria extends BaseCriteria {
     public description: string;
     public descriptionLike: string;
     public actif: null | boolean;
+  public zoneVilleRegionReleve: ZoneVilleRegionReleveCriteria ;
+  public zoneVilleRegionReleves: Array<ZoneVilleRegionReleveCriteria> ;
       public uniteReleves: Array<UniteReleveCriteria>;
 
 }

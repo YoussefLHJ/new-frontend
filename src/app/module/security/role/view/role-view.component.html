@@ -3,8 +3,12 @@
           [modal]="true" styleClass="p-fluid">
 
     <ng-template pTemplate="content">
-        <p-tabView>
-            <p-tabPanel header="{{'role.tabPan' | translate}}">
+        <p-tabs [value]="0">
+<p-tablist>
+<p-tab [value]="0">{{'role.tabPan' | translate}}</p-tab>
+</p-tablist>
+<p-tabpanels>
+<p-tabpanel [value]="0">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 p-4">
 
                     <!-- Authority -->
@@ -19,8 +23,9 @@
                     </div>
 
                 </div>
-            </p-tabPanel>
-        </p-tabView>
+            </p-tabpanel>
+</p-tabpanels>
+</p-tabs>
     </ng-template>
 
     <ng-template pTemplate="footer">

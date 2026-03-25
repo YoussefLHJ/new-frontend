@@ -14,7 +14,7 @@ export class ZoneAgenceReleveDto extends BaseDto{
 
    public actif: null | boolean;
 
-    public zoneVilleRegionReleve: ZoneVilleRegionReleveDto ;
+    public zoneVilleRegionReleve: ZoneVilleRegionReleveDto | null;
      public uniteReleves: Array<UniteReleveDto>;
 
 
@@ -25,6 +25,7 @@ export class ZoneAgenceReleveDto extends BaseDto{
         this.libelle = '';
         this.description = '';
         this.actif = null;
+        this.zoneVilleRegionReleve = null;
         this.uniteReleves = new Array<UniteReleveDto>();
 
         }

@@ -219,7 +219,7 @@ export class AbstractListController<DTO extends BaseDto, CRITERIA extends BaseCr
         });
     }
 
-    public async openCreate() {
+    public async openCreate(_entityName?: string) {
         this.item = this.service.constrcutDto();
         this.createDialog = true;
         this.service.initStepper();

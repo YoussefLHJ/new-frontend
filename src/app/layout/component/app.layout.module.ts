@@ -1,10 +1,10 @@
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { InputTextModule } from 'primeng/inputtext';
-import { SidebarModule } from 'primeng/sidebar';
+import { DrawerModule } from 'primeng/drawer';
 import { BadgeModule } from 'primeng/badge';
 import { RadioButtonModule } from 'primeng/radiobutton';
-import { InputSwitchModule } from 'primeng/inputswitch';
+import { ToggleSwitchModule } from 'primeng/toggleswitch';
 import { RippleModule } from 'primeng/ripple';
 import { AppMenuComponent } from './app.menu.component';
 import { AppMenuitem } from './app.menuitem.component';
@@ -12,14 +12,14 @@ import { RouterModule } from '@angular/router';
 import { AppTopBarComponent } from './app.topbar.component';
 import { AppFooterComponent } from './app.footer.component';
 import { PanelMenuModule } from 'primeng/panelmenu';
-import { TabViewModule } from 'primeng/tabview';
+import { TabsModule } from 'primeng/tabs';
 import { DialogModule } from 'primeng/dialog';
 import { TranslateModule } from '@ngx-translate/core';
 import { ButtonModule } from 'primeng/button';
 import { PasswordModule } from 'primeng/password';
 import { MenuModule } from 'primeng/menu';
 import { SplitButtonModule } from 'primeng/splitbutton';
-import { DropdownModule } from 'primeng/dropdown';
+import { SelectModule } from 'primeng/select';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 
@@ -30,21 +30,21 @@ import { NgModule } from '@angular/core';
         FormsModule,
         HttpClientModule,
         InputTextModule,
-        SidebarModule,
+        DrawerModule,
         BadgeModule,
         RadioButtonModule,
-        InputSwitchModule,
+        ToggleSwitchModule,
         RippleModule,
         RouterModule,
         PanelMenuModule,
-        TabViewModule,
+        TabsModule,
         DialogModule,
         TranslateModule,
         ButtonModule,
         PasswordModule,
         MenuModule,
         SplitButtonModule,
-        DropdownModule,
+        SelectModule,
         AppTopBarComponent
     ],
     exports: [AppMenuComponent, AppFooterComponent]

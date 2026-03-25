@@ -242,7 +242,7 @@ export abstract class AbstractService<DTO extends BaseDto, CRITERIA extends Base
         this._API = API;
     }
 
-    public abstract get API() ;
+    public abstract get API(): string ;
 
     public setHttp(http: HttpClient) {
         this.httpClient = http;

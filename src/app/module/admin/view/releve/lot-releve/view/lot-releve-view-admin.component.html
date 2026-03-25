@@ -1,7 +1,12 @@
 <p-dialog [(visible)]="viewDialog" [style]="{width: '70vw'}" header="{{'lotReleve.tabPan' | translate}}" [modal]="true" styleClass="p-fluid">
     <ng-template pTemplate="content">
-        <p-tabView>
-            <p-tabPanel header="{{'lotReleve.tabPan' | translate}}">
+        <p-tabs [value]="0">
+<p-tablist>
+<p-tab [value]="0">{{'lotReleve.tabPan' | translate}}</p-tab>
+<p-tab [value]="1">{{'lotReleve.batiments' | translate}}</p-tab>
+</p-tablist>
+<p-tabpanels>
+<p-tabpanel [value]="0">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 p-4">
                                 <div class="flex flex-col gap-2">
                                     <label class="text-sm font-semibold" for="1">{{'lotReleve.numero' | translate}}</label>
@@ -25,11 +30,11 @@
                                 </div>
                                 <div class="flex flex-col gap-2">
                                     <label class="text-sm font-semibold" for="6">{{'lotReleve.dateCreation' | translate}}</label>
-                                    <p-calendar class="w-full" id="6" [disabled]="true"  [showTime]="true" [showSeconds]="false" placeholder="{{'lotReleve.dateCreation' | translate}}"  [ngModel]="item.dateCreation" dateFormat="{{dateFormat}}"></p-calendar>
+                                    <p-datepicker class="w-full" id="6" [disabled]="true"  [showTime]="true" [showSeconds]="false" placeholder="{{'lotReleve.dateCreation' | translate}}"  [ngModel]="item.dateCreation" dateFormat="{{dateFormat}}"></p-datepicker>
                                 </div>
                                 <div class="flex flex-col gap-2">
                                     <label class="text-sm font-semibold" for="7">{{'lotReleve.dateMiseAJour' | translate}}</label>
-                                    <p-calendar class="w-full" id="7" [disabled]="true"  [showTime]="true" [showSeconds]="false" placeholder="{{'lotReleve.dateMiseAJour' | translate}}"  [ngModel]="item.dateMiseAJour" dateFormat="{{dateFormat}}"></p-calendar>
+                                    <p-datepicker class="w-full" id="7" [disabled]="true"  [showTime]="true" [showSeconds]="false" placeholder="{{'lotReleve.dateMiseAJour' | translate}}"  [ngModel]="item.dateMiseAJour" dateFormat="{{dateFormat}}"></p-datepicker>
                                 </div>
                             <div class="flex flex-col gap-2">
                                 <label class="text-sm font-semibold" for="8">{{'lotReleve.uniteReleve' | translate}}</label>
@@ -39,13 +44,12 @@
 
                                     <label class="text-sm font-semibold" for="10">{{'lotReleve.actif' | translate}}</label>
 
-                                    <p-inputSwitch id="10"  [disabled]="true" [ngModel]="item.actif"></p-inputSwitch>
+                                    <p-toggleswitch id="10"  [disabled]="true" [ngModel]="item.actif"></p-toggleswitch>
 
                                 </div>
                 </div>
-            </p-tabPanel>
-
-                    <p-tabPanel header="{{'lotReleve.batiments' | translate}}">
+            </p-tabpanel>
+<p-tabpanel [value]="1">
                         <div class="card p-4">
                             <p-table [value]="item.batiments" [scrollable]="true" scrollHeight="200px">
                                 <ng-template pTemplate="header">
@@ -80,8 +84,9 @@
                                 </ng-template>
                             </p-table>
                         </div>
-                    </p-tabPanel>
-        </p-tabView>
+                    </p-tabpanel>
+</p-tabpanels>
+</p-tabs>
 
     </ng-template>
 

@@ -4,8 +4,12 @@
           [maximizable]="true" [draggable]="false" [resizable]="false">
 
     <ng-template pTemplate="content">
-        <p-tabView>
-            <p-tabPanel header="{{'modelPermissionUser.tabPan' | translate}}">
+        <p-tabs [value]="0">
+<p-tablist>
+<p-tab [value]="0">{{'modelPermissionUser.tabPan' | translate}}</p-tab>
+</p-tablist>
+<p-tabpanels>
+<p-tabpanel [value]="0">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 p-4">
 
                     <!-- Action Permission -->
@@ -14,12 +18,12 @@
                             {{'modelPermissionUser.actionPermission' | translate}}
                         </label>
                         <div class="flex gap-2">
-                            <p-dropdown appendTo="body" [options]="actionPermissions" [(ngModel)]="item.actionPermission"
+                            <p-select appendTo="body" [options]="actionPermissions" [(ngModel)]="item.actionPermission"
                                         id="1" [filter]="true" filterMatchMode="contains"
                                         [showClear]="true" optionLabel="reference"
                                         placeholder="{{'modelPermissionUser.actionPermission' | translate}}"
                                         class="w-full">
-                            </p-dropdown>
+                            </p-select>
                             <button pButton pRipple type="button" icon="pi pi-plus"
                                     (click)="openCreateActionPermission('ActionPermission')"
                                     class="p-button-success">
@@ -33,12 +37,12 @@
                             {{'modelPermissionUser.modelPermission' | translate}}
                         </label>
                         <div class="flex gap-2">
-                            <p-dropdown appendTo="body" [options]="modelPermissions" [(ngModel)]="item.modelPermission"
+                            <p-select appendTo="body" [options]="modelPermissions" [(ngModel)]="item.modelPermission"
                                         id="2" [filter]="true" filterMatchMode="contains"
                                         [showClear]="true" optionLabel="reference"
                                         placeholder="{{'modelPermissionUser.modelPermission' | translate}}"
                                         class="w-full">
-                            </p-dropdown>
+                            </p-select>
                             <button pButton pRipple type="button" icon="pi pi-plus"
                                     (click)="openCreateModelPermission('ModelPermission')"
                                     class="p-button-success">
@@ -51,7 +55,7 @@
                         <label for="3" class="text-sm font-semibold">
                             {{'modelPermissionUser.value' | translate}}
                         </label>
-                        <p-inputSwitch id="3" [(ngModel)]="item.value"></p-inputSwitch>
+                        <p-toggleswitch id="3" [(ngModel)]="item.value"></p-toggleswitch>
                     </div>
 
                     <!-- User -->
@@ -60,12 +64,12 @@
                             {{'modelPermissionUser.user' | translate}}
                         </label>
                         <div class="flex gap-2">
-                            <p-dropdown appendTo="body" [options]="users" [(ngModel)]="item.user"
+                            <p-select appendTo="body" [options]="users" [(ngModel)]="item.user"
                                         id="4" [filter]="true" filterMatchMode="contains"
                                         [showClear]="true" optionLabel="email"
                                         placeholder="{{'modelPermissionUser.user' | translate}}"
                                         class="w-full">
-                            </p-dropdown>
+                            </p-select>
                             <button pButton pRipple type="button" icon="pi pi-plus"
                                     (click)="openCreateUser('User')"
                                     class="p-button-success">
@@ -83,8 +87,9 @@
                     </div>
 
                 </div>
-            </p-tabPanel>
-        </p-tabView>
+            </p-tabpanel>
+</p-tabpanels>
+</p-tabs>
     </ng-template>
 
     <ng-template pTemplate="footer">

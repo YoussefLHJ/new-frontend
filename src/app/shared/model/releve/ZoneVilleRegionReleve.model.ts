@@ -14,7 +14,7 @@ export class ZoneVilleRegionReleveDto extends BaseDto{
 
    public actif: null | boolean;
 
-    public zoneVilleReleve: ZoneVilleReleveDto ;
+    public zoneVilleReleve: ZoneVilleReleveDto | null;
      public zoneAgenceReleves: Array<ZoneAgenceReleveDto>;
 
 

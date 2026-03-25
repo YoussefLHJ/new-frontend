@@ -95,14 +95,14 @@ export class UserListComponent extends AbstractListController<UserDto, UserCrite
     public override initDuplicate(res: UserDto) {
         if (res.modelPermissionUsers != null) {
             res.modelPermissionUsers.forEach((d) => {
-                d.user = null;
-                d.id = null;
+                d.user = null as any;
+                d.id = null as any;
             });
         }
         if (res.roleUsers != null) {
             res.roleUsers.forEach((d) => {
-                d.user = null;
-                d.id = null;
+                d.user = null as any;
+                d.id = null as any;
             });
         }
     }

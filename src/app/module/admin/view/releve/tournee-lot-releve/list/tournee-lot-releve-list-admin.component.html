@@ -95,45 +95,45 @@
                                 </div>
                         <div class="flex flex-col gap-2">
                             <label  class="text-sm font-semibold" for="11-2">{{'tourneeLotReleve.lotReleve' | translate}}</label>
-                                <p-dropdown [options]="lotReleves" [(ngModel)]="criteria.lotReleve" id="11" [filter]="true" class="w-full"
+                                <p-select [options]="lotReleves" [(ngModel)]="criteria.lotReleve" id="11" [filter]="true" class="w-full"
                                             [showClear]="true"  placeholder="{{'tourneeLotReleve.lotReleve' | translate}}" optionLabel="numero">
-                                </p-dropdown>
+                                </p-select>
                         </div>
                             <div class="flex flex-col gap-2">
                                 <label  class="text-sm font-semibold" for="12">{{'tourneeLotReleve.actif' | translate}}</label>
-                                <p-dropdown id="12" [options]="yesOrNoActif" [(ngModel)]="criteria.actif" class="w-full"
+                                <p-select id="12" [options]="yesOrNoActif" [(ngModel)]="criteria.actif" class="w-full"
                                             [filter]="false" [showClear]="true"  placeholder="{{'tourneeLotReleve.actif' | translate}}" optionLabel="label" optionValue="value">
-                                </p-dropdown>
+                                </p-select>
                             </div>
 
                             <div class="flex flex-col gap-2">
                                 <label class="text-sm font-semibold" for="13-1">{{'tourneeLotReleve.dateCreationMin' | translate}}</label>
-                                <p-calendar class="w-full" [(ngModel)]="criteria.dateCreationFrom"
-                                            id="13-1" dateFormat="dd-MM-yy"  [showIcon]="true"  class="p-fluid"></p-calendar>
+                                <p-datepicker class="w-full" [(ngModel)]="criteria.dateCreationFrom"
+                                            id="13-1" dateFormat="dd-MM-yy"  [showIcon]="true"  class="p-fluid"></p-datepicker>
                             </div>
 
                             <div class="flex flex-col gap-2">
                                 <label  class="text-sm font-semibold" for="13-2">{{'tourneeLotReleve.dateCreationMax' | translate}}</label>
-                                <p-calendar class="w-full" [(ngModel)]="criteria.dateCreationTo"
-                                            id="13-2" dateFormat="dd-MM-yy"  [showIcon]="true" class="p-fluid"></p-calendar>
+                                <p-datepicker class="w-full" [(ngModel)]="criteria.dateCreationTo"
+                                            id="13-2" dateFormat="dd-MM-yy"  [showIcon]="true" class="p-fluid"></p-datepicker>
                             </div>
 
 
                             <div class="flex flex-col gap-2">
                                 <label class="text-sm font-semibold" for="14-1">{{'tourneeLotReleve.dateMiseAJourMin' | translate}}</label>
-                                <p-calendar class="w-full" [(ngModel)]="criteria.dateMiseAJourFrom"
-                                            id="14-1" dateFormat="dd-MM-yy"  [showIcon]="true"  class="p-fluid"></p-calendar>
+                                <p-datepicker class="w-full" [(ngModel)]="criteria.dateMiseAJourFrom"
+                                            id="14-1" dateFormat="dd-MM-yy"  [showIcon]="true"  class="p-fluid"></p-datepicker>
                             </div>
 
                             <div class="flex flex-col gap-2">
                                 <label  class="text-sm font-semibold" for="14-2">{{'tourneeLotReleve.dateMiseAJourMax' | translate}}</label>
-                                <p-calendar class="w-full" [(ngModel)]="criteria.dateMiseAJourTo"
-                                            id="14-2" dateFormat="dd-MM-yy"  [showIcon]="true" class="p-fluid"></p-calendar>
+                                <p-datepicker class="w-full" [(ngModel)]="criteria.dateMiseAJourTo"
+                                            id="14-2" dateFormat="dd-MM-yy"  [showIcon]="true" class="p-fluid"></p-datepicker>
                             </div>
 
 
                 <div class="col-span-full flex justify-end mt-4">
-                    <button pButton pRipple label="{{'validate' | translate}}" class="px-4 py-2 rounded-md" (click)="findPaginatedByCriteria()">
+                    <button pButton pRipple class="px-4 py-2 rounded-md" (click)="findPaginatedByCriteria()">
                         <i class="pi pi-sort-amount-down"></i> {{'validate' | translate}}
                     </button>
                 </div>
@@ -151,7 +151,7 @@
                             <p-iconfield iconPosition="left" class="w-full md:w-auto">
 							  <p-inputicon class="pi pi-search" />
                               <input pInputText type="text" placeholder="{{'searchInput' | translate}}"
-                                     (input)="dt.filterGlobal($event.target.value, 'contains')"
+                                     (input)="dt.filterGlobal(($any($event.target)).value, 'contains')"
                                      class="w-full md:w-72 border border-gray-300 rounded-md p-2 focus:ring focus:ring-blue-300" />
                             </p-iconfield>
 						</span>

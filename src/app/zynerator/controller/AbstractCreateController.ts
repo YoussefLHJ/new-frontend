@@ -1,7 +1,7 @@
 import {ConfirmationService, MessageService,MenuItem} from 'primeng/api';
 import {DatePipe} from '@angular/common';
 import {Router} from '@angular/router';
-import {Inject, Injectable, PLATFORM_ID} from '@angular/core';
+import {Inject, PLATFORM_ID} from '@angular/core';
 import {environment} from 'src/environments/environment';
 
 import {RoleService} from 'src/app/zynerator/security/shared/service/Role.service';
@@ -12,7 +12,6 @@ import {StringUtilService} from 'src/app/zynerator/util/StringUtil.service';
 import {FileTempDto} from 'src/app/zynerator/dto/FileTempDto.model';
 import {ServiceLocator} from 'src/app/zynerator/service/ServiceLocator';
 
-@Injectable()
 export class AbstractCreateController<DTO extends BaseDto, CRITERIA extends BaseCriteria, SERVICE extends AbstractService<DTO, CRITERIA>> {
 
     protected _submitted = false;

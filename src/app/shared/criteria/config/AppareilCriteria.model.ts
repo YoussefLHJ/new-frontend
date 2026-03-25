@@ -7,5 +7,7 @@ export class AppareilCriteria extends BaseCriteria {
     public id: number;
     public numeroAppareil: string;
     public numeroAppareilLike: string;
+  public batiment: BatimentCriteria ;
+  public batiments: Array<BatimentCriteria> ;
 
 }

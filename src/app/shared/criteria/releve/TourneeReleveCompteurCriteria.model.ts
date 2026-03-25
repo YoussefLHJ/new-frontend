@@ -24,5 +24,7 @@ export class TourneeReleveCompteurCriteria extends BaseCriteria {
     public photoLike: string;
   public appareil: AppareilCriteria ;
   public appareils: Array<AppareilCriteria> ;
+  public tourneeReleveDetail: TourneeReleveDetailCriteria ;
+  public tourneeReleveDetails: Array<TourneeReleveDetailCriteria> ;
 
 }

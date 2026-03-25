@@ -16,13 +16,13 @@ export class LotReleveDto extends BaseDto{
 
     public nbCompteursCharges: null | number;
 
-   public dateCreation: Date;
+   public dateCreation: Date | null;
 
-   public dateMiseAJour: Date;
+   public dateMiseAJour: Date | null;
 
    public actif: null | boolean;
 
-    public uniteReleve: UniteReleveDto ;
+    public uniteReleve: UniteReleveDto | null;
      public batiments: Array<BatimentDto>;
 
 
@@ -37,6 +37,7 @@ export class LotReleveDto extends BaseDto{
         this.dateCreation = null;
         this.dateMiseAJour = null;
         this.actif = null;
+        this.uniteReleve = null;
         this.batiments = new Array<BatimentDto>();
 
         }

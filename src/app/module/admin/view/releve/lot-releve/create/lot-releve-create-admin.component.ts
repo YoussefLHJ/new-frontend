@@ -55,7 +55,7 @@ export class LotReleveCreateAdminComponent  implements OnInit {
     private _validBatimentsCodeBatiment = true;
     private _validBatimentsLibelle = true;
 
-	constructor(private service: LotReleveAdminService , private communeService: CommuneAdminService, private uniteReleveService: UniteReleveAdminService, private batimentService: BatimentAdminService, @Inject(PLATFORM_ID) private platformId? ) {
+	constructor(private service: LotReleveAdminService , private communeService: CommuneAdminService, private uniteReleveService: UniteReleveAdminService, private batimentService: BatimentAdminService, @Inject(PLATFORM_ID) private platformId?: Object ) {
         this.datePipe = ServiceLocator.injector.get(DatePipe);
         this.messageService = ServiceLocator.injector.get(MessageService);
         this.confirmationService = ServiceLocator.injector.get(ConfirmationService);

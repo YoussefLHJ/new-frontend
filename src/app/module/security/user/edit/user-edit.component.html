@@ -2,10 +2,14 @@
           [modal]="true" styleClass="p-fluid" [maximizable]="true" [draggable]="false" [resizable]="false">
 
     <ng-template pTemplate="content">
-        <p-tabView>
-
-            <!-- Informations Utilisateur -->
-            <p-tabPanel header="{{'user.tabPan' | translate}}">
+        <p-tabs [value]="0">
+<p-tablist>
+<p-tab [value]="0">{{'user.tabPan' | translate}}</p-tab>
+<p-tab [value]="1">Roles</p-tab>
+<p-tab [value]="2">{{'user.modelPermissionUsers' | translate}}</p-tab>
+</p-tablist>
+<p-tabpanels>
+<p-tabpanel [value]="0">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 p-4">
 
                     <!-- Username -->
@@ -47,38 +51,36 @@
                         <!-- Credentials Non Expired -->
                         <div class="flex flex-col gap-2">
                             <label for="1" class="text-sm font-semibold">{{'user.credentialsNonExpired' | translate}}</label>
-                            <p-inputSwitch id="1" [(ngModel)]="item.credentialsNonExpired"></p-inputSwitch>
+                            <p-toggleswitch id="1" [(ngModel)]="item.credentialsNonExpired"></p-toggleswitch>
                         </div>
 
                         <!-- Enabled -->
                         <div class="flex flex-col gap-2">
                             <label for="2" class="text-sm font-semibold">{{'user.enabled' | translate}}</label>
-                            <p-inputSwitch id="2" [(ngModel)]="item.enabled"></p-inputSwitch>
+                            <p-toggleswitch id="2" [(ngModel)]="item.enabled"></p-toggleswitch>
                         </div>
 
                         <!-- Account Non Expired -->
                         <div class="flex flex-col gap-2">
                             <label for="4" class="text-sm font-semibold">{{'user.accountNonExpired' | translate}}</label>
-                            <p-inputSwitch id="4" [(ngModel)]="item.accountNonExpired"></p-inputSwitch>
+                            <p-toggleswitch id="4" [(ngModel)]="item.accountNonExpired"></p-toggleswitch>
                         </div>
 
                         <!-- Account Non Locked -->
                         <div class="flex flex-col gap-2">
                             <label for="5" class="text-sm font-semibold">{{'user.accountNonLocked' | translate}}</label>
-                            <p-inputSwitch id="5" [(ngModel)]="item.accountNonLocked"></p-inputSwitch>
+                            <p-toggleswitch id="5" [(ngModel)]="item.accountNonLocked"></p-toggleswitch>
                         </div>
 
                         <!-- Password Changed -->
                         <div class="flex flex-col gap-2">
                             <label for="8" class="text-sm font-semibold">{{'user.passwordChanged' | translate}}</label>
-                            <p-inputSwitch id="8" [(ngModel)]="item.passwordChanged"></p-inputSwitch>
+                            <p-toggleswitch id="8" [(ngModel)]="item.passwordChanged"></p-toggleswitch>
                         </div>
 
                 </div>
-            </p-tabPanel>
-
-            <!-- Rôles Utilisateur -->
-            <p-tabPanel header="Roles">
+            </p-tabpanel>
+<p-tabpanel [value]="1">
                 <div class="grid p-4">
                     <div class="col">
                         <div class="card">
@@ -102,12 +104,10 @@
                         </div>
                     </div>
                 </div>
-            </p-tabPanel>
-
-            <!-- Permissions Utilisateur -->
-            <p-tabPanel header="{{'user.modelPermissionUsers' | translate}}">
+            </p-tabpanel>
+<p-tabpanel [value]="2">
                 <div class="flex justify-content-center align-items-center gap-2 mb-3">
-                    <p-inputSwitch inputId="Permission value" (onChange)="editPermission()" [(ngModel)]="globalValue"></p-inputSwitch>
+                    <p-toggleswitch inputId="Permission value" (onChange)="editPermission()" [(ngModel)]="globalValue"></p-toggleswitch>
                     <span>Permission value</span>
                 </div>
                 <p-table [value]="item.modelPermissionUsers" sortField="modelPermission.reference"
@@ -130,7 +130,7 @@
                                 <span class="font-bold ml-2">{{p.modelPermission?.reference}}</span>
                             </td>
                             <td colspan="2">
-                                <p-inputSwitch id="16" (onChange)="editModelPermission(p)" [(ngModel)]="p.modelPermission.globalValue"></p-inputSwitch>
+                                <p-toggleswitch id="16" (onChange)="editModelPermission(p)" [(ngModel)]="p.modelPermission.globalValue"></p-toggleswitch>
                             </td>
                         </tr>
                     </ng-template>
@@ -138,14 +138,14 @@
                         <tr>
                             <td></td>
                             <td>{{p.actionPermission?.reference}}</td>
-                            <td><p-inputSwitch id="10" [(ngModel)]="p.value"></p-inputSwitch></td>
+                            <td><p-toggleswitch id="10" [(ngModel)]="p.value"></p-toggleswitch></td>
                             <td>{{p.subAttribute}}</td>
                         </tr>
                     </ng-template>
                 </p-table>
-            </p-tabPanel>
-
-        </p-tabView>
+            </p-tabpanel>
+</p-tabpanels>
+</p-tabs>
     </ng-template>
 
 

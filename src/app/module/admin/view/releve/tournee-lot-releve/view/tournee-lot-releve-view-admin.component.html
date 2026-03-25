@@ -1,7 +1,12 @@
 <p-dialog [(visible)]="viewDialog" [style]="{width: '70vw'}" header="{{'tourneeLotReleve.tabPan' | translate}}" [modal]="true" styleClass="p-fluid">
     <ng-template pTemplate="content">
-        <p-tabView>
-            <p-tabPanel header="{{'tourneeLotReleve.tabPan' | translate}}">
+        <p-tabs [value]="0">
+<p-tablist>
+<p-tab [value]="0">{{'tourneeLotReleve.tabPan' | translate}}</p-tab>
+<p-tab [value]="1">{{'tourneeLotReleve.tourneeReleveDetails' | translate}}</p-tab>
+</p-tablist>
+<p-tabpanels>
+<p-tabpanel [value]="0">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 p-4">
                                 <div class="flex flex-col gap-2">
                                     <label class="text-sm font-semibold" for="1">{{'tourneeLotReleve.numero' | translate}}</label>
@@ -51,21 +56,20 @@
 
                                     <label class="text-sm font-semibold" for="12">{{'tourneeLotReleve.actif' | translate}}</label>
 
-                                    <p-inputSwitch id="12"  [disabled]="true" [ngModel]="item.actif"></p-inputSwitch>
+                                    <p-toggleswitch id="12"  [disabled]="true" [ngModel]="item.actif"></p-toggleswitch>
 
                                 </div>
                                 <div class="flex flex-col gap-2">
                                     <label class="text-sm font-semibold" for="13">{{'tourneeLotReleve.dateCreation' | translate}}</label>
-                                    <p-calendar class="w-full" id="13" [disabled]="true"  [showTime]="true" [showSeconds]="false" placeholder="{{'tourneeLotReleve.dateCreation' | translate}}"  [ngModel]="item.dateCreation" dateFormat="{{dateFormat}}"></p-calendar>
+                                    <p-datepicker class="w-full" id="13" [disabled]="true"  [showTime]="true" [showSeconds]="false" placeholder="{{'tourneeLotReleve.dateCreation' | translate}}"  [ngModel]="item.dateCreation" dateFormat="{{dateFormat}}"></p-datepicker>
                                 </div>
                                 <div class="flex flex-col gap-2">
                                     <label class="text-sm font-semibold" for="14">{{'tourneeLotReleve.dateMiseAJour' | translate}}</label>
-                                    <p-calendar class="w-full" id="14" [disabled]="true"  [showTime]="true" [showSeconds]="false" placeholder="{{'tourneeLotReleve.dateMiseAJour' | translate}}"  [ngModel]="item.dateMiseAJour" dateFormat="{{dateFormat}}"></p-calendar>
+                                    <p-datepicker class="w-full" id="14" [disabled]="true"  [showTime]="true" [showSeconds]="false" placeholder="{{'tourneeLotReleve.dateMiseAJour' | translate}}"  [ngModel]="item.dateMiseAJour" dateFormat="{{dateFormat}}"></p-datepicker>
                                 </div>
                 </div>
-            </p-tabPanel>
-
-                    <p-tabPanel header="{{'tourneeLotReleve.tourneeReleveDetails' | translate}}">
+            </p-tabpanel>
+<p-tabpanel [value]="1">
                         <div class="card p-4">
                             <p-table [value]="item.tourneeReleveDetails" [scrollable]="true" scrollHeight="200px">
                                 <ng-template pTemplate="header">
@@ -86,8 +90,9 @@
                                 </ng-template>
                             </p-table>
                         </div>
-                    </p-tabPanel>
-        </p-tabView>
+                    </p-tabpanel>
+</p-tabpanels>
+</p-tabs>
 
     </ng-template>
 

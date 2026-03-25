@@ -1,4 +1,4 @@
-import {DropdownModule} from 'primeng/dropdown';
+import {SelectModule} from 'primeng/select';
 import {ButtonModule} from 'primeng/button';
 import {ToolbarModule} from 'primeng/toolbar';
 import {TextareaModule} from 'primeng/textarea';
@@ -6,9 +6,9 @@ import {TextareaModule} from 'primeng/textarea';
 import {FileUploadModule} from 'primeng/fileupload';
 import {SelectButtonModule} from 'primeng/selectbutton';
 import {PanelMenuModule} from 'primeng/panelmenu';
-import {CalendarModule} from 'primeng/calendar';
-import {TabViewModule} from 'primeng/tabview';
-import {InputSwitchModule} from 'primeng/inputswitch';
+import {DatePickerModule} from 'primeng/datepicker';
+import {TabsModule} from 'primeng/tabs';
+import {ToggleSwitchModule} from 'primeng/toggleswitch';
 import {InputTextModule} from 'primeng/inputtext';
 import {ToastModule} from 'primeng/toast';
 import {PanelModule} from 'primeng/panel';
@@ -68,12 +68,12 @@ imports: [
     InputTextModule,
     AppRoutingModule,
     HttpClientModule,
-    DropdownModule,
-    TabViewModule,
+    SelectModule,
+    TabsModule,
     SplitButtonModule,
-    InputSwitchModule,
+    ToggleSwitchModule,
     TextareaModule,
-    CalendarModule,
+    DatePickerModule,
     PanelModule,
     MessageModule,
     CardModule,

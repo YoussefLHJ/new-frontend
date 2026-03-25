@@ -49,7 +49,7 @@ export class CommuneEditAdminComponent implements OnInit {
 
 
 
-    constructor(private service: CommuneAdminService , @Inject(PLATFORM_ID) private platformId?) {
+    constructor(private service: CommuneAdminService , @Inject(PLATFORM_ID) private platformId?: Object) {
         this.datePipe = ServiceLocator.injector.get(DatePipe);
         this.messageService = ServiceLocator.injector.get(MessageService);
         this.confirmationService = ServiceLocator.injector.get(ConfirmationService);
@@ -62,8 +62,8 @@ export class CommuneEditAdminComponent implements OnInit {
     }
 
     public prepareEdit() {
-        this.item.dateCreation = this.service.format(this.item.dateCreation);
-        this.item.dateMiseAJour = this.service.format(this.item.dateMiseAJour);
+        this.item.dateCreation = this.service.format(this.item.dateCreation!);
+        this.item.dateMiseAJour = this.service.format(this.item.dateMiseAJour!);
     }
 
 

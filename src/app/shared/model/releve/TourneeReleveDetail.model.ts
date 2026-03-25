@@ -13,8 +13,8 @@ export class TourneeReleveDetailDto extends BaseDto{
 
     public nbCompteursBatiment: null | number;
 
-    public tourneeLotReleve: TourneeLotReleveDto ;
-    public lotReleve: LotReleveDto ;
+    public tourneeLotReleve: TourneeLotReleveDto | null;
+    public lotReleve: LotReleveDto | null;
      public tourneeReleveCompteurs: Array<TourneeReleveCompteurDto>;
 
 

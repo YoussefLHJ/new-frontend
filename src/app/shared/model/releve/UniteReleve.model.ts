@@ -14,7 +14,7 @@ export class UniteReleveDto extends BaseDto{
 
    public actif: null | boolean;
 
-    public zoneAgenceReleve: ZoneAgenceReleveDto ;
+    public zoneAgenceReleve: ZoneAgenceReleveDto | null;
      public lotReleves: Array<LotReleveDto>;
 
 
@@ -25,6 +25,7 @@ export class UniteReleveDto extends BaseDto{
         this.libelle = '';
         this.description = '';
         this.actif = null;
+        this.zoneAgenceReleve = null;
         this.lotReleves = new Array<LotReleveDto>();
 
         }

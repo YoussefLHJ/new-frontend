@@ -53,7 +53,7 @@ export class ZoneVilleRegionReleveCreateAdminComponent  implements OnInit {
     private _validZoneAgenceRelevesNumero = true;
     private _validZoneAgenceRelevesLibelle = true;
 
-	constructor(private service: ZoneVilleRegionReleveAdminService , private zoneAgenceReleveService: ZoneAgenceReleveAdminService, private zoneVilleReleveService: ZoneVilleReleveAdminService, @Inject(PLATFORM_ID) private platformId? ) {
+	constructor(private service: ZoneVilleRegionReleveAdminService , private zoneAgenceReleveService: ZoneAgenceReleveAdminService, private zoneVilleReleveService: ZoneVilleReleveAdminService, @Inject(PLATFORM_ID) private platformId?: Object ) {
         this.datePipe = ServiceLocator.injector.get(DatePipe);
         this.messageService = ServiceLocator.injector.get(MessageService);
         this.confirmationService = ServiceLocator.injector.get(ConfirmationService);
