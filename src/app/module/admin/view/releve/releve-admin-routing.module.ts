@@ -18,6 +18,7 @@ import {AuthGuard} from 'src/app/zynerator/security/guards/auth.guard';
 
 
 import { LotReleveListAdminComponent } from './lot-releve/list/lot-releve-list-admin.component';
+import { NewReleveListAdminComponent } from './new-releve/list/new-releve-list-admin.component';
 import { TourneeReleveCompteurListAdminComponent } from './tournee-releve-compteur/list/tournee-releve-compteur-list-admin.component';
 import { TourneeLotReleveListAdminComponent } from './tournee-lot-releve/list/tournee-lot-releve-list-admin.component';
 import { TourneeReleveDetailListAdminComponent } from './tournee-releve-detail/list/tournee-releve-detail-list-admin.component';
@@ -98,6 +99,18 @@ import { ZoneVilleRegionReleveListAdminComponent } from './zone-ville-region-rel
                                 {
                                     path: 'list',
                                     component: LotReleveListAdminComponent ,
+                                    canActivate: [AuthGuard]
+                                }
+                            ]
+                        },
+
+                        {
+
+                            path: 'new-releve',
+                            children: [
+                                {
+                                    path: 'list',
+                                    component: NewReleveListAdminComponent ,
                                     canActivate: [AuthGuard]
                                 }
                             ]

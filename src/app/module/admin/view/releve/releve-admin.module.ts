@@ -26,6 +26,12 @@ import { LotReleveCreateAdminComponent } from './lot-releve/create/lot-releve-cr
 import { LotReleveEditAdminComponent } from './lot-releve/edit/lot-releve-edit-admin.component';
 import { LotReleveViewAdminComponent } from './lot-releve/view/lot-releve-view-admin.component';
 import { LotReleveListAdminComponent } from './lot-releve/list/lot-releve-list-admin.component';
+import { LotReleveListAdminV2Component } from './lot-releve/list/lot-releve-list-admin-v2.component';
+import { NewReleveCreateAdminComponent } from './new-releve/create/new-releve-create-admin.component';
+import { NewReleveEditAdminComponent } from './new-releve/edit/new-releve-edit-admin.component';
+import { NewReleveViewAdminComponent } from './new-releve/view/new-releve-view-admin.component';
+import { NewReleveListAdminComponent } from './new-releve/list/new-releve-list-admin.component';
+import { ServerDataTableComponent } from 'src/app/shared/components/data-grid';
 import { TourneeReleveCompteurCreateAdminComponent } from './tournee-releve-compteur/create/tournee-releve-compteur-create-admin.component';
 import { TourneeReleveCompteurEditAdminComponent } from './tournee-releve-compteur/edit/tournee-releve-compteur-edit-admin.component';
 import { TourneeReleveCompteurViewAdminComponent } from './tournee-releve-compteur/view/tournee-releve-compteur-view-admin.component';
@@ -73,8 +79,13 @@ import { InputIcon } from 'primeng/inputicon';
 
     LotReleveCreateAdminComponent,
     LotReleveListAdminComponent,
+    LotReleveListAdminV2Component,
     LotReleveViewAdminComponent,
     LotReleveEditAdminComponent,
+    NewReleveCreateAdminComponent,
+    NewReleveListAdminComponent,
+    NewReleveViewAdminComponent,
+    NewReleveEditAdminComponent,
     TourneeReleveCompteurCreateAdminComponent,
     TourneeReleveCompteurListAdminComponent,
     TourneeReleveCompteurViewAdminComponent,
@@ -136,15 +147,20 @@ import { InputIcon } from 'primeng/inputicon';
     EditorModule,
     TagModule,
     IconField,
-    InputIcon
-
+    InputIcon,
+    ServerDataTableComponent
 
   ],
   exports: [
   LotReleveCreateAdminComponent,
   LotReleveListAdminComponent,
+  LotReleveListAdminV2Component,
   LotReleveViewAdminComponent,
   LotReleveEditAdminComponent,
+  NewReleveCreateAdminComponent,
+  NewReleveListAdminComponent,
+  NewReleveViewAdminComponent,
+  NewReleveEditAdminComponent,
   TourneeReleveCompteurCreateAdminComponent,
   TourneeReleveCompteurListAdminComponent,
   TourneeReleveCompteurViewAdminComponent,

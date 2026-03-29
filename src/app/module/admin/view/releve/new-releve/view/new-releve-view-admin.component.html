@@ -1,0 +1,102 @@
+<p-dialog [(visible)]="viewDialog" [style]="{width: '70vw'}" header="{{'lotReleve.tabPan' | translate}}" [modal]="true" styleClass="p-fluid">
+    <ng-template pTemplate="content">
+        <p-tabs [value]="0">
+            <p-tablist>
+                <p-tab [value]="0">{{'lotReleve.tabPan' | translate}}</p-tab>
+                <p-tab [value]="1">{{'lotReleve.batiments' | translate}}</p-tab>
+            </p-tablist>
+            <p-tabpanels>
+                <p-tabpanel [value]="0">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 p-4">
+                        <div class="flex flex-col gap-2">
+                            <label class="text-sm font-semibold">{{'lotReleve.numero' | translate}}</label>
+                            <input type="text" pInputText [disabled]="true" placeholder="{{'lotReleve.numero' | translate}}" [ngModel]="item.numero" />
+                        </div>
+                        <div class="flex flex-col gap-2">
+                            <label class="text-sm font-semibold">{{'lotReleve.code' | translate}}</label>
+                            <input type="text" pInputText [disabled]="true" placeholder="{{'lotReleve.code' | translate}}" [ngModel]="item.code" />
+                        </div>
+                        <div class="flex flex-col gap-2">
+                            <label class="text-sm font-semibold">{{'lotReleve.nbBatiments' | translate}}</label>
+                            <p-inputNumber [disabled]="true" placeholder="{{'lotReleve.nbBatiments' | translate}}" [ngModel]="item.nbBatiments"></p-inputNumber>
+                        </div>
+                        <div class="flex flex-col gap-2">
+                            <label class="text-sm font-semibold">{{'lotReleve.nbCompteursALire' | translate}}</label>
+                            <p-inputNumber [disabled]="true" placeholder="{{'lotReleve.nbCompteursALire' | translate}}" [ngModel]="item.nbCompteursALire"></p-inputNumber>
+                        </div>
+                        <div class="flex flex-col gap-2">
+                            <label class="text-sm font-semibold">{{'lotReleve.nbCompteursCharges' | translate}}</label>
+                            <p-inputNumber [disabled]="true" placeholder="{{'lotReleve.nbCompteursCharges' | translate}}" [ngModel]="item.nbCompteursCharges"></p-inputNumber>
+                        </div>
+                        <div class="flex flex-col gap-2">
+                            <label class="text-sm font-semibold">{{'lotReleve.dateCreation' | translate}}</label>
+                            <p-datepicker class="w-full" [disabled]="true" [showTime]="true" [showSeconds]="false"
+                                          placeholder="{{'lotReleve.dateCreation' | translate}}" [ngModel]="item.dateCreation"
+                                          dateFormat="{{dateFormat}}"></p-datepicker>
+                        </div>
+                        <div class="flex flex-col gap-2">
+                            <label class="text-sm font-semibold">{{'lotReleve.dateMiseAJour' | translate}}</label>
+                            <p-datepicker class="w-full" [disabled]="true" [showTime]="true" [showSeconds]="false"
+                                          placeholder="{{'lotReleve.dateMiseAJour' | translate}}" [ngModel]="item.dateMiseAJour"
+                                          dateFormat="{{dateFormat}}"></p-datepicker>
+                        </div>
+                        <div class="flex flex-col gap-2">
+                            <label class="text-sm font-semibold">{{'lotReleve.uniteReleve' | translate}}</label>
+                            <input type="text" pInputText [disabled]="true" placeholder="{{'lotReleve.uniteReleve' | translate}}" [ngModel]="item.uniteReleve?.libelle" />
+                        </div>
+                        <div class="flex flex-col gap-2">
+                            <label class="text-sm font-semibold">{{'lotReleve.actif' | translate}}</label>
+                            <p-toggleswitch [disabled]="true" [ngModel]="item.actif"></p-toggleswitch>
+                        </div>
+                    </div>
+                </p-tabpanel>
+
+                <p-tabpanel [value]="1">
+                    <div class="card p-4">
+                        <p-table [value]="item.batiments" [scrollable]="true" scrollHeight="200px">
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th>Code batiment</th>
+                                    <th>Complement adresse</th>
+                                    <th>Libelle</th>
+                                    <th>Nombre etages</th>
+                                    <th>Nombre points livraison</th>
+                                    <th>Nombre lieux releve</th>
+                                    <th>Nombre lieux consommation</th>
+                                    <th>Date creation</th>
+                                    <th>Commune</th>
+                                    <th>Actif</th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-p>
+                                <tr>
+                                    <td>{{p.codeBatiment}}</td>
+                                    <td>{{p.complementAdresse}}</td>
+                                    <td>{{p.libelle}}</td>
+                                    <td>{{p.nombreEtages}}</td>
+                                    <td>{{p.nombrePointsLivraison}}</td>
+                                    <td>{{p.nombreLieuxReleve}}</td>
+                                    <td>{{p.nombreLieuxConsommation}}</td>
+                                    <td>{{p.dateCreation | date: dateFormatColumn}}</td>
+                                    <td>{{p.commune?.libelle}}</td>
+                                    <td>
+                                        <i *ngIf="p.actif" class="pi pi-check checked-toogle"></i>
+                                        <i *ngIf="!p.actif" class="pi pi-times unchecked-toogle"></i>
+                                    </td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </div>
+                </p-tabpanel>
+            </p-tabpanels>
+        </p-tabs>
+    </ng-template>
+
+    <ng-template pTemplate="footer">
+        <div class="flex justify-end p-4">
+            <button class="border border-gray-400 font-semibold py-2 px-4 rounded shadow" (click)="hideViewDialog()">
+                <i class="pi pi-times"></i> Annuler
+            </button>
+        </div>
+    </ng-template>
+</p-dialog>

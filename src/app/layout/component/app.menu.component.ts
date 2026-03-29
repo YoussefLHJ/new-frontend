@@ -34,6 +34,11 @@ constructor(public layoutService: LayoutService, public app: AppComponent, publi
 						label: 'Releve',
 						icon: 'pi pi-wallet',
 						items: [
+                                {
+                                    label: 'New releve',
+                                    icon: 'pi pi-th-large',
+                                    routerLink: ['/app/admin/releve/new-releve/list']
+                                },
 								  {
 									label: 'Liste lot releve',
 									icon: 'pi pi-th-large',
