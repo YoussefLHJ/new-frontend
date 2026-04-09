@@ -10,7 +10,7 @@ import { ToggleSwitchModule } from 'primeng/toggleswitch';
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { TabsModule } from 'primeng/tabs';
-import { DataGridCreateComponent } from '@/app/pages/components/data-grid';
+import { DataGridEditComponent } from '@/app/pages/components/data-grid';
 
 
 import {DatePipe} from '@angular/common';
@@ -39,7 +39,7 @@ import {CommuneCriteria} from 'src/app/shared/criteria/config/CommuneCriteria.mo
   imports: [
     CommonModule, FormsModule, TranslateModule,
     InputTextModule, InputNumberModule, SelectModule, ToggleSwitchModule,
-    TableModule, ButtonModule, TabsModule, DataGridCreateComponent,
+    TableModule, ButtonModule, TabsModule, DataGridEditComponent,
   ],
   templateUrl: './commune-edit-admin.component.html'
 })
@@ -64,10 +64,10 @@ export class CommuneEditAdminComponent implements OnInit {
     private _validCommuneCode = true;
     private _validCommuneLibelle = true;
 
+    public onUpdated = output<void>();
 
 
-
-    constructor(private service: CommuneAdminService , @Inject(PLATFORM_ID) private platformId?) {
+    constructor(private service: CommuneAdminService , @Inject(PLATFORM_ID) private platformId?: Object) {
         this.datePipe = ServiceLocator.injector.get(DatePipe);
         this.messageService = ServiceLocator.injector.get(MessageService);
         this.confirmationService = ServiceLocator.injector.get(ConfirmationService);

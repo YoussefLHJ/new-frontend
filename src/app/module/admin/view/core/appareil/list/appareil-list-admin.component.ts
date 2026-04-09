@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, viewChild} from '@angular/core';
 import {AppareilAdminService} from 'src/app/shared/service/admin/core/AppareilAdmin.service';
 import {AppareilDto} from 'src/app/shared/model/core/Appareil.model';
 import {AppareilCriteria} from 'src/app/shared/criteria/core/AppareilCriteria.model';
@@ -35,6 +35,7 @@ import {ServerColumnConfig ,GroupingConfig ,DataGridListComponent, DataGridCreat
 })
 export class AppareilListAdminComponent implements OnInit {
 
+    groupingConfig: GroupingConfig = {};
 
     protected filterColumns: string[] = ['numero','dernierePeriodeIndex','derniereAnneeIndex','batiment',];
 
@@ -133,7 +134,7 @@ export class AppareilListAdminComponent implements OnInit {
     batiments: Array<BatimentDto>;
 
 
-    constructor( private service: AppareilAdminService  , private batimentService: BatimentAdminService, @Inject(PLATFORM_ID) private platformId?) {
+    constructor( private service: AppareilAdminService  , private batimentService: BatimentAdminService, @Inject(PLATFORM_ID) private platformId?: Object) {
         this.datePipe = ServiceLocator.injector.get(DatePipe);
         this.messageService = ServiceLocator.injector.get(MessageService);
         this.confirmationService = ServiceLocator.injector.get(ConfirmationService);
@@ -358,7 +359,13 @@ export class AppareilListAdminComponent implements OnInit {
         });
     }
 
-// add
+    public onSaved() {
+        this.dataGridList()?.refresh();
+    }
+
+    public onUpdated() {
+        this.dataGridList()?.refresh();
+    }
 
 
     public initCol() {

@@ -14,7 +14,7 @@ import { TagModule } from 'primeng/tag';
 import { TooltipModule } from 'primeng/tooltip';
 import { TranslateService } from '@ngx-translate/core';
 import { SignalTranslatePipe } from '@/app/pages/pipe/signal-translate.pipe';
-import { ExportService } from '@/app/shared/service/Export.service';
+import { ExportService } from '@/app/zynerator/util/Export.service';
 import { DataGridToolbarComponent } from '../data-grid-toolbar/data-grid-toolbar.component';
 import { ViewDetailDialogComponent } from '../../view/view-detail-dialog/view-detail-dialog.component';
 import { ColumnConfig, FilterCondition, GroupOption, GroupingConfig } from '../../models/data-grid.models';

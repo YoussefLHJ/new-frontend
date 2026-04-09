@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, viewChild} from '@angular/core';
 import {CommuneAdminService} from 'src/app/shared/service/admin/config/CommuneAdmin.service';
 import {CommuneDto} from 'src/app/shared/model/config/Commune.model';
 import {CommuneCriteria} from 'src/app/shared/criteria/config/CommuneCriteria.model';
@@ -33,6 +33,7 @@ import {ServerColumnConfig ,GroupingConfig ,DataGridListComponent, DataGridCreat
 })
 export class CommuneListAdminComponent implements OnInit {
 
+    groupingConfig: GroupingConfig = {};
 
     protected filterColumns: string[] = ['code','libelle','description','actif',];
 
@@ -132,7 +133,7 @@ export class CommuneListAdminComponent implements OnInit {
      yesOrNoActif: any[] = [];
 
 
-    constructor( private service: CommuneAdminService  , @Inject(PLATFORM_ID) private platformId?) {
+    constructor( private service: CommuneAdminService  , @Inject(PLATFORM_ID) private platformId?: Object) {
         this.datePipe = ServiceLocator.injector.get(DatePipe);
         this.messageService = ServiceLocator.injector.get(MessageService);
         this.confirmationService = ServiceLocator.injector.get(ConfirmationService);
@@ -357,7 +358,13 @@ export class CommuneListAdminComponent implements OnInit {
         });
     }
 
-// add
+    public onSaved() {
+        this.dataGridList()?.refresh();
+    }
+
+    public onUpdated() {
+        this.dataGridList()?.refresh();
+    }
 
 
     public initCol() {

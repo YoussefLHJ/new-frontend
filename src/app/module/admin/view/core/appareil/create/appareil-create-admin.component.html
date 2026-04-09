@@ -1,15 +1,17 @@
     <app-data-grid-create [(visible)]="createDialog"  title="{{'appareil.tabPan' | translate}}" (onSave)="save()" (onCancel)="hideCreateDialog()">
 <ng-template pTemplate="content" >
-        <p-tabView>
-            <p-tabPanel header="{{'appareil.tabPan' | translate}}">
+        <p-tabs value="0">
+            <p-tabpanels>
+            <p-tabpanel value="0">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 p-4">
 
                                 <div class="flex flex-col gap-2">
                                     <label class="text-sm font-semibold" for="1">{{'appareil.numero' | translate}}<span class="text-red-500">*</span></label>
                                     <input type="text" pInputText  placeholder="{{'appareil.numero' | translate}}" id="1" [(ngModel)]="item.numero"
                                            [ngClass]="{'ng-invalid ng-dirty' : !validAppareilNumero}"  />
-                                        @if (!validAppareilNumero)
+                                        @if (!validAppareilNumero) {
                                         <small class="text-red-500">Numero is obligatory.</small>
+                                        }
                                 </div>
 
 
@@ -33,15 +35,15 @@
                             </div>
 
                 </div>
-            </p-tabPanel>
-
-        </p-tabView>
+            </p-tabpanel>
+            </p-tabpanels>
+        </p-tabs>
 
 </ng-template>
 
 <ng-template pTemplate="footer" >
     <div class="flex justify-end space-x-3 p-4">
-            <button (click)="save()" label="{{'validate' | translate}}"  class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-primary">
+            <button (click)="save()" class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-primary">
                 <i class="pi pi-check"></i> {{'validate' | translate}}
             </button>
 

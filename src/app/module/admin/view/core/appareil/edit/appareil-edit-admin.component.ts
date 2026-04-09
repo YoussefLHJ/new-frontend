@@ -10,7 +10,7 @@ import { ToggleSwitchModule } from 'primeng/toggleswitch';
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { TabsModule } from 'primeng/tabs';
-import { DataGridCreateComponent } from '@/app/pages/components/data-grid';
+import { DataGridEditComponent } from '@/app/pages/components/data-grid';
 
 
 import {DatePipe} from '@angular/common';
@@ -41,7 +41,7 @@ import {BatimentAdminService} from 'src/app/shared/service/admin/core/BatimentAd
   imports: [
     CommonModule, FormsModule, TranslateModule,
     InputTextModule, InputNumberModule, SelectModule, ToggleSwitchModule,
-    TableModule, ButtonModule, TabsModule, DataGridCreateComponent,
+    TableModule, ButtonModule, TabsModule, DataGridEditComponent,
   ],
   templateUrl: './appareil-edit-admin.component.html'
 })
@@ -68,9 +68,9 @@ export class AppareilEditAdminComponent implements OnInit {
     private _validBatimentCode = true;
     private _validBatimentLibelle = true;
 
+    public onUpdated = output<void>();
 
-
-    constructor(private service: AppareilAdminService , private batimentService: BatimentAdminService, @Inject(PLATFORM_ID) private platformId?) {
+    constructor(private service: AppareilAdminService , private batimentService: BatimentAdminService, @Inject(PLATFORM_ID) private platformId?: Object) {
         this.datePipe = ServiceLocator.injector.get(DatePipe);
         this.messageService = ServiceLocator.injector.get(MessageService);
         this.confirmationService = ServiceLocator.injector.get(ConfirmationService);

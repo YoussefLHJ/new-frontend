@@ -22,7 +22,7 @@ import {CommuneAdminService} from 'src/app/shared/service/admin/config/CommuneAd
 import {AppareilAdminService} from 'src/app/shared/service/admin/core/AppareilAdmin.service';
 
 
-import {DataGridListComponent, ServerColumnConfig} from '@/app/pages/components/data-grid';
+import {DataGridListComponent, GroupingConfig, ServerColumnConfig} from '@/app/pages/components/data-grid';
 
 @Component({
     selector: 'app-batiment-list-admin',
@@ -31,6 +31,7 @@ import {DataGridListComponent, ServerColumnConfig} from '@/app/pages/components/
 })
 export class BatimentListAdminComponent implements OnInit {
 
+    groupingConfig: GroupingConfig = {};
 
     protected filterColumns: string[] = ['code', 'complementAdresse', 'libelle', 'nombreEtages', 'nombrePointsLivraison', 'nombreLieuxReleve', 'nombreLieuxConsommation', 'commune', 'actif',];
 
@@ -186,7 +187,7 @@ export class BatimentListAdminComponent implements OnInit {
     communes: Array<CommuneDto>;
 
 
-    constructor(private service: BatimentAdminService, private communeService: CommuneAdminService, private appareilService: AppareilAdminService, @Inject(PLATFORM_ID) private platformId?) {
+    constructor(private service: BatimentAdminService, private communeService: CommuneAdminService, private appareilService: AppareilAdminService, @Inject(PLATFORM_ID) private platformId?: Object) {
         this.datePipe = ServiceLocator.injector.get(DatePipe);
         this.messageService = ServiceLocator.injector.get(MessageService);
         this.confirmationService = ServiceLocator.injector.get(ConfirmationService);
@@ -418,7 +419,13 @@ export class BatimentListAdminComponent implements OnInit {
         });
     }
 
-// add
+    public onSaved() {
+        this.dataGridList()?.refresh();
+    }
+
+    public onUpdated() {
+        this.dataGridList()?.refresh();
+    }
 
 
     public initCol() {
@@ -444,8 +451,8 @@ export class BatimentListAdminComponent implements OnInit {
     public initDuplicate(res: BatimentDto) {
         if (res.appareils != null) {
             res.appareils.forEach(d => {
-                d.batiment = null;
-                d.id = null;
+                d.batiment = null as any;
+                d.id = null as any;
             });
         }
     }
