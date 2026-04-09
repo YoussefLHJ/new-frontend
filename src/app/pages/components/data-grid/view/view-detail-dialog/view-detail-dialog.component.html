@@ -1,0 +1,65 @@
+<p-dialog [(visible)]="visible" [style]="{ width: '600px' }"
+          [modal]="true" [dismissableMask]="true" [closable]="true"
+          (onHide)="onHide()"
+          [breakpoints]="{ '650px': '95vw' }">
+
+    <ng-template #header>
+        <div class="flex items-start gap-3 w-full">
+            <div class="flex items-center justify-center w-8 h-8 rounded-lg bg-primary/10 shrink-0 mt-0.5">
+                <i class="pi pi-eye text-primary text-sm"></i>
+            </div>
+            <div class="flex-1 min-w-0">
+                <h3 class="text-lg font-semibold m-0 leading-none">{{ 'common.viewDetails' | translate }}</h3>
+                <p class="text-xs text-muted-color m-0 mt-1.5">{{ title() | translate }}</p>
+            </div>
+        </div>
+    </ng-template>
+
+    <ng-template #content>
+        @if (item()) {
+            <div class="flex flex-col gap-0.5 -mt-2">
+                @for (col of visibleColumns(); track col.field) {
+                    <div class="grid grid-cols-5 gap-4 items-start px-4 py-3 rounded-lg transition-colors duration-150"
+                         [class]="$index % 2 === 0 ? 'bg-surface-50 dark:bg-surface-800/50' : ''">
+
+                        <!-- Label -->
+                        <div class="col-span-2 flex items-center gap-2 min-h-[1.5rem]">
+                            <i [class]="getFieldIcon(col) + ' text-xs text-muted-color opacity-60'"></i>
+                            <span class="text-sm font-medium text-muted-color">{{ col.header | translate }}</span>
+                        </div>
+
+                        <!-- Value -->
+                        <div class="col-span-3 min-h-[1.5rem]">
+                            @switch (col.type) {
+                                @case ('boolean') {
+                                    <p-tag [value]="getBooleanLabel(col)"
+                                           [severity]="$any(getBooleanSeverity(col))" />
+                                }
+                                @case ('date') {
+                                    <span class="text-sm font-medium text-color">
+                                                {{ item()![col.field] ? (item()![col.field] | date:(col.dateFormat || 'dd/MM/yyyy')) : '—' }}
+                                            </span>
+                                }
+                                @case ('entity') {
+                                    <span class="text-sm font-medium text-color">
+                                                {{ item()![col.field]?.[col.entityLabelField || 'libelle'] || '—' }}
+                                            </span>
+                                }
+                                @default {
+                                    <span class="text-sm font-medium text-color">
+                                                {{ item()![col.field] ?? '—' }}
+                                            </span>
+                                }
+                            }
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+    </ng-template>
+
+    <ng-template #footer>
+        <p-button [label]="'common.close' | translate" icon="pi pi-times" [outlined]="true"
+                  severity="secondary" (onClick)="onHide()" />
+    </ng-template>
+</p-dialog>

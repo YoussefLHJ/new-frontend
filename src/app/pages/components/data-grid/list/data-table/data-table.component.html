@@ -1,0 +1,232 @@
+<p-toolbar styleClass="mb-4" style="position: relative; z-index: 10;">
+    <ng-template #start>
+        <p-button [label]="'new' | translate" icon="pi pi-plus" severity="secondary"
+                  (onClick)="onCreate.emit()" />
+    </ng-template>
+    <ng-template #end>
+        <app-data-grid-toolbar
+            [columns]="columns()"
+            [groupOptions]="groupOptions()"
+            [groupingConfig]="groupingConfig()"
+            [storageKey]="storageKey()"
+            (groupChanged)="onGroupFieldsChange($event)"
+            (filtersApplied)="onFiltersApplied($event)"
+            (filtersCleared)="onFiltersCleared()"
+            (exportExcel)="exportToExcel()"
+            (exportCsv)="exportToCsv()"
+            (exportPdf)="exportToPdf()"
+            (columnsChanged)="onColumnsChanged()" />
+    </ng-template>
+</p-toolbar>
+
+<!-- Selection bar -->
+@if (selectedItems().length) {
+    <div class="flex items-center gap-3 mb-3 px-4 py-2.5 rounded-lg
+                bg-primary/10 border border-primary/20
+                transition-all duration-200"
+         role="status" aria-live="polite">
+        <div class="flex items-center justify-center w-7 h-7 rounded-full bg-primary text-primary-contrast text-xs font-bold shrink-0">
+            {{ selectedItems().length }}
+        </div>
+        <span class="text-sm font-medium text-color flex-1">
+            {{ (selectedItems().length === 1 ? 'dataGrid.selection.rowSelected' : 'dataGrid.selection.rowsSelected') | translate: { count: selectedItems().length } }}
+        </span>
+        <div class="flex items-center gap-1.5">
+            <p-button [label]="'delete' | translate" icon="pi pi-trash" severity="danger" [outlined]="true"
+                      size="small" (onClick)="onDeleteSelected.emit(selectedItems())" />
+            <p-button icon="pi pi-times" [rounded]="true" [text]="true" severity="secondary"
+                      size="small" (onClick)="selectedItems.set([])"
+                      [pTooltip]="'dataGrid.selection.clearSelection' | translate" tooltipPosition="top" />
+        </div>
+    </div>
+}
+
+<!-- Active filter chips -->
+@if (activeFilters?.length) {
+    <div class="flex items-center gap-2 mb-3 px-3 py-2 bg-surface-50 dark:bg-surface-800 rounded-lg flex-wrap">
+        <i class="pi pi-filter text-muted-color text-sm"></i>
+        @for (c of activeFilters; track $index) {
+            @if ($index > 0) {
+                <span class="text-[0.65rem] font-bold text-muted-color uppercase tracking-widest">{{ 'dataGrid.filter.and' | translate }}</span>
+            }
+            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 bg-primary/10 text-primary rounded-full text-xs font-medium">
+                {{ getFilterChipLabel(c) }}
+                <i class="pi pi-times cursor-pointer text-xs opacity-70 hover:opacity-100 transition-opacity"
+                   (click)="removeFilter(c)"></i>
+            </span>
+        }
+        <p-button icon="pi pi-filter-slash" [rounded]="true" [text]="true" severity="danger"
+                  [pTooltip]="'dataGrid.filter.clearAll' | translate" tooltipPosition="top"
+                  (onClick)="clearAllFilters()" />
+    </div>
+}
+
+<p-table
+    #dt
+    [value]="displayItems()"
+    [rows]="10"
+    [paginator]="true"
+    [globalFilterFields]="cachedGlobalFilterFields()"
+    [tableStyle]="{ 'min-width': tableMinWidth() }"
+    [selection]="selectedItems()"
+    (selectionChange)="selectedItems.set($event)"
+    [rowHover]="true"
+    [dataKey]="dataKey()"
+    [currentPageReportTemplate]="'from-to' | translate"
+    [showCurrentPageReport]="true"
+    [rowsPerPageOptions]="[10, 25, 50]"
+    [loading]="loading()"
+    [rowGroupMode]="activeGroupFields.length ? 'subheader' : undefined"
+    [groupRowsBy]="activeGroupFields.length ? '_groupKey' : undefined"
+    [sortField]="activeGroupFields.length ? '_groupKey' : undefined"
+    [sortOrder]="1"
+>
+    <ng-template #caption>
+        <div class="flex items-center justify-between gap-4">
+            <h5 class="m-0 text-lg font-semibold">{{ title() | translate }}</h5>
+            <p-iconfield>
+                <p-inputicon styleClass="pi pi-search" />
+                <input pInputText type="text" (input)="onGlobalFilter(dt, $event)"
+                       [placeholder]="'common.searchPlaceholder' | translate" />
+            </p-iconfield>
+        </div>
+    </ng-template>
+
+    <ng-template #header>
+        <tr>
+            <th style="width: 3rem"><p-tableHeaderCheckbox /></th>
+            @for (col of columns(); track col.field) {
+                @if (col.visible !== false) {
+                    <th [pSortableColumn]="col.sortable && !activeGroupFields.length ? col.field : undefined"
+                        [style.min-width]="col.width || getDefaultWidth(col)">
+                        {{ col.header | translate }}
+                        @if (col.sortable && !activeGroupFields.length) {
+                            <p-sortIcon [field]="col.field" />
+                        }
+                    </th>
+                }
+            }
+            <th style="min-width: 9rem; text-align: center">{{ 'actions' | translate }}</th>
+        </tr>
+    </ng-template>
+
+    <ng-template #groupheader let-item>
+        <tr pRowGroupHeader>
+            <td [attr.colspan]="cachedVisibleColumnCount() + 2" class="!p-0 !border-none">
+                <div class="flex items-center gap-3 px-4 py-3 cursor-pointer select-none
+                            bg-emerald-50/50 dark:bg-emerald-950/15
+                            border-l-[3px] border-emerald-500
+                            hover:bg-emerald-50 dark:hover:bg-emerald-950/25
+                            active:bg-emerald-100/60 dark:active:bg-emerald-900/20
+                            transition-all duration-200"
+                     (click)="toggleGroup(item)">
+
+                    <button type="button"
+                            class="flex items-center justify-center w-7 h-7 rounded-lg shrink-0
+                                   bg-emerald-500/10 dark:bg-emerald-500/15
+                                   hover:bg-emerald-500/20 dark:hover:bg-emerald-500/25
+                                   transition-colors duration-200 border-none cursor-pointer outline-none
+                                   focus-visible:ring-2 focus-visible:ring-emerald-500/50 focus-visible:ring-offset-1"
+                            [attr.aria-expanded]="isGroupExpanded(item._groupKey)"
+                            [attr.aria-label]="(isGroupExpanded(item._groupKey) ? 'common.collapse' : 'common.expand') | translate">
+                        <i class="pi text-emerald-600 dark:text-emerald-400 text-xs
+                                  transition-transform duration-200"
+                           [class.pi-chevron-down]="isGroupExpanded(item._groupKey)"
+                           [class.pi-chevron-right]="!isGroupExpanded(item._groupKey)"></i>
+                    </button>
+
+                    <div class="flex items-center gap-1.5 flex-wrap flex-1 min-w-0">
+                        @for (part of getGroupParts(item); track $index) {
+                            <div class="inline-flex items-center gap-1.5 px-2.5 py-1
+                                        bg-surface-0 dark:bg-surface-700
+                                        border border-surface-200 dark:border-surface-600
+                                        rounded-lg shadow-[0_1px_2px_rgba(0,0,0,0.04)]">
+                                <span class="text-[11px] font-medium text-muted-color uppercase tracking-wider">{{ part.label }}</span>
+                                <span class="text-muted-color/30 text-xs">:</span>
+                                <span class="text-sm font-semibold text-color">{{ part.value }}</span>
+                            </div>
+                            @if (!$last) {
+                                <i class="pi pi-chevron-right text-[10px] text-muted-color/40"></i>
+                            }
+                        }
+                    </div>
+
+                    <div class="inline-flex items-center gap-1 px-2.5 py-1
+                                bg-emerald-500/10 dark:bg-emerald-500/15
+                                rounded-full shrink-0">
+                        <span class="text-xs font-bold text-emerald-600 dark:text-emerald-400">{{ groupCountMap.get(item._groupKey) ?? 0 }}</span>
+                        <span class="text-[11px] font-medium text-emerald-600/70 dark:text-emerald-400/70">{{ 'dataGrid.grouping.count' | translate }}</span>
+                    </div>
+                </div>
+            </td>
+        </tr>
+    </ng-template>
+
+    <ng-template #body let-item>
+        @if (isGroupExpanded(item._groupKey)) {
+            <tr>
+                <td [class]="activeGroupFields.length ? 'border-l-[3px] border-emerald-500/30' : ''">
+                    <p-tableCheckbox [value]="item" /></td>
+                @for (col of columns(); track col.field) {
+                    @if (col.visible !== false) {
+                        @if (customCellTpl() && hasCustomCell(col)) {
+                            <td>
+                                <ng-container [ngTemplateOutlet]="customCellTpl()!"
+                                              [ngTemplateOutletContext]="{ $implicit: item, column: col }" />
+                            </td>
+                        } @else {
+                            <td>
+                                @switch (col.type) {
+                                    @case ('boolean') {
+                                        <p-tag [value]="getBooleanLabel(item, col)"
+                                               [severity]="$any(getBooleanSeverity(item, col))" />
+                                    }
+                                    @case ('date') {
+                                        <span>{{ item[col.field] | date:(col.dateFormat || 'dd/MM/yyyy') }}</span>
+                                    }
+                                    @case ('entity') {
+                                        <span>{{ item[col.field]?.[col.entityLabelField || 'libelle'] }}</span>
+                                    }
+                                    @default {
+                                        <span>{{ item[col.field] }}</span>
+                                    }
+                                }
+                            </td>
+                        }
+                    }
+                }
+                <td>
+                    <div class="flex items-center justify-center gap-1">
+                        <p-button icon="pi pi-eye" [rounded]="true" [text]="true" severity="info"
+                                  [pTooltip]="'common.view' | translate" tooltipPosition="top"
+                                  (click)="openViewDialog(item)" />
+                        <p-button icon="pi pi-pencil" [rounded]="true" [text]="true"
+                                  [pTooltip]="'common.edit' | translate" tooltipPosition="top"
+                                  (click)="onEdit.emit(item)" />
+                        <p-button icon="pi pi-trash" severity="danger" [rounded]="true" [text]="true"
+                                  [pTooltip]="'common.delete' | translate" tooltipPosition="top"
+                                  (click)="onDelete.emit(item)" />
+                    </div>
+                </td>
+            </tr>
+        }
+    </ng-template>
+
+    <ng-template #emptymessage>
+        <tr>
+            <td [attr.colspan]="cachedVisibleColumnCount() + 2">
+                <div class="flex flex-col items-center justify-center py-16 text-muted-color">
+                    <i class="pi pi-inbox text-5xl mb-4 opacity-40"></i>
+                    <span class="text-lg font-medium">{{ emptyMessage() | translate }}</span>
+                </div>
+            </td>
+        </tr>
+    </ng-template>
+</p-table>
+
+<!-- View detail dialog -->
+<app-view-detail-dialog
+    [(visible)]="viewDialogVisible"
+    [item]="viewItem"
+    [columns]="columns()"
+    [title]="title()" />

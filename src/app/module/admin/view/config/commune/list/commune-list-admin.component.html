@@ -1,0 +1,32 @@
+@if (listActionIsValid){
+<div class="grid">
+    <app-data-grid-list
+	  mode="server"
+	  [columns]="columns"
+	  [dataLoader]="dataLoader"
+	  [criteriaFactory]="criteriaFactory"
+	  [exportDataLoader]="exportDataLoader"
+	  [groupingConfig]="groupingConfig"
+	  title="commune.header"
+	  storageKey="commune"
+	  exportFileName="Commune"
+	  [globalFilterFields]="filterColumns"
+	  (onCreate)="openCreate()"
+	  (onEdit)="openEdit($event)"
+	  (onDelete)="delete($event)"
+	  (onDeleteSelected)="deleteSelected($event)" />
+
+    <app-commune-create-admin (onSaved)="onSaved()" />
+    <app-commune-edit-admin (onUpdated)="onUpdated()" />
+    <app-commune-view-admin />
+
+<p-confirmDialog [style]="{width: '450px'}"></p-confirmDialog>
+} @else{
+	<p-card header="Permission not allowed">
+		<p class="m-0">
+			You don't have permission to access !
+		</p>
+	</p-card>
+}
+
+

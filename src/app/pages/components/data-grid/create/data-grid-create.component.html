@@ -1,0 +1,27 @@
+<p-dialog [(visible)]="visible"
+          [style]="{ width: dialogWidth() }"
+          [header]="title() | translate"
+          [modal]="true"
+          styleClass="p-fluid"
+          [maximizable]="true"
+          [draggable]="false"
+          [resizable]="false"
+          [breakpoints]="{ '960px': '95vw' }">
+
+    @if (customContentTpl()) {
+        <ng-container [ngTemplateOutlet]="customContentTpl()!" />
+    } @else {
+        <ng-content></ng-content>
+    }
+
+    <ng-template #footer>
+        <div class="flex justify-end gap-2 p-4">
+            <p-button [label]="'validate' | translate" icon="pi pi-check"
+                      (onClick)="onSave.emit()"
+                      [disabled]="saveDisabled()" />
+            <p-button [label]="'cancel' | translate" icon="pi pi-times"
+                      [outlined]="true" severity="secondary"
+                      (onClick)="hide()" />
+        </div>
+    </ng-template>
+</p-dialog>
