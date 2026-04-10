@@ -1,290 +1,84 @@
-import {Component, effect, inject, signal} from '@angular/core';
-import {ChartModule} from 'primeng/chart';
-import {FluidModule} from 'primeng/fluid';
-import {LayoutService} from '@/app/layout/service/layout.service';
+import { Component } from '@angular/core';
+import { FluidModule } from 'primeng/fluid';
+
+import { LineChartComponent, ChartDataset } from './chart/line-chart/line-chart.component';
+import { BarChartComponent } from './chart/bar-chart/bar-chart.component';
+import { PieChartComponent } from './chart/pie-chart/pie-chart.component';
+import { PolarChartComponent } from './chart/polar-chart/polar-chart.component';
+import { RadarChartComponent } from './chart/radar-chart/radar-chart.component';
 
 @Component({
     selector: 'app-chart-demo',
     standalone: true,
-    imports: [ChartModule, FluidModule],
+    imports: [FluidModule, LineChartComponent, BarChartComponent, PieChartComponent, PolarChartComponent, RadarChartComponent],
     template: `
         <p-fluid class="grid grid-cols-12 gap-8">
             <div class="col-span-12 xl:col-span-6">
                 <div class="card">
                     <div class="font-semibold text-xl mb-6">Linear</div>
-                    <p-chart type="line" [data]="lineData()" [options]="lineOptions()"></p-chart>
+                    <app-line-chart [labels]="months" [datasets]="lineDatasets"></app-line-chart>
                 </div>
             </div>
+
             <div class="col-span-12 xl:col-span-6">
                 <div class="card">
                     <div class="font-semibold text-xl mb-6">Bar</div>
-                    <p-chart type="bar" [data]="barData()" [options]="barOptions()"></p-chart>
+                    <app-bar-chart [labels]="months" [datasets]="barDatasets"></app-bar-chart>
                 </div>
             </div>
+
             <div class="col-span-12 xl:col-span-6">
                 <div class="card flex flex-col items-center">
                     <div class="font-semibold text-xl mb-6">Pie</div>
-                    <p-chart type="pie" [data]="pieData()" [options]="pieOptions()"></p-chart>
+                    <app-pie-chart [labels]="pieLabels" [values]="pieValues" variant="pie"></app-pie-chart>
                 </div>
             </div>
+
             <div class="col-span-12 xl:col-span-6">
                 <div class="card flex flex-col items-center">
                     <div class="font-semibold text-xl mb-6">Doughnut</div>
-                    <p-chart type="doughnut" [data]="pieData()" [options]="pieOptions()"></p-chart>
+                    <app-pie-chart [labels]="pieLabels" [values]="pieValues" variant="doughnut"></app-pie-chart>
                 </div>
             </div>
+
             <div class="col-span-12 xl:col-span-6">
                 <div class="card flex flex-col items-center">
                     <div class="font-semibold text-xl mb-6">Polar Area</div>
-                    <p-chart type="polarArea" [data]="polarData()" [options]="polarOptions()"></p-chart>
+                    <app-polar-chart [labels]="polarLabels" [values]="polarValues"></app-polar-chart>
                 </div>
             </div>
+
             <div class="col-span-12 xl:col-span-6">
                 <div class="card flex flex-col items-center">
                     <div class="font-semibold text-xl mb-6">Radar</div>
-                    <p-chart type="radar" [data]="radarData()" [options]="radarOptions()"></p-chart>
+                    <app-radar-chart [labels]="radarLabels" [datasets]="radarDatasets"></app-radar-chart>
                 </div>
             </div>
         </p-fluid>
     `
 })
 export class ChartDemo {
-    layoutService = inject(LayoutService);
+    months = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
 
-    lineData = signal<any>(null);
-    
-    barData = signal<any>(null);
-    
-    pieData = signal<any>(null);
-    
-    polarData = signal<any>(null);
-    
-    radarData = signal<any>(null);
+    lineDatasets: ChartDataset[] = [
+        { label: 'First Dataset', data: [65, 59, 80, 81, 56, 55, 40], colorKey: 'primary500' },
+        { label: 'Second Dataset', data: [28, 48, 40, 19, 86, 27, 90], colorKey: 'primary200' }
+    ];
 
-    lineOptions = signal<any>(null);
-    
-    barOptions = signal<any>(null);
-    
-    pieOptions = signal<any>(null);
-    
-    polarOptions = signal<any>(null);
-    
-    radarOptions = signal<any>(null);
+    barDatasets: ChartDataset[] = [
+        { label: 'My First dataset', data: [65, 59, 80, 81, 56, 55, 40], colorKey: 'primary500' },
+        { label: 'My Second dataset', data: [28, 48, 40, 19, 86, 27, 90], colorKey: 'primary200' }
+    ];
 
-    chartEffect = effect(() => {
-        this.layoutService.layoutConfig().darkTheme;
-        setTimeout(() => this.initCharts(), 150);
-    })
+    pieLabels = ['A', 'B', 'C'];
+    pieValues = [540, 325, 702];
 
-    initCharts() {
-        const documentStyle = getComputedStyle(document.documentElement);
-        const textColor = documentStyle.getPropertyValue('--text-color');
-        const textColorSecondary = documentStyle.getPropertyValue('--text-color-secondary');
-        const surfaceBorder = documentStyle.getPropertyValue('--surface-border');
+    polarLabels = ['Indigo', 'Purple', 'Teal', 'Orange'];
+    polarValues = [11, 16, 7, 3];
 
-        this.barData.set({
-            labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-            datasets: [
-                {
-                    label: 'My First dataset',
-                    backgroundColor: documentStyle.getPropertyValue('--p-primary-500'),
-                    borderColor: documentStyle.getPropertyValue('--p-primary-500'),
-                    data: [65, 59, 80, 81, 56, 55, 40]
-                },
-                {
-                    label: 'My Second dataset',
-                    backgroundColor: documentStyle.getPropertyValue('--p-primary-200'),
-                    borderColor: documentStyle.getPropertyValue('--p-primary-200'),
-                    data: [28, 48, 40, 19, 86, 27, 90]
-                }
-            ]
-        });
-
-        this.barOptions.set({
-            maintainAspectRatio: false,
-            aspectRatio: 0.8,
-            plugins: {
-                legend: {
-                    labels: {
-                        color: textColor
-                    }
-                }
-            },
-            scales: {
-                x: {
-                    ticks: {
-                        color: textColorSecondary,
-                        font: {
-                            weight: 500
-                        }
-                    },
-                    grid: {
-                        display: false,
-                        drawBorder: false
-                    }
-                },
-                y: {
-                    ticks: {
-                        color: textColorSecondary
-                    },
-                    grid: {
-                        color: surfaceBorder,
-                        drawBorder: false
-                    }
-                }
-            }
-        });
-
-        this.pieData.set({
-            labels: ['A', 'B', 'C'],
-            datasets: [
-                {
-                    data: [540, 325, 702],
-                    backgroundColor: [documentStyle.getPropertyValue('--p-indigo-500'), documentStyle.getPropertyValue('--p-purple-500'), documentStyle.getPropertyValue('--p-teal-500')],
-                    hoverBackgroundColor: [documentStyle.getPropertyValue('--p-indigo-400'), documentStyle.getPropertyValue('--p-purple-400'), documentStyle.getPropertyValue('--p-teal-400')]
-                }
-            ]
-        });
-
-        this.pieOptions.set({
-            plugins: {
-                legend: {
-                    labels: {
-                        usePointStyle: true,
-                        color: textColor
-                    }
-                }
-            }
-        });
-
-        this.lineData.set({
-            labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-            datasets: [
-                {
-                    label: 'First Dataset',
-                    data: [65, 59, 80, 81, 56, 55, 40],
-                    fill: false,
-                    backgroundColor: documentStyle.getPropertyValue('--p-primary-500'),
-                    borderColor: documentStyle.getPropertyValue('--p-primary-500'),
-                    tension: 0.4
-                },
-                {
-                    label: 'Second Dataset',
-                    data: [28, 48, 40, 19, 86, 27, 90],
-                    fill: false,
-                    backgroundColor: documentStyle.getPropertyValue('--p-primary-200'),
-                    borderColor: documentStyle.getPropertyValue('--p-primary-200'),
-                    tension: 0.4
-                }
-            ]
-        });
-
-        this.lineOptions.set({
-            maintainAspectRatio: false,
-            aspectRatio: 0.8,
-            plugins: {
-                legend: {
-                    labels: {
-                        color: textColor
-                    }
-                }
-            },
-            scales: {
-                x: {
-                    ticks: {
-                        color: textColorSecondary
-                    },
-                    grid: {
-                        color: surfaceBorder,
-                        drawBorder: false
-                    }
-                },
-                y: {
-                    ticks: {
-                        color: textColorSecondary
-                    },
-                    grid: {
-                        color: surfaceBorder,
-                        drawBorder: false
-                    }
-                }
-            }
-        });
-
-        this.polarData.set({
-            datasets: [
-                {
-                    data: [11, 16, 7, 3],
-                    backgroundColor: [documentStyle.getPropertyValue('--p-indigo-500'), documentStyle.getPropertyValue('--p-purple-500'), documentStyle.getPropertyValue('--p-teal-500'), documentStyle.getPropertyValue('--p-orange-500')],
-                    label: 'My dataset'
-                }
-            ],
-            labels: ['Indigo', 'Purple', 'Teal', 'Orange']
-        });
-
-        this.polarOptions.set({
-            plugins: {
-                legend: {
-                    labels: {
-                        color: textColor
-                    }
-                }
-            },
-            scales: {
-                r: {
-                    grid: {
-                        color: surfaceBorder
-                    },
-                    ticks: {
-                        display: false,
-                        color: textColorSecondary
-                    }
-                }
-            }
-        });
-
-        this.radarData.set({
-            labels: ['Eating', 'Drinking', 'Sleeping', 'Designing', 'Coding', 'Cycling', 'Running'],
-            datasets: [
-                {
-                    label: 'My First dataset',
-                    borderColor: documentStyle.getPropertyValue('--p-indigo-400'),
-                    pointBackgroundColor: documentStyle.getPropertyValue('--p-indigo-400'),
-                    pointBorderColor: documentStyle.getPropertyValue('--p-indigo-400'),
-                    pointHoverBackgroundColor: textColor,
-                    pointHoverBorderColor: documentStyle.getPropertyValue('--p-indigo-400'),
-                    data: [65, 59, 90, 81, 56, 55, 40]
-                },
-                {
-                    label: 'My Second dataset',
-                    borderColor: documentStyle.getPropertyValue('--p-purple-400'),
-                    pointBackgroundColor: documentStyle.getPropertyValue('--p-purple-400'),
-                    pointBorderColor: documentStyle.getPropertyValue('--p-purple-400'),
-                    pointHoverBackgroundColor: textColor,
-                    pointHoverBorderColor: documentStyle.getPropertyValue('--p-purple-400'),
-                    data: [28, 48, 40, 19, 96, 27, 100]
-                }
-            ]
-        });
-
-        this.radarOptions.set({
-            plugins: {
-                legend: {
-                    labels: {
-                        color: textColor
-                    }
-                }
-            },
-            scales: {
-                r: {
-                    pointLabels: {
-                        color: textColor
-                    },
-                    grid: {
-                        color: surfaceBorder
-                    }
-                }
-            }
-        });
-    }
+    radarLabels = ['Eating', 'Drinking', 'Sleeping', 'Designing', 'Coding', 'Cycling', 'Running'];
+    radarDatasets: ChartDataset[] = [
+        { label: 'My First dataset', data: [65, 59, 90, 81, 56, 55, 40], colorKey: 'indigo500' },
+        { label: 'My Second dataset', data: [28, 48, 40, 19, 96, 27, 100], colorKey: 'purple500' }
+    ];
 }

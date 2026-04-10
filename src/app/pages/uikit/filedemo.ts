@@ -1,52 +1,58 @@
-import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { MessageService } from 'primeng/api';
-import { ButtonModule } from 'primeng/button';
-import { FileUploadModule } from 'primeng/fileupload';
-import { ToastModule } from 'primeng/toast';
+
+import { FileUploadAdvancedComponent } from './file/file-upload-advanced/file-upload-advanced.component';
+import { FileUploadBasicComponent } from './file/file-upload-basic/file-upload-basic.component';
+import { ToastNotifierComponent } from './message/toast-notifier/toast-notifier.component';
 
 @Component({
     selector: 'app-file-demo',
     standalone: true,
-    imports: [CommonModule, FileUploadModule, ToastModule, ButtonModule],
-    template: `<p-toast />
+    imports: [FileUploadAdvancedComponent, FileUploadBasicComponent, ToastNotifierComponent],
+    template: `
+        <app-toast-notifier></app-toast-notifier>
         <div class="grid grid-cols-12 gap-8">
             <div class="col-span-full lg:col-span-6">
                 <div class="card">
                     <div class="font-semibold text-xl mb-4">Advanced</div>
-                    <p-fileupload name="demo[]" (onUpload)="onUpload($event)" [multiple]="true" accept="image/*" maxFileSize="1000000" mode="advanced" url="https://www.primefaces.org/cdn/api/upload.php">
-                        <ng-template #empty>
-                            <div>Drag and drop files to here to upload.</div>
-                        </ng-template>
-                    </p-fileupload>
+                    <app-file-upload-advanced
+                        name="demo[]"
+                        url="https://www.primefaces.org/cdn/api/upload.php"
+                        accept="image/*"
+                        [maxFileSize]="1000000"
+                        [multiple]="true"
+                        emptyText="Drag and drop files to here to upload."
+                        (uploaded)="onUpload($event)"
+                    ></app-file-upload-advanced>
                 </div>
             </div>
+
             <div class="col-span-full lg:col-span-6">
                 <div class="card">
                     <div class="font-semibold text-xl mb-4">Basic</div>
-                    <div class="flex flex-col gap-4 items-center justify-center">
-                        <p-fileupload #fu mode="basic" chooseLabel="Choose" chooseIcon="pi pi-upload" name="demo[]" url="https://www.primefaces.org/cdn/api/upload.php" accept="image/*" maxFileSize="1000000" (onUpload)="onUpload($event)" />
-                        <p-button label="Upload" (onClick)="fu.upload()" severity="secondary" />
-                    </div>
+                    <app-file-upload-basic
+                        name="demo[]"
+                        url="https://www.primefaces.org/cdn/api/upload.php"
+                        accept="image/*"
+                        [maxFileSize]="1000000"
+                        chooseLabel="Choose"
+                        chooseIcon="pi pi-upload"
+                        submitLabel="Upload"
+                        (uploaded)="onUpload($event)"
+                    ></app-file-upload-basic>
                 </div>
             </div>
-        </div>`,
+        </div>
+    `,
     providers: [MessageService]
 })
 export class FileDemo {
-    uploadedFiles: any[] = [];
+    uploadedFiles: File[] = [];
 
     constructor(private messageService: MessageService) {}
 
-    onUpload(event: any) {
-        for (const file of event.files) {
-            this.uploadedFiles.push(file);
-        }
-
+    onUpload(files: File[]) {
+        this.uploadedFiles.push(...files);
         this.messageService.add({ severity: 'info', summary: 'Success', detail: 'File Uploaded' });
-    }
-
-    onBasicUpload() {
-        this.messageService.add({ severity: 'info', summary: 'Success', detail: 'File Uploaded with Basic Mode' });
     }
 }
