@@ -18,10 +18,15 @@ import {ChangePasswordAdminComponent} from 'src/app/module/admin/change-password
                 {path: 'admin/login', component: LoginAdminComponent },
                 {path: 'admin/register', component: RegisterAdminComponent },
                 {path: 'admin/changePassword', component: ChangePasswordAdminComponent },
+                {path: 'uikit-showcase', redirectTo: 'app/uikit-showcase', pathMatch: 'full'},
                 {
                     path: 'app',
                     component: AppLayout,
                     children: [
+                        {
+                            path: 'uikit-showcase',
+                            loadComponent: () => import('./pages/uikit/uikit-showcase/uikit-showcase.component').then((m) => m.UIKitShowcaseComponent)
+                        },
                         {
                             path: 'admin',
                             loadChildren: () => import( './module/admin/admin-routing.module').then(x => x.AdminRoutingModule),

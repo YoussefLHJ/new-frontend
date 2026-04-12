@@ -20,7 +20,6 @@ import { AutoCompleteCompleteEvent, AutoCompleteModule } from 'primeng/autocompl
                 [placeholder]="placeholder"
                 [dropdown]="dropdown"
                 [multiple]="multiple"
-                [display]="display"
                 [disabled]="disabled"
                 (completeMethod)="search.emit($event)"
             ></p-autocomplete>

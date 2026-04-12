@@ -33,7 +33,7 @@ export interface AccordionItem {
 })
 export class AccordionComponent {
     @Input() items: AccordionItem[] = [];
-    @Input() activeValue: string | number | (string | number)[] = '0';
+    @Input() activeValue: string | number | string[] | number[] = '0';
     @Input() multiple = false;
     @Output() activeValueChange = new EventEmitter<any>();
 }

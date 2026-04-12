@@ -1,0 +1,546 @@
+<app-toast-notifier></app-toast-notifier>
+
+<div class="flex flex-col gap-6">
+    <div class="card flex flex-col gap-3">
+        <div class="flex flex-col gap-1">
+            <h1 class="text-2xl font-semibold m-0">UI Kit Showcase</h1>
+            <p class="text-muted-color m-0">
+                Centralized visual documentation for the reusable UI kit components under <code>src/app/pages/uikit</code>.
+            </p>
+        </div>
+    </div>
+
+    <section class="card flex flex-col gap-4">
+        <div>
+            <h2 class="text-xl font-semibold m-0">Buttons</h2>
+            <p class="text-muted-color m-0">Reusable action buttons and button primitives.</p>
+        </div>
+
+        <div class="grid grid-cols-1 xl:grid-cols-2 gap-4">
+            <div class="border border-surface rounded-xl p-4 flex flex-col gap-3">
+                <div class="font-semibold">Base Button</div>
+                <div class="flex flex-wrap gap-2">
+                    <app-base-button label="Primary"></app-base-button>
+                    <app-base-button label="Outlined" severity="secondary" [outlined]="true"></app-base-button>
+                    <app-base-button label="Rounded" icon="pi pi-star" [rounded]="true"></app-base-button>
+                </div>
+            </div>
+
+            <div class="border border-surface rounded-xl p-4 flex flex-col gap-3">
+                <div class="font-semibold">Save Button</div>
+                <app-save-button></app-save-button>
+            </div>
+
+            <div class="border border-surface rounded-xl p-4 flex flex-col gap-3">
+                <div class="font-semibold">Cancel Button</div>
+                <app-cancel-button></app-cancel-button>
+            </div>
+
+            <div class="border border-surface rounded-xl p-4 flex flex-col gap-3">
+                <div class="font-semibold">Delete Button</div>
+                <app-delete-button></app-delete-button>
+            </div>
+
+            <div class="border border-surface rounded-xl p-4 flex flex-col gap-3">
+                <div class="font-semibold">Export Button</div>
+                <div class="flex flex-wrap gap-2">
+                    <app-export-button format="excel" (exportRequested)="onExport($event)"></app-export-button>
+                    <app-export-button format="pdf" (exportRequested)="onExport($event)"></app-export-button>
+                </div>
+            </div>
+
+            <div class="border border-surface rounded-xl p-4 flex flex-col gap-3">
+                <div class="font-semibold">Import Button</div>
+                <app-import-button (filesSelected)="onImport($event)"></app-import-button>
+            </div>
+        </div>
+    </section>
+
+    <section class="card flex flex-col gap-4">
+        <div>
+            <h2 class="text-xl font-semibold m-0">Inputs</h2>
+            <p class="text-muted-color m-0">Form controls built as reusable wrappers around PrimeNG inputs.</p>
+        </div>
+
+        <div class="grid grid-cols-1 xl:grid-cols-2 gap-4">
+            <div class="border border-surface rounded-xl p-4 flex flex-col gap-3">
+                <div class="font-semibold">Text Input</div>
+                <app-text-input [(ngModel)]="textValue" label="Name" placeholder="Type here" hint="Reusable text field with optional icons."></app-text-input>
+            </div>
+
+            <div class="border border-surface rounded-xl p-4 flex flex-col gap-3">
+                <div class="font-semibold">Number Input</div>
+                <app-number-input [(ngModel)]="numberValue" label="Version" [showButtons]="true" [min]="0" [max]="50"></app-number-input>
+            </div>
+
+            <div class="border border-surface rounded-xl p-4 flex flex-col gap-3">
+                <div class="font-semibold">Textarea Input</div>
+                <app-textarea-input [(ngModel)]="textareaValue" label="Notes"></app-textarea-input>
+            </div>
+
+            <div class="border border-surface rounded-xl p-4 flex flex-col gap-3">
+                <div class="font-semibold">Date Picker</div>
+                <app-date-picker [(ngModel)]="dateValue" label="Release Date"></app-date-picker>
+            </div>
+
+            <div class="border border-surface rounded-xl p-4 flex flex-col gap-3">
+                <div class="font-semibold">Autocomplete</div>
+                <app-autocomplete
+                    [(ngModel)]="autocompleteValue"
+                    label="City"
+                    placeholder="Search city"
+                    [suggestions]="filteredAutocompleteOptions"
+                    (search)="filterAutocomplete($event)"
+                ></app-autocomplete>
+            </div>
+
+            <div class="border border-surface rounded-xl p-4 flex flex-col gap-3">
+                <div class="font-semibold">Select Dropdown</div>
+                <app-select-dropdown [(ngModel)]="dropdownValue" label="Status" [options]="selectOptions" [filter]="true"></app-select-dropdown>
+            </div>
+
+            <div class="border border-surface rounded-xl p-4 flex flex-col gap-3">
+                <div class="font-semibold">Multi Select</div>
+                <app-multi-select [(ngModel)]="multiSelectValue" label="Modules" [options]="multiSelectOptions"></app-multi-select>
+            </div>
+
+            <div class="border border-surface rounded-xl p-4 flex flex-col gap-3">
+                <div class="font-semibold">Tree Select</div>
+                <app-tree-select [(ngModel)]="treeValue" label="Section" [options]="treeNodes"></app-tree-select>
+            </div>
+
+            <div class="border border-surface rounded-xl p-4 flex flex-col gap-3">
+                <div class="font-semibold">Listbox Input</div>
+                <app-listbox-input [(ngModel)]="listboxValue" label="Severity" [options]="listboxOptions"></app-listbox-input>
+            </div>
+
+            <div class="border border-surface rounded-xl p-4 flex flex-col gap-3">
+                <div class="font-semibold">Checkbox Group</div>
+                <app-checkbox-group [(ngModel)]="checkboxValue" label="Capabilities" [options]="checkboxOptions"></app-checkbox-group>
+            </div>
+
+            <div class="border border-surface rounded-xl p-4 flex flex-col gap-3">
+                <div class="font-semibold">Radio Group</div>
+                <app-radio-group [(ngModel)]="radioValue" label="Density" [options]="radioOptions"></app-radio-group>
+            </div>
+
+            <div class="border border-surface rounded-xl p-4 flex flex-col gap-3">
+                <div class="font-semibold">Toggle Switch</div>
+                <app-toggle-switch [(ngModel)]="switchValue" label="Enabled"></app-toggle-switch>
+            </div>
+
+            <div class="border border-surface rounded-xl p-4 flex flex-col gap-3">
+                <div class="font-semibold">Toggle Button</div>
+                <app-toggle-button [(ngModel)]="toggleButtonValue" onLabel="Visible" offLabel="Hidden"></app-toggle-button>
+            </div>
+
+            <div class="border border-surface rounded-xl p-4 flex flex-col gap-3">
+                <div class="font-semibold">Select Button Group</div>
+                <app-select-button-group [(ngModel)]="selectButtonValue" [options]="selectButtonOptions"></app-select-button-group>
+            </div>
+
+            <div class="border border-surface rounded-xl p-4 flex flex-col gap-3">
+                <div class="font-semibold">Slider Input</div>
+                <app-slider-input [(ngModel)]="sliderValue" label="Confidence" [min]="0" [max]="100"></app-slider-input>
+                <small class="text-muted-color">Value: {{ sliderValue }}</small>
+            </div>
+
+            <div class="border border-surface rounded-xl p-4 flex flex-col gap-3">
+                <div class="font-semibold">Rating Input</div>
+                <app-rating-input [(ngModel)]="ratingValue" label="Quality"></app-rating-input>
+            </div>
+
+            <div class="border border-surface rounded-xl p-4 flex flex-col gap-3">
+                <div class="font-semibold">Color Picker</div>
+                <app-color-picker [(ngModel)]="colorValue" label="Accent"></app-color-picker>
+            </div>
+
+            <div class="border border-surface rounded-xl p-4 flex flex-col gap-3 items-start">
+                <div class="font-semibold">Knob Input</div>
+                <app-knob-input [(ngModel)]="knobValue" label="Progress" [max]="100" valueTemplate="{value}%"></app-knob-input>
+            </div>
+        </div>
+    </section>
+
+    <section class="card flex flex-col gap-4">
+        <div>
+            <h2 class="text-xl font-semibold m-0">Panels</h2>
+            <p class="text-muted-color m-0">Composition components for content framing and layout.</p>
+        </div>
+
+        <div class="grid grid-cols-1 xl:grid-cols-2 gap-4">
+            <div class="border border-surface rounded-xl p-4 flex flex-col gap-3">
+                <div class="font-semibold">Card</div>
+                <app-card header="Component Card" subheader="Reusable framed content">
+                    <p class="m-0">Use this wrapper when a screen needs a titled surface with consistent spacing.</p>
+                </app-card>
+            </div>
+
+            <div class="border border-surface rounded-xl p-4 flex flex-col gap-3">
+                <div class="font-semibold">Collapsible Panel</div>
+                <app-collapsible-panel [(collapsed)]="collapsibleCollapsed" header="Advanced Filters">
+                    <p class="m-0">Panel content stays fully projectable while collapse state remains bindable.</p>
+                </app-collapsible-panel>
+            </div>
+
+            <div class="border border-surface rounded-xl p-4 flex flex-col gap-3">
+                <div class="font-semibold">Fieldset Panel</div>
+                <app-fieldset-panel legend="Design Tokens" [toggleable]="true">
+                    <p class="m-0">Fieldsets work well for grouped form or settings content.</p>
+                </app-fieldset-panel>
+            </div>
+
+            <div class="border border-surface rounded-xl p-4 flex flex-col gap-3">
+                <div class="font-semibold">Accordion</div>
+                <app-accordion [(activeValue)]="activeAccordion" [items]="accordionItems"></app-accordion>
+            </div>
+
+            <div class="border border-surface rounded-xl p-4 flex flex-col gap-3">
+                <div class="font-semibold">Tabs Panel</div>
+                <app-tabs-panel [(activeValue)]="activePanelTab" [items]="tabPanelItems"></app-tabs-panel>
+            </div>
+
+            <div class="border border-surface rounded-xl p-4 flex flex-col gap-3">
+                <div class="font-semibold">Toolbar Bar</div>
+                <app-toolbar-bar>
+                    <div slot="start" class="flex gap-2">
+                        <app-base-button icon="pi pi-plus" ariaLabel="Add"></app-base-button>
+                        <app-base-button icon="pi pi-print" severity="secondary" ariaLabel="Print"></app-base-button>
+                    </div>
+                    <div slot="center" class="text-sm text-muted-color">Reusable workspace toolbar</div>
+                    <div slot="end">
+                        <app-save-button label="Publish"></app-save-button>
+                    </div>
+                </app-toolbar-bar>
+            </div>
+
+            <div class="border border-surface rounded-xl p-4 flex flex-col gap-3">
+                <div class="font-semibold">Divider Line</div>
+                <div class="flex flex-col gap-4">
+                    <app-divider-line>Section Break</app-divider-line>
+                    <div class="flex items-center gap-4 h-20">
+                        <span>Left</span>
+                        <app-divider-line layout="vertical"></app-divider-line>
+                        <span>Right</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="border border-surface rounded-xl p-4 flex flex-col gap-3">
+                <div class="font-semibold">Splitter Panel</div>
+                <app-splitter-panel [style]="{ height: '180px' }" [panelSizes]="[45, 55]">
+                    <ng-template #panel>
+                        <div class="flex items-center justify-center h-full">Left Panel</div>
+                    </ng-template>
+                    <ng-template #panel>
+                        <div class="flex items-center justify-center h-full">Right Panel</div>
+                    </ng-template>
+                </app-splitter-panel>
+            </div>
+        </div>
+    </section>
+
+    <section class="card flex flex-col gap-4">
+        <div>
+            <h2 class="text-xl font-semibold m-0">Messages</h2>
+            <p class="text-muted-color m-0">Inline feedback and toast outlets.</p>
+        </div>
+
+        <div class="grid grid-cols-1 xl:grid-cols-2 gap-4">
+            <div class="border border-surface rounded-xl p-4 flex flex-col gap-3">
+                <div class="font-semibold">Inline Message</div>
+                <app-inline-message severity="secondary" text="Secondary informational state"></app-inline-message>
+            </div>
+
+            <div class="border border-surface rounded-xl p-4 flex flex-col gap-3">
+                <div class="font-semibold">Success Message</div>
+                <app-success-message text="Operation completed successfully"></app-success-message>
+            </div>
+
+            <div class="border border-surface rounded-xl p-4 flex flex-col gap-3">
+                <div class="font-semibold">Info Message</div>
+                <app-info-message text="Documentation content is up to date"></app-info-message>
+            </div>
+
+            <div class="border border-surface rounded-xl p-4 flex flex-col gap-3">
+                <div class="font-semibold">Warning Message</div>
+                <app-warning-message text="Review these values before publishing"></app-warning-message>
+            </div>
+
+            <div class="border border-surface rounded-xl p-4 flex flex-col gap-3">
+                <div class="font-semibold">Error Message</div>
+                <app-error-message text="A required field is missing" icon="pi pi-times-circle"></app-error-message>
+            </div>
+
+            <div class="border border-surface rounded-xl p-4 flex flex-col gap-3">
+                <div class="font-semibold">Toast Notifier</div>
+                <div class="flex flex-wrap gap-2">
+                    <app-base-button label="Success" severity="success" (clicked)="showToast('success')"></app-base-button>
+                    <app-base-button label="Info" severity="info" (clicked)="showToast('info')"></app-base-button>
+                    <app-base-button label="Warn" severity="warn" (clicked)="showToast('warn')"></app-base-button>
+                    <app-base-button label="Error" severity="danger" (clicked)="showToast('error')"></app-base-button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="card flex flex-col gap-4">
+        <div>
+            <h2 class="text-xl font-semibold m-0">Overlay</h2>
+            <p class="text-muted-color m-0">Dialogs, drawers, popovers, confirmations, and tooltip hosting.</p>
+        </div>
+
+        <div class="grid grid-cols-1 xl:grid-cols-2 gap-4">
+            <div class="border border-surface rounded-xl p-4 flex flex-col gap-3">
+                <div class="font-semibold">Dialog</div>
+                <app-dialog [(visible)]="dialogVisible" header="Release Notes">
+                    <p class="m-0">Dialogs accept projected body content and a dedicated footer slot.</p>
+                    <ng-container slot="footer">
+                        <app-save-button (clicked)="dialogVisible = false"></app-save-button>
+                    </ng-container>
+                </app-dialog>
+                <app-base-button label="Open Dialog" (clicked)="dialogVisible = true"></app-base-button>
+            </div>
+
+            <div class="border border-surface rounded-xl p-4 flex flex-col gap-3">
+                <div class="font-semibold">Drawer</div>
+                <app-drawer [(visible)]="drawerVisible" header="Quick Actions" position="right">
+                    <p class="m-0">Drawers help keep contextual actions available without leaving the screen.</p>
+                </app-drawer>
+                <app-base-button label="Open Drawer" icon="pi pi-arrow-left" (clicked)="drawerVisible = true"></app-base-button>
+            </div>
+
+            <div class="border border-surface rounded-xl p-4 flex flex-col gap-3">
+                <div class="font-semibold">Popover</div>
+                <app-popover #notesPopover [style]="{ width: '20rem' }">
+                    <div class="flex flex-col gap-2">
+                        <div class="font-medium">Popover Content</div>
+                        <p class="m-0 text-sm">Useful for lightweight contextual details and quick actions.</p>
+                    </div>
+                </app-popover>
+                <app-base-button label="Toggle Popover" icon="pi pi-comment" (clicked)="notesPopover.toggle($event)"></app-base-button>
+            </div>
+
+            <div class="border border-surface rounded-xl p-4 flex flex-col gap-3">
+                <div class="font-semibold">Confirm Popup</div>
+                <app-confirm-popup key="uikit-showcase-confirm"></app-confirm-popup>
+                <app-delete-button label="Open Confirm Popup" (clicked)="openConfirmPopup($event)"></app-delete-button>
+            </div>
+
+            <div class="border border-surface rounded-xl p-4 flex flex-col gap-3">
+                <div class="font-semibold">Confirm Dialog</div>
+                <app-confirm-dialog
+                    [(visible)]="confirmDialogVisible"
+                    message="Promote this reusable component set to the next release?"
+                    acceptLabel="Promote"
+                    rejectLabel="Cancel"
+                    (accepted)="onConfirmDialogAccepted()"
+                    (rejected)="onConfirmDialogRejected()"
+                ></app-confirm-dialog>
+                <app-base-button label="Open Confirm Dialog" severity="warn" (clicked)="confirmDialogVisible = true"></app-base-button>
+            </div>
+
+            <div class="border border-surface rounded-xl p-4 flex flex-col gap-3">
+                <div class="font-semibold">Tooltip Host</div>
+                <app-tooltip-host>
+                    <span pTooltip="Tooltip content rendered inside projected content.">
+                        <app-base-button label="Hover For Tooltip" icon="pi pi-info-circle"></app-base-button>
+                    </span>
+                </app-tooltip-host>
+            </div>
+        </div>
+    </section>
+
+    <section class="card flex flex-col gap-4">
+        <div>
+            <h2 class="text-xl font-semibold m-0">Charts</h2>
+            <p class="text-muted-color m-0">Generic chart primitive plus specialized themed wrappers.</p>
+        </div>
+
+        <div class="grid grid-cols-1 xl:grid-cols-2 gap-4">
+            <div class="border border-surface rounded-xl p-4 flex flex-col gap-3">
+                <div class="font-semibold">Base Chart</div>
+                <app-base-chart type="doughnut" [data]="genericChartData" [options]="genericChartOptions" height="240"></app-base-chart>
+            </div>
+
+            <div class="border border-surface rounded-xl p-4 flex flex-col gap-3">
+                <div class="font-semibold">Line Chart</div>
+                <app-line-chart [labels]="chartLabels" [datasets]="comparisonDatasets"></app-line-chart>
+            </div>
+
+            <div class="border border-surface rounded-xl p-4 flex flex-col gap-3">
+                <div class="font-semibold">Bar Chart</div>
+                <app-bar-chart [labels]="chartLabels" [datasets]="comparisonDatasets"></app-bar-chart>
+            </div>
+
+            <div class="border border-surface rounded-xl p-4 flex flex-col gap-3">
+                <div class="font-semibold">Pie Chart</div>
+                <app-pie-chart [labels]="['Buttons', 'Inputs', 'Panels', 'Overlay']" [values]="pieValues"></app-pie-chart>
+            </div>
+
+            <div class="border border-surface rounded-xl p-4 flex flex-col gap-3">
+                <div class="font-semibold">Polar Chart</div>
+                <app-polar-chart [labels]="['A', 'B', 'C', 'D']" [values]="polarValues" datasetLabel="Coverage"></app-polar-chart>
+            </div>
+
+            <div class="border border-surface rounded-xl p-4 flex flex-col gap-3">
+                <div class="font-semibold">Radar Chart</div>
+                <app-radar-chart [labels]="['Docs', 'API', 'A11y', 'Theme', 'Tests']" [datasets]="radarDatasets"></app-radar-chart>
+            </div>
+        </div>
+    </section>
+
+    <section class="card flex flex-col gap-4">
+        <div>
+            <h2 class="text-xl font-semibold m-0">Timeline</h2>
+            <p class="text-muted-color m-0">Reusable timeline for status-based or date-based sequences.</p>
+        </div>
+
+        <div class="border border-surface rounded-xl p-4 flex flex-col gap-3">
+            <div class="font-semibold">Event Timeline</div>
+            <app-event-timeline [events]="timelineEvents" mode="date" align="alternate"></app-event-timeline>
+        </div>
+    </section>
+
+    <section class="card flex flex-col gap-4">
+        <div>
+            <h2 class="text-xl font-semibold m-0">Menu</h2>
+            <p class="text-muted-color m-0">Navigation primitives covering menus, breadcrumbs, steps, and overlays.</p>
+        </div>
+
+        <div class="grid grid-cols-1 xl:grid-cols-2 gap-4">
+            <div class="border border-surface rounded-xl p-4 flex flex-col gap-3">
+                <div class="font-semibold">Menubar</div>
+                <app-menubar [model]="nestedMenuItems">
+                    <span slot="end" class="text-sm text-muted-color">Search</span>
+                </app-menubar>
+            </div>
+
+            <div class="border border-surface rounded-xl p-4 flex flex-col gap-3">
+                <div class="font-semibold">Breadcrumb Bar</div>
+                <app-breadcrumb-bar [items]="breadcrumbItems" [home]="breadcrumbHome"></app-breadcrumb-bar>
+            </div>
+
+            <div class="border border-surface rounded-xl p-4 flex flex-col gap-3">
+                <div class="font-semibold">Step List</div>
+                <app-step-list [(activeValue)]="activeStep" [steps]="stepItems"></app-step-list>
+            </div>
+
+            <div class="border border-surface rounded-xl p-4 flex flex-col gap-3">
+                <div class="font-semibold">Tab Menu</div>
+                <app-tab-menu [(activeValue)]="activeTab" [tabs]="tabItems"></app-tab-menu>
+            </div>
+
+            <div class="border border-surface rounded-xl p-4 flex flex-col gap-3">
+                <div class="font-semibold">Tiered Menu</div>
+                <app-tiered-menu [items]="nestedMenuItems"></app-tiered-menu>
+            </div>
+
+            <div class="border border-surface rounded-xl p-4 flex flex-col gap-3">
+                <div class="font-semibold">Plain Menu</div>
+                <app-plain-menu [items]="simpleMenuItems"></app-plain-menu>
+            </div>
+
+            <div class="border border-surface rounded-xl p-4 flex flex-col gap-3">
+                <div class="font-semibold">Overlay Menu</div>
+                <app-overlay-menu [items]="simpleMenuItems"></app-overlay-menu>
+            </div>
+
+            <div class="border border-surface rounded-xl p-4 flex flex-col gap-3">
+                <div class="font-semibold">Context Menu</div>
+                <div #contextMenuTarget class="border border-dashed border-surface-400 rounded-lg p-4 text-sm text-muted-color">
+                    Right click inside this area to open the context menu.
+                </div>
+                <app-context-menu [target]="contextMenuTarget" [items]="contextMenuItems"></app-context-menu>
+            </div>
+
+            <div class="border border-surface rounded-xl p-4 flex flex-col gap-3">
+                <div class="font-semibold">Mega Menu</div>
+                <app-mega-menu [items]="megaMenuItems"></app-mega-menu>
+            </div>
+
+            <div class="border border-surface rounded-xl p-4 flex flex-col gap-3">
+                <div class="font-semibold">Panel Menu</div>
+                <app-panel-menu [items]="nestedMenuItems" [multiple]="true"></app-panel-menu>
+            </div>
+        </div>
+    </section>
+
+    <section class="card flex flex-col gap-4">
+        <div>
+            <h2 class="text-xl font-semibold m-0">File</h2>
+            <p class="text-muted-color m-0">Reusable file upload wrappers for simple and advanced flows.</p>
+        </div>
+
+        <div class="grid grid-cols-1 xl:grid-cols-2 gap-4">
+            <div class="border border-surface rounded-xl p-4 flex flex-col gap-3">
+                <div class="font-semibold">File Upload Basic</div>
+                <app-file-upload-basic [showSubmitButton]="false" accept=".pdf,.docx" (filesSelected)="onImport($event)"></app-file-upload-basic>
+            </div>
+
+            <div class="border border-surface rounded-xl p-4 flex flex-col gap-3">
+                <div class="font-semibold">File Upload Advanced</div>
+                <app-file-upload-advanced [customUpload]="true" accept=".png,.jpg,.svg" (uploadHandler)="onAdvancedUpload($event)"></app-file-upload-advanced>
+            </div>
+        </div>
+    </section>
+
+    <section class="card flex flex-col gap-4">
+        <div>
+            <h2 class="text-xl font-semibold m-0">Misc</h2>
+            <p class="text-muted-color m-0">Utility components for status, identity, placeholders, and metadata chips.</p>
+        </div>
+
+        <div class="grid grid-cols-1 xl:grid-cols-2 gap-4">
+            <div class="border border-surface rounded-xl p-4 flex flex-col gap-3">
+                <div class="font-semibold">Progress Bar</div>
+                <app-progress-bar [value]="68"></app-progress-bar>
+            </div>
+
+            <div class="border border-surface rounded-xl p-4 flex flex-col gap-3">
+                <div class="font-semibold">Badge</div>
+                <app-badge [value]="8" severity="success"></app-badge>
+            </div>
+
+            <div class="border border-surface rounded-xl p-4 flex flex-col gap-3">
+                <div class="font-semibold">Overlay Badge</div>
+                <app-overlay-badge [value]="4" severity="danger">
+                    <i class="pi pi-bell text-xl"></i>
+                </app-overlay-badge>
+            </div>
+
+            <div class="border border-surface rounded-xl p-4 flex flex-col gap-3">
+                <div class="font-semibold">Avatar</div>
+                <app-avatar label="YS" size="large"></app-avatar>
+            </div>
+
+            <div class="border border-surface rounded-xl p-4 flex flex-col gap-3">
+                <div class="font-semibold">Avatar Group</div>
+                <app-avatar-group>
+                    <app-avatar label="UI"></app-avatar>
+                    <app-avatar label="DX"></app-avatar>
+                    <app-avatar label="QA"></app-avatar>
+                </app-avatar-group>
+            </div>
+
+            <div class="border border-surface rounded-xl p-4 flex flex-col gap-3">
+                <div class="font-semibold">Skeleton Block</div>
+                <div class="flex flex-col gap-2">
+                    <app-skeleton-block width="100%" height="1rem"></app-skeleton-block>
+                    <app-skeleton-block width="75%" height="1rem"></app-skeleton-block>
+                    <app-skeleton-block width="50%" height="1rem"></app-skeleton-block>
+                </div>
+            </div>
+
+            <div class="border border-surface rounded-xl p-4 flex flex-col gap-3">
+                <div class="font-semibold">Tag</div>
+                <app-tag value="Stable" severity="success" icon="pi pi-check"></app-tag>
+            </div>
+
+            <div class="border border-surface rounded-xl p-4 flex flex-col gap-3">
+                <div class="font-semibold">Chip</div>
+                <app-chip label="Reusable" icon="pi pi-star"></app-chip>
+            </div>
+        </div>
+    </section>
+</div>

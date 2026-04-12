@@ -14,6 +14,6 @@ import { OverlayBadgeModule } from 'primeng/overlaybadge';
 })
 export class OverlayBadgeComponent {
     @Input() value?: string | number;
-    @Input() severity: 'primary' | 'secondary' | 'success' | 'info' | 'warn' | 'danger' | 'contrast' = 'primary';
+    @Input() severity: 'secondary' | 'success' | 'info' | 'warn' | 'danger' | 'contrast' | undefined = undefined;
     @Input() styleClass = '';
 }

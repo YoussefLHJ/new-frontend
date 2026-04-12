@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from 
 import { StepperModule } from 'primeng/stepper';
 
 export interface StepItem {
-    value: number | string;
+    value: number;
     label: string;
 }
 
@@ -23,6 +23,6 @@ export interface StepItem {
 })
 export class StepListComponent {
     @Input() steps: StepItem[] = [];
-    @Input() activeValue: number | string = 1;
-    @Output() activeValueChange = new EventEmitter<number | string>();
+    @Input() activeValue: number = 1;
+    @Output() activeValueChange = new EventEmitter<number>();
 }

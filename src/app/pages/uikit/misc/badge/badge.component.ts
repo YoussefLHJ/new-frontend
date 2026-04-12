@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { BadgeModule } from 'primeng/badge';
 
-export type BadgeSeverity = 'primary' | 'secondary' | 'success' | 'info' | 'warn' | 'danger' | 'contrast';
+export type BadgeSeverity = 'secondary' | 'success' | 'info' | 'warn' | 'danger' | 'contrast';
 export type BadgeSize = 'small' | 'large' | 'xlarge';
 
 @Component({
@@ -13,7 +13,7 @@ export type BadgeSize = 'small' | 'large' | 'xlarge';
 })
 export class BadgeComponent {
     @Input() value: string | number = '';
-    @Input() severity: BadgeSeverity = 'primary';
+    @Input() severity: BadgeSeverity | undefined = undefined;
     @Input() badgeSize?: BadgeSize;
     @Input() styleClass = '';
 }

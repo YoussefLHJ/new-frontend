@@ -57,6 +57,11 @@ constructor(public layoutService: LayoutService, public app: AppComponent, publi
 								  },
 						]
 					  },
+                      {
+                        label: 'UI Kit',
+                        icon: 'pi pi-palette',
+                        routerLink: ['/uikit-showcase']
+                      },
 
 				   {
 					  label: 'Security Management',

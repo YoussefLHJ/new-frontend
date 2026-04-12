@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, ElementRef, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { MenuItem } from 'primeng/api';
 import { ContextMenuModule } from 'primeng/contextmenu';
 
@@ -10,6 +10,6 @@ import { ContextMenuModule } from 'primeng/contextmenu';
     template: `<p-contextmenu [target]="target" [model]="items"></p-contextmenu>`
 })
 export class ContextMenuComponent {
-    @Input() target: HTMLElement | ElementRef | null = null;
+    @Input() target: HTMLElement | string | null = null;
     @Input() items: MenuItem[] = [];
 }
