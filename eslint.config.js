@@ -22,7 +22,7 @@ export default {
         {
             files: ['*.ts'],
             parserOptions: {
-                project: ['tsconfig.json', 'e2e/tsconfig.json'],
+                project: ['tsconfig.json'],
                 createDefaultProgram: true
             },
             extends: ['eslint:recommended', 'plugin:@typescript-eslint/recommended', 'plugin:@angular-eslint/recommended', 'plugin:@angular-eslint/template/process-inline-templates', 'prettier'],

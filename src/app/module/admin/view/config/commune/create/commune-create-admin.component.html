@@ -1,66 +1,43 @@
-    <app-data-grid-create [(visible)]="createDialog"  title="{{'commune.tabPan' | translate}}" (onSave)="save()" (onCancel)="hideCreateDialog()">
-<ng-template pTemplate="content" >
-        <p-tabs value="0">
-            <p-tabpanels>
+<app-data-grid-create [(visible)]="createDialog" title="{{'commune.tabPan' | translate}}" (onSave)="save()" (onCancel)="hideCreateDialog()">
+    <p-tabs value="0">
+        <p-tabpanels>
             <p-tabpanel value="0">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 p-4">
+                <p-fluid>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 p-4">
+                        <div class="flex flex-col gap-2">
+                            <p-floatlabel variant="on">
+                                <input pInputText id="commune-code" [(ngModel)]="item.code" [ngClass]="{'ng-invalid ng-dirty' : !validCommuneCode}" />
+                                <label for="commune-code">{{'commune.code' | translate}} *</label>
+                            </p-floatlabel>
+                            @if (!validCommuneCode) {
+                                <small class="text-red-500">Code is obligatory.</small>
+                            }
+                        </div>
 
-                                <div class="flex flex-col gap-2">
-                                    <label class="text-sm font-semibold" for="1">{{'commune.code' | translate}}<span class="text-red-500">*</span></label>
-                                    <input type="text" pInputText  placeholder="{{'commune.code' | translate}}" id="1" [(ngModel)]="item.code"
-                                           [ngClass]="{'ng-invalid ng-dirty' : !validCommuneCode}"  />
-                                        @if (!validCommuneCode) {
-                                        <small class="text-red-500">Code is obligatory.</small>
-                                        }
-                                </div>
+                        <div class="flex flex-col gap-2">
+                            <p-floatlabel variant="on">
+                                <input pInputText id="commune-libelle" [(ngModel)]="item.libelle" [ngClass]="{'ng-invalid ng-dirty' : !validCommuneLibelle}" />
+                                <label for="commune-libelle">{{'commune.libelle' | translate}} *</label>
+                            </p-floatlabel>
+                            @if (!validCommuneLibelle) {
+                                <small class="text-red-500">Libelle is obligatory.</small>
+                            }
+                        </div>
 
+                        <div class="md:col-span-2 flex flex-col gap-2">
+                            <p-floatlabel variant="on">
+                                <textarea id="commune-description" pTextarea rows="4" [autoResize]="true" [(ngModel)]="item.description"></textarea>
+                                <label for="commune-description">{{'commune.description' | translate}}</label>
+                            </p-floatlabel>
+                        </div>
 
-                                <div class="flex flex-col gap-2">
-                                    <label class="text-sm font-semibold" for="2">{{'commune.libelle' | translate}}<span class="text-red-500">*</span></label>
-                                    <input type="text" pInputText  placeholder="{{'commune.libelle' | translate}}" id="2" [(ngModel)]="item.libelle"
-                                           [ngClass]="{'ng-invalid ng-dirty' : !validCommuneLibelle}"  />
-                                        @if (!validCommuneLibelle) {
-                                        <small class="text-red-500">Libelle is obligatory.</small>
-                                        }
-                                </div>
-
-
-                                <div class="flex flex-col gap-2">
-                                    <label class="text-sm font-semibold" for="3">{{'commune.description' | translate}}</label>
-                                    <textarea id="3" pTextarea rows="5" cols="30" placeholder="{{'commune.description' | translate}}"  [(ngModel)]="item.description"
-                                               ></textarea>
-
-                                </div>
-
-                                <div class="flex flex-col gap-2">
-
-                                    <label class="text-sm font-semibold" for="4">{{'commune.actif' | translate}}</label>
-
-                                    <p-toggleswitch id="4"  [(ngModel)]="item.actif"
-                                                    >
-                                    </p-toggleswitch>
-
-                                </div>
-
-
-                </div>
+                        <div class="flex flex-col gap-2">
+                            <label class="text-sm font-semibold" for="commune-actif">{{'commune.actif' | translate}}</label>
+                            <p-toggleswitch id="commune-actif" [(ngModel)]="item.actif"></p-toggleswitch>
+                        </div>
+                    </div>
+                </p-fluid>
             </p-tabpanel>
-            </p-tabpanels>
-        </p-tabs>
-
-</ng-template>
-
-<ng-template pTemplate="footer" >
-    <div class="flex justify-end space-x-3 p-4">
-            <button (click)="save()" class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-primary">
-                <i class="pi pi-check"></i> {{'validate' | translate}}
-            </button>
-
-                <button (click)="hideCreateDialog()" class="border border-gray-400 text-gray-600 hover:bg-gray-200 px-4 py-2 rounded-md">
-                    <i class="pi pi-times"></i> {{'cancel' | translate}}
-                </button>
-
-    </div>
-</ng-template>
-
-    </app-data-grid-create>
+        </p-tabpanels>
+    </p-tabs>
+</app-data-grid-create>

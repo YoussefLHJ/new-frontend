@@ -10,6 +10,8 @@ import { ToggleSwitchModule } from 'primeng/toggleswitch';
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { TabsModule } from 'primeng/tabs';
+import { FluidModule } from 'primeng/fluid';
+import { FloatLabelModule } from 'primeng/floatlabel';
 import { DataGridEditComponent } from '@/app/pages/components/data-grid';
 
 
@@ -43,7 +45,7 @@ import {AppareilAdminService} from 'src/app/shared/service/admin/core/AppareilAd
   imports: [
     CommonModule, FormsModule, TranslateModule,
     InputTextModule, InputNumberModule, SelectModule, ToggleSwitchModule,
-    TableModule, ButtonModule, TabsModule, DataGridEditComponent,
+    TableModule, ButtonModule, TabsModule, FluidModule, FloatLabelModule, DataGridEditComponent,
   ],
   templateUrl: './batiment-edit-admin.component.html'
 })
@@ -116,6 +118,7 @@ export class BatimentEditAdminComponent implements OnInit {
             this.items[myIndex] = religion;
             this.editDialog = false;
             this.submitted = false;
+            this.onUpdated.emit();
             this.item = new BatimentDto();
         } , error =>{
             console.log(error);

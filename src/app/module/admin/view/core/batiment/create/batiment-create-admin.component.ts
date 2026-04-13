@@ -10,6 +10,8 @@ import { ToggleSwitchModule } from 'primeng/toggleswitch';
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { TabsModule } from 'primeng/tabs';
+import { FluidModule } from 'primeng/fluid';
+import { FloatLabelModule } from 'primeng/floatlabel';
 import { DataGridCreateComponent } from '@/app/pages/components/data-grid';
 
 
@@ -40,7 +42,7 @@ import {AppareilAdminService} from 'src/app/shared/service/admin/core/AppareilAd
   imports: [
     CommonModule, FormsModule, TranslateModule,
     InputTextModule, InputNumberModule, SelectModule, ToggleSwitchModule,
-    TableModule, ButtonModule, TabsModule, DataGridCreateComponent,
+    TableModule, ButtonModule, TabsModule, FluidModule, FloatLabelModule, DataGridCreateComponent,
   ],
   templateUrl: './batiment-create-admin.component.html'
 })
@@ -100,6 +102,7 @@ export class BatimentCreateAdminComponent  implements OnInit {
                 this.items.push({...item});
                 this.createDialog = false;
                 this.submitted = false;
+                this.onSaved.emit();
                 this.item = new BatimentDto();
             } else {
                 this.messageService.add({severity: 'error', summary: 'Erreurs', detail: 'Element existant'});

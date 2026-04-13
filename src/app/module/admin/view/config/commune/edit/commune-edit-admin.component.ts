@@ -10,6 +10,9 @@ import { ToggleSwitchModule } from 'primeng/toggleswitch';
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { TabsModule } from 'primeng/tabs';
+import { FluidModule } from 'primeng/fluid';
+import { FloatLabelModule } from 'primeng/floatlabel';
+import { TextareaModule } from 'primeng/textarea';
 import { DataGridEditComponent } from '@/app/pages/components/data-grid';
 
 
@@ -39,7 +42,7 @@ import {CommuneCriteria} from 'src/app/shared/criteria/config/CommuneCriteria.mo
   imports: [
     CommonModule, FormsModule, TranslateModule,
     InputTextModule, InputNumberModule, SelectModule, ToggleSwitchModule,
-    TableModule, ButtonModule, TabsModule, DataGridEditComponent,
+    TableModule, ButtonModule, TabsModule, FluidModule, FloatLabelModule, TextareaModule, DataGridEditComponent,
   ],
   templateUrl: './commune-edit-admin.component.html'
 })
@@ -105,6 +108,7 @@ export class CommuneEditAdminComponent implements OnInit {
             this.items[myIndex] = religion;
             this.editDialog = false;
             this.submitted = false;
+            this.onUpdated.emit();
             this.item = new CommuneDto();
         } , error =>{
             console.log(error);
