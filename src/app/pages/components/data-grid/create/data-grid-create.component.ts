@@ -1,39 +1,23 @@
-import { Component, ChangeDetectionStrategy, model, input, output, TemplateRef, contentChild } from '@angular/core';
-import { NgTemplateOutlet } from '@angular/common';
-import { DialogModule } from 'primeng/dialog';
-import { ButtonModule } from 'primeng/button';
-import { SignalTranslatePipe } from '@/app/pages/pipe/signal-translate.pipe';
+import { Component, ChangeDetectionStrategy, TemplateRef, contentChild, model, input, output } from '@angular/core';
+import { AppDialogFormComponent } from '@/app/pages/uikit/app-dialog-form.component';
 
-/**
- * Entry component for the data-grid create feature.
- *
- * Provides a standardized dialog shell for entity creation forms,
- * matching the appareil create-admin pattern. The form content is
- * provided by the host via content projection (`ng-content`).
- *
- * Usage:
- * ```html
- * <app-data-grid-create
- *     [(visible)]="createDialogVisible"
- *     [title]="'entity.tabPan'"
- *     (onSave)="save()"
- *     (onCancel)="cancel()">
- *
- *     <!-- Entity-specific form fields -->
- *     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 p-4">
- *         <div class="flex flex-col gap-2">
- *             <label>{{'entity.field' | translate}}</label>
- *             <input pInputText [(ngModel)]="item.field" />
- *         </div>
- *     </div>
- * </app-data-grid-create>
- * ```
- */
 @Component({
     selector: 'app-data-grid-create',
-    imports: [DialogModule, ButtonModule, NgTemplateOutlet, SignalTranslatePipe],
+    standalone: true,
+    imports: [AppDialogFormComponent],
     changeDetection: ChangeDetectionStrategy.OnPush,
-    templateUrl: 'data-grid-create.component.html',
+    template: `
+        <app-dialog-form
+            [(visible)]="visible"
+            [title]="title()"
+            [dialogWidth]="dialogWidth()"
+            [actionDisabled]="saveDisabled()"
+            [contentTpl]="customContentTpl() ?? null"
+            (onAction)="onSave.emit()"
+            (onCancel)="onCancel.emit()">
+            <ng-content></ng-content>
+        </app-dialog-form>
+    `
 })
 export class DataGridCreateComponent {
     visible = model(false);

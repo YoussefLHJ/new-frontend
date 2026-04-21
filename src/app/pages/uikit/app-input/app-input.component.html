@@ -1,0 +1,18 @@
+@if (!hidden) {
+    <div class="flex flex-col gap-2">
+        <input
+            pInputText
+            [id]="id"
+            [placeholder]="placeholder || label + (required ? ' *' : '')"
+            [ngModel]="value"
+            (ngModelChange)="onValueChange($event)"
+            [readOnly]="readonly"
+            [disabled]="disabled"
+            class="w-full"
+            [ngClass]="{ 'ng-invalid ng-dirty': isInvalid }"
+        />
+        @if (isInvalid && errorMessage) {
+            <small class="text-red-500">{{ errorMessage }}</small>
+        }
+    </div>
+}

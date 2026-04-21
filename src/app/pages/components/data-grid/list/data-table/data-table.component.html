@@ -106,7 +106,7 @@
                     </th>
                 }
             }
-            <th style="min-width: 9rem; text-align: center">{{ 'actions' | translate }}</th>
+            <th style="min-width: 5rem; text-align: center">{{ 'actions' | translate }}</th>
         </tr>
     </ng-template>
 
@@ -195,18 +195,9 @@
                         }
                     }
                 }
-                <td>
-                    <div class="flex items-center justify-center gap-1">
-                        <p-button icon="pi pi-eye" [rounded]="true" [text]="true" severity="info"
-                                  [pTooltip]="'common.view' | translate" tooltipPosition="top"
-                                  (click)="openViewDialog(item)" />
-                        <p-button icon="pi pi-pencil" [rounded]="true" [text]="true"
-                                  [pTooltip]="'common.edit' | translate" tooltipPosition="top"
-                                  (click)="onEdit.emit(item)" />
-                        <p-button icon="pi pi-trash" severity="danger" [rounded]="true" [text]="true"
-                                  [pTooltip]="'common.delete' | translate" tooltipPosition="top"
-                                  (click)="onDelete.emit(item)" />
-                    </div>
+                <td class="text-center">
+                    <p-button icon="pi pi-ellipsis-v" [rounded]="true" [text]="true" severity="secondary"
+                              (click)="openRowMenu($event, item)" />
                 </td>
             </tr>
         }
@@ -223,6 +214,8 @@
         </tr>
     </ng-template>
 </p-table>
+
+<p-menu #rowMenu [model]="rowMenuItems()" [popup]="true" appendTo="body" />
 
 <!-- View detail dialog -->
 <app-view-detail-dialog

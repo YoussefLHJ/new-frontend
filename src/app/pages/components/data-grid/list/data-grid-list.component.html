@@ -41,6 +41,7 @@
         [criteriaFactory]="$any(criteriaFactory())"
         [exportDataLoader]="exportDataLoader()"
         [initialRows]="initialRows()"
+        [service]="service()"
         (onCreate)="onCreate.emit()"
         (onEdit)="onEdit.emit($event)"
         (onDelete)="onDelete.emit($event)"

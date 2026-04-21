@@ -1,5 +1,16 @@
 import { Observable } from 'rxjs';
 
+/**
+ * Minimal contract that any AbstractService subclass satisfies.
+ * Pass a service as `[service]` input to enable auto-delete and auto-refresh.
+ */
+export interface DataGridServiceContract {
+    delete(dto: any): Observable<any>;
+    deleteMultiple(): Observable<any>;
+    exportPdf(element: any): Observable<ArrayBuffer>;
+    selections: any[];
+}
+
 export interface ColumnConfig {
     field: string;
     header: string;
@@ -154,4 +165,6 @@ export interface DataGridListConfig {
     dataLoader?: DataLoadFn;
     /** Server-mode only: loads all matching records for export. */
     exportDataLoader?: ExportLoadFn;
+    /** Optional: when provided, delete operations are handled by the service with auto-refresh. */
+    service?: DataGridServiceContract;
 }

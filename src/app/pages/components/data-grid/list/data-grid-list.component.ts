@@ -6,7 +6,7 @@ import { DataTableComponent } from './data-table/data-table.component';
 import { ServerDataTableComponent } from './server-data-table/server-data-table.component';
 import {
     ColumnConfig, ServerColumnConfig, GroupOption, GroupingConfig,
-    DataLoadFn, ExportLoadFn
+    DataLoadFn, ExportLoadFn, DataGridServiceContract
 } from '../models/data-grid.models';
 
 /**
@@ -73,6 +73,7 @@ export class DataGridListComponent {
     criteriaFactory = input<() => any>();
     exportDataLoader = input<ExportLoadFn>();
     initialRows = input(10);
+    service = input<DataGridServiceContract | null>(null);
 
     // --- Outputs ---
     onCreate = output<void>();

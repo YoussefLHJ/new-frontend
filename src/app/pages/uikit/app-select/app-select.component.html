@@ -1,0 +1,21 @@
+@if (!hidden) {
+    <div class="flex flex-col gap-2">
+        <p-select
+            [inputId]="id"
+            [placeholder]="placeholder || label"
+            [ngModel]="value"
+            (ngModelChange)="onValueChange($event)"
+            [options]="options"
+            [optionLabel]="optionLabel"
+            [filter]="filter"
+            [filterMatchMode]="filterMatchMode"
+            [showClear]="showClear"
+            [disabled]="disabled || readonly"
+            appendTo="body"
+            Class="w-full"
+        />
+        @if (isInvalid && errorMessage) {
+            <small class="text-red-500">{{ errorMessage }}</small>
+        }
+    </div>
+}

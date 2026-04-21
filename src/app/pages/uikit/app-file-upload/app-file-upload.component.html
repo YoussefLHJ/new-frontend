@@ -1,0 +1,18 @@
+<div class="flex flex-col gap-2">
+
+    <p-fileUpload
+        [multiple]="multiple"
+        [maxFileSize]="maxFileSize"
+        [showUploadButton]="showUploadButton"
+        [showCancelButton]="showCancelButton"
+        (onSelect)="onSelect($event)"
+    >
+    </p-fileUpload>
+
+    @if (isInvalid) {
+        <small class="text-red-500">
+            {{ errorMessage }}
+        </small>
+    }
+
+</div>

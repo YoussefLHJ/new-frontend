@@ -3,9 +3,9 @@ import { DatePipe } from '@angular/common';
 import { DialogModule } from 'primeng/dialog';
 import { TagModule } from 'primeng/tag';
 import { ButtonModule } from 'primeng/button';
-import { TranslateService } from '@ngx-translate/core';
 import { SignalTranslatePipe } from '@/app/pages/pipe/signal-translate.pipe';
 import { ColumnConfig } from '../../models/data-grid.models';
+import { DataDisplayService } from '../../services/data-display.service';
 
 @Component({
     selector: 'app-view-detail-dialog',
@@ -19,30 +19,20 @@ export class ViewDetailDialogComponent {
     title = input('');
     visible = model(false);
 
-    private readonly translate = inject(TranslateService);
+    private readonly display = inject(DataDisplayService);
 
     visibleColumns = computed(() => this.columns().filter(c => c.visible !== false));
 
     getFieldIcon(col: ColumnConfig): string {
-        switch (col.type) {
-            case 'boolean': return 'pi pi-check-circle';
-            case 'date': return 'pi pi-calendar';
-            case 'entity': return 'pi pi-link';
-            case 'numeric': return 'pi pi-hashtag';
-            default: return 'pi pi-align-left';
-        }
+        return this.display.getFieldIcon(col);
     }
 
     getBooleanLabel(col: ColumnConfig): string {
-        return this.item()[col.field]
-            ? this.translate.instant(col.booleanTrueLabel || 'common.active')
-            : this.translate.instant(col.booleanFalseLabel || 'common.inactive');
+        return this.display.getBooleanLabel(this.item()![col.field], col);
     }
 
     getBooleanSeverity(col: ColumnConfig): string {
-        return this.item()[col.field]
-            ? (col.booleanTrueSeverity || 'success')
-            : (col.booleanFalseSeverity || 'danger');
+        return this.display.getBooleanSeverity(this.item()![col.field], col);
     }
 
     onHide() {

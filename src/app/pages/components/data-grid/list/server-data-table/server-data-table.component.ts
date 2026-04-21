@@ -14,6 +14,8 @@ import { InputTextModule } from 'primeng/inputtext';
 import { TagModule } from 'primeng/tag';
 import { TooltipModule } from 'primeng/tooltip';
 import { PaginatorModule } from 'primeng/paginator';
+import { Menu, MenuModule } from 'primeng/menu';
+import { MenuItem } from 'primeng/api';
 import { TranslateService } from '@ngx-translate/core';
 import { SignalTranslatePipe } from '@/app/pages/pipe/signal-translate.pipe';
 import { ExportService } from '@/app/zynerator/util/Export.service';
@@ -21,17 +23,18 @@ import { DataGridToolbarComponent } from '../data-grid-toolbar/data-grid-toolbar
 import { ViewDetailDialogComponent } from '../../view/view-detail-dialog/view-detail-dialog.component';
 import {
     ServerColumnConfig, FilterCondition, GroupOption, GroupingConfig,
-    DataLoadFn, ExportLoadFn
+    DataLoadFn, ExportLoadFn, DataGridServiceContract
 } from '../../models/data-grid.models';
 import { CriteriaMapperService } from '../../services/criteria-mapper.service';
 import { DataGridGroupingService } from '../../services/data-grid-grouping.service';
+import { DataDisplayService } from '../../services/data-display.service';
 
 @Component({
     selector: 'app-server-data-table',
     imports: [
         FormsModule, TableModule, ButtonModule, ToolbarModule,
         IconFieldModule, InputIconModule, InputTextModule, TagModule, TooltipModule,
-        PaginatorModule,
+        PaginatorModule, MenuModule,
         NgTemplateOutlet, SignalTranslatePipe, DataGridToolbarComponent, ViewDetailDialogComponent, DatePipe
     ],
     templateUrl: './server-data-table.component.html',
@@ -41,6 +44,7 @@ export class ServerDataTableComponent implements OnInit {
     // --- Queries ---
     dt = viewChild<Table>('dt');
     toolbar = viewChild(DataGridToolbarComponent);
+    rowMenu = viewChild<Menu>('rowMenu');
     customCellTpl = contentChild<TemplateRef<any>>('customCell');
 
     // --- Configuration Inputs ---
@@ -61,6 +65,7 @@ export class ServerDataTableComponent implements OnInit {
     dataLoader = input.required<DataLoadFn>();
     criteriaFactory = input.required<() => any>();
     exportDataLoader = input<ExportLoadFn>();
+    service = input<DataGridServiceContract | null>(null);
 
     // --- Outputs ---
     onCreate = output<void>();
@@ -72,6 +77,7 @@ export class ServerDataTableComponent implements OnInit {
     private readonly criteriaMapper = inject(CriteriaMapperService);
     private readonly groupingService = inject(DataGridGroupingService);
     private readonly exportService = inject(ExportService);
+    private readonly display = inject(DataDisplayService);
     readonly translate = inject(TranslateService);
     private readonly destroyRef = inject(DestroyRef);
 
@@ -81,6 +87,7 @@ export class ServerDataTableComponent implements OnInit {
     totalRecords = signal(0);
     loading = signal(false);
     selectedItems = signal<any[]>([]);
+    rowMenuItems = signal<MenuItem[]>([]);
     viewDialogVisible = false;
     viewItem: any = null;
     activeGroupFields: string[] = [];
@@ -107,7 +114,6 @@ export class ServerDataTableComponent implements OnInit {
         return fields;
     });
 
-    /** Whether backend grouping is active for the current configuration. */
     private get isBackendGrouping(): boolean {
         const config = this.groupingConfig();
         return !!config.backendGrouping && this.activeGroupFields.length > 0;
@@ -141,7 +147,6 @@ export class ServerDataTableComponent implements OnInit {
             this.currentRows
         );
 
-        // Attach groupBy to criteria when backend grouping is enabled
         if (this.isBackendGrouping) {
             const key = this.groupingConfig().backendGroupCriteriaKey || 'groupBy';
             criteria[key] = [...this.activeGroupFields];
@@ -170,9 +175,42 @@ export class ServerDataTableComponent implements OnInit {
         this.loadData();
     }
 
-    /** Public method to trigger a data reload from the host component. */
     refresh() {
         this.loadData();
+    }
+
+    // ─── Row Menu ───────────────────────────────────────────────────────
+
+    openRowMenu(event: MouseEvent, item: any) {
+        this.rowMenuItems.set([
+            { label: this.translate.instant('common.view'), icon: 'pi pi-eye', command: () => this.openViewDialog(item) },
+            { label: this.translate.instant('common.edit'), icon: 'pi pi-pencil', command: () => this.onEdit.emit(item) },
+            { separator: true },
+            { label: this.translate.instant('common.delete'), icon: 'pi pi-trash', styleClass: 'text-red-500', command: () => this.handleDelete(item) },
+        ]);
+        this.rowMenu()?.toggle(event);
+    }
+
+    handleDelete(item: any) {
+        const svc = this.service();
+        if (svc) {
+            svc.delete(item).pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => this.loadData());
+        } else {
+            this.onDelete.emit(item);
+        }
+    }
+
+    handleDeleteSelected(items: any[]) {
+        const svc = this.service();
+        if (svc) {
+            svc.selections = items;
+            svc.deleteMultiple().pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
+                this.selectedItems.set([]);
+                this.loadData();
+            });
+        } else {
+            this.onDeleteSelected.emit(items);
+        }
     }
 
     // ─── View Dialog ────────────────────────────────────────────────────
@@ -182,31 +220,22 @@ export class ServerDataTableComponent implements OnInit {
         this.viewDialogVisible = true;
     }
 
-    // ─── Cell Rendering ─────────────────────────────────────────────────
+    // ─── Cell Rendering (delegates to DataDisplayService) ───────────────
 
     hasCustomCell(col: ServerColumnConfig): boolean {
         return this.customCellFields().includes(col.field);
     }
 
     getBooleanLabel(item: any, col: ServerColumnConfig): string {
-        return item[col.field]
-            ? this.translate.instant(col.booleanTrueLabel || 'common.active')
-            : this.translate.instant(col.booleanFalseLabel || 'common.inactive');
+        return this.display.getBooleanLabel(item[col.field], col);
     }
 
     getBooleanSeverity(item: any, col: ServerColumnConfig): string {
-        return item[col.field]
-            ? (col.booleanTrueSeverity || 'success')
-            : (col.booleanFalseSeverity || 'danger');
+        return this.display.getBooleanSeverity(item[col.field], col);
     }
 
     getDefaultWidth(col: ServerColumnConfig): string {
-        switch (col.type) {
-            case 'boolean': return '8rem';
-            case 'date': return '10rem';
-            case 'entity': return '12rem';
-            default: return '10rem';
-        }
+        return this.display.getDefaultColumnWidth(col);
     }
 
     // ─── Column Visibility ──────────────────────────────────────────────
@@ -215,7 +244,7 @@ export class ServerDataTableComponent implements OnInit {
         this.cachedVisibleColumnCount.set(this.columns().filter(c => c.visible !== false).length);
     }
 
-    // ─── Global Filter (debounced, client-side on current page) ─────────
+    // ─── Global Filter ──────────────────────────────────────────────────
 
     onGlobalFilter(table: Table, event: Event) {
         clearTimeout(this.globalFilterTimeout);
@@ -229,12 +258,10 @@ export class ServerDataTableComponent implements OnInit {
     onGroupFieldsChange(fields: string[]) {
         this.activeGroupFields = fields;
 
-        // Backend grouping: re-fetch with groupBy in criteria
         if (this.groupingConfig().backendGrouping) {
             this.resetPagination();
             this.loadData();
         } else {
-            // Frontend grouping: recompute on current page
             this.recomputeDisplay();
         }
     }
@@ -271,23 +298,7 @@ export class ServerDataTableComponent implements OnInit {
     }
 
     getFilterChipLabel(condition: FilterCondition): string {
-        const col = this.columns().find(c => c.field === condition.field);
-        const fieldLabel = col ? this.translate.instant(col.header) : condition.field;
-        const opLabel = this.translate.instant(`dataGrid.operators.${condition.operator}`);
-
-        let valueStr: string;
-        if (col?.type === 'boolean') {
-            valueStr = condition.value
-                ? this.translate.instant(col.booleanTrueLabel || 'common.active')
-                : this.translate.instant(col.booleanFalseLabel || 'common.inactive');
-        } else if (col?.type === 'date' && condition.value) {
-            const d = new Date(condition.value);
-            valueStr = `${d.getDate().toString().padStart(2, '0')}/${(d.getMonth() + 1).toString().padStart(2, '0')}/${d.getFullYear()}`;
-        } else {
-            valueStr = String(condition.value ?? '');
-        }
-
-        return `${fieldLabel} ${opLabel} ${valueStr}`;
+        return this.display.getFilterChipLabel(condition, this.columns());
     }
 
     removeFilter(condition: FilterCondition) {
@@ -317,7 +328,6 @@ export class ServerDataTableComponent implements OnInit {
         const items = this.items();
         const columns = this.columns();
 
-        // Add flat entity labels for global search
         for (const col of columns) {
             if (col.type === 'entity') {
                 const labelKey = `_${col.field}_label`;
@@ -334,7 +344,6 @@ export class ServerDataTableComponent implements OnInit {
             return;
         }
 
-        // Delegate grouping computation to the service
         const grouped = [...items];
         this.groupCountMap = this.groupingService.computeGroups(
             grouped, this.activeGroupFields, columns, this.translate
@@ -352,41 +361,12 @@ export class ServerDataTableComponent implements OnInit {
     // ─── Export ─────────────────────────────────────────────────────────
 
     private getExportData(source: any[]): Record<string, any>[] {
-        const columns = this.columns();
-        return source.map(item => {
-            const row: Record<string, any> = {};
-            for (const col of columns) {
-                if (col.visible === false) continue;
-                const header = this.translate.instant(col.header);
-                const value = item[col.field];
-                switch (col.type) {
-                    case 'boolean':
-                        row[header] = value
-                            ? this.translate.instant(col.booleanTrueLabel || 'common.active')
-                            : this.translate.instant(col.booleanFalseLabel || 'common.inactive');
-                        break;
-                    case 'date':
-                        if (value) {
-                            const d = new Date(value);
-                            row[header] = `${d.getDate().toString().padStart(2, '0')}/${(d.getMonth() + 1).toString().padStart(2, '0')}/${d.getFullYear()}`;
-                        } else {
-                            row[header] = '';
-                        }
-                        break;
-                    case 'entity':
-                        row[header] = value?.[col.entityLabelField || 'libelle'] ?? '';
-                        break;
-                    default:
-                        row[header] = value ?? '';
-                }
-            }
-            return row;
-        });
+        return source.map(item => this.display.formatExportRow(item, this.columns()));
     }
 
     private getExportCriteria(): string[] {
         if (!this.activeFilters?.length) return [];
-        return this.activeFilters.map(c => this.getFilterChipLabel(c));
+        return this.activeFilters.map(c => this.display.getFilterChipLabel(c, this.columns()));
     }
 
     private doExport(exportFn: (title: string, data: any[], criteria: string[], fileName: string, filterLabel: string) => void) {
@@ -396,14 +376,12 @@ export class ServerDataTableComponent implements OnInit {
 
         const exportLoader = this.exportDataLoader();
         if (exportLoader) {
-            // Fetch all matching records from server for full export
             const serverCriteria = this.criteriaMapper.buildCriteria(
                 this.criteriaFactory(),
                 this.activeFilters,
                 this.columns(),
                 0, 0
             );
-            // Include groupBy for backend-grouped exports
             if (this.isBackendGrouping) {
                 const key = this.groupingConfig().backendGroupCriteriaKey || 'groupBy';
                 serverCriteria[key] = [...this.activeGroupFields];
@@ -417,7 +395,6 @@ export class ServerDataTableComponent implements OnInit {
                     }
                 });
         } else {
-            // Export current page data
             const source = (this.dt()?.filteredValue ?? this.displayItems()) as any[];
             const rows = this.getExportData(source);
             if (rows.length) {
@@ -437,7 +414,28 @@ export class ServerDataTableComponent implements OnInit {
     }
 
     exportToPdf() {
-        this.doExport((title, data, criteria, fileName, filterLabel) =>
-            this.exportService.exportPdf(title, data, criteria, fileName, filterLabel));
+        const svc = this.service();
+        if (svc) {
+            const serverCriteria = this.criteriaMapper.buildCriteria(
+                this.criteriaFactory(),
+                this.activeFilters,
+                this.columns(),
+                0, 0
+            );
+            svc.exportPdf(serverCriteria)
+                .pipe(takeUntilDestroyed(this.destroyRef))
+                .subscribe(buffer => {
+                    const blob = new Blob([buffer], { type: 'application/pdf' });
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = `${this.exportFileName()}.pdf`;
+                    a.click();
+                    URL.revokeObjectURL(url);
+                });
+        } else {
+            this.doExport((title, data, criteria, fileName, filterLabel) =>
+                this.exportService.exportPdf(title, data, criteria, fileName, filterLabel));
+        }
     }
 }

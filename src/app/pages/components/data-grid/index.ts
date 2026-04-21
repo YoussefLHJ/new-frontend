@@ -5,11 +5,13 @@ export * from './models/data-grid.models';
 export * from './services/data-grid-filter.service';
 export * from './services/data-grid-grouping.service';
 export * from './services/criteria-mapper.service';
+export * from './services/data-display.service';
 
 // ── Shared Components ───────────────────────────────────────────────────
 export * from './shared/filter-dialog/filter-dialog.component';
 export * from './shared/export-menu/export-menu.component';
 export * from './shared/column-selector/column-selector.component';
+export * from './shared/inline-table/data-grid-inline-table.component';
 
 // ── List ────────────────────────────────────────────────────────────────
 export * from './list/data-grid-list.component';

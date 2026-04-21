@@ -1,0 +1,21 @@
+@if (!hidden) {
+    <div class="flex flex-col gap-2">
+        <textarea
+            pTextarea
+            [id]="id"
+            [placeholder]="placeholder || label + (required ? ' *' : '')"
+            [rows]="rows"
+            [cols]="cols"
+            [autoResize]="autoResize"
+            [ngModel]="value"
+            (ngModelChange)="onValueChange($event)"
+            [readOnly]="readonly"
+            [disabled]="disabled"
+            class="w-full"
+            [ngClass]="{ 'ng-invalid ng-dirty': isInvalid }"
+        ></textarea>
+        @if (isInvalid && errorMessage) {
+            <small class="text-red-500">{{ errorMessage }}</small>
+        }
+    </div>
+}

@@ -1,0 +1,17 @@
+<div class="flex flex-col gap-1">
+    @if (label) {
+        <label class="text-sm font-medium">{{ label }}</label>
+    }
+    <p-datepicker
+        [ngModel]="value"
+        (ngModelChange)="onValueChange($event)"
+        (onBlur)="onTouched()"
+        [placeholder]="placeholder"
+        [dateFormat]="dateFormat"
+        [showIcon]="true"
+        [readonlyInput]="true"
+        [disabled]="disabled"
+        [showTime]="showTime"
+        [showSeconds]="showSeconds">
+    </p-datepicker>
+</div>

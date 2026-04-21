@@ -142,7 +142,66 @@
         "deleteCommandesConfirmationMessage": "Are you sure you want to delete the selected elements"
     },
 
-"appName": "GED"
+"common": {
+        "viewDetails": "عرض التفاصيل",
+        "close": "إغلاق",
+        "view": "عرض",
+        "edit": "تعديل",
+        "delete": "حذف",
+        "groupBy": "تجميع حسب",
+        "collapse": "طي",
+        "expand": "توسيع",
+        "active": "نشط",
+        "inactive": "غير نشط",
+        "noData": "لا توجد سجلات",
+        "searchPlaceholder": "بحث..."
+    },
+
+    "dataGrid": {
+        "filter": {
+            "title": "فلاتر متقدمة",
+            "subtitle": "تصفية السجلات بشرط واحد أو أكثر",
+            "allConditionsMustMatch": "يجب أن تتطابق جميع الشروط",
+            "condition": "الشرط",
+            "removeCondition": "حذف الشرط",
+            "field": "الحقل",
+            "selectField": "اختر حقلاً",
+            "operator": "المعامل",
+            "selectOperator": "اختر معاملاً",
+            "value": "القيمة",
+            "enterValue": "أدخل قيمة",
+            "and": "و",
+            "addCondition": "إضافة شرط",
+            "apply": "تطبيق الفلاتر",
+            "clearAll": "مسح الكل"
+        },
+        "grouping": {
+            "clearGrouping": "إزالة التجميع",
+            "count": "العدد"
+        },
+        "operators": {
+            "contains": "يحتوي على",
+            "equals": "يساوي",
+            "startsWith": "يبدأ بـ",
+            "endsWith": "ينتهي بـ",
+            "greaterThan": "أكبر من",
+            "lessThan": "أقل من"
+        },
+        "selection": {
+            "rowSelected": "صف محدد",
+            "rowsSelected": "صفوف محددة",
+            "clearSelection": "مسح التحديد"
+        },
+        "export": {
+            "title": "تصدير",
+            "filtersLabel": "الفلاتر المطبقة"
+        },
+        "columns": {
+            "title": "الأعمدة"
+        }
+    },
+
+    "appName": "GED"
 }
 
 

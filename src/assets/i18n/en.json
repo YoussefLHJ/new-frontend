@@ -145,7 +145,66 @@
         "deleteCommandesConfirmationMessage": "Are you sure you want to delete the selected elements"
     },
 
-"appName": "GED"
+"common": {
+        "viewDetails": "View Details",
+        "close": "Close",
+        "view": "View",
+        "edit": "Edit",
+        "delete": "Delete",
+        "groupBy": "Group by",
+        "collapse": "Collapse",
+        "expand": "Expand",
+        "active": "Active",
+        "inactive": "Inactive",
+        "noData": "No records found",
+        "searchPlaceholder": "Search..."
+    },
+
+    "dataGrid": {
+        "filter": {
+            "title": "Advanced Filters",
+            "subtitle": "Filter records by one or more conditions",
+            "allConditionsMustMatch": "All conditions must match",
+            "condition": "Condition",
+            "removeCondition": "Remove condition",
+            "field": "Field",
+            "selectField": "Select field",
+            "operator": "Operator",
+            "selectOperator": "Select operator",
+            "value": "Value",
+            "enterValue": "Enter value",
+            "and": "AND",
+            "addCondition": "Add condition",
+            "apply": "Apply filters",
+            "clearAll": "Clear all"
+        },
+        "grouping": {
+            "clearGrouping": "Clear grouping",
+            "count": "Count"
+        },
+        "operators": {
+            "contains": "Contains",
+            "equals": "Equals",
+            "startsWith": "Starts with",
+            "endsWith": "Ends with",
+            "greaterThan": "Greater than",
+            "lessThan": "Less than"
+        },
+        "selection": {
+            "rowSelected": "row selected",
+            "rowsSelected": "rows selected",
+            "clearSelection": "Clear selection"
+        },
+        "export": {
+            "title": "Export",
+            "filtersLabel": "Applied filters"
+        },
+        "columns": {
+            "title": "Columns"
+        }
+    },
+
+    "appName": "GED"
 }
 
 

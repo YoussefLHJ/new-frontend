@@ -1,0 +1,13 @@
+<div class="flex flex-col gap-2">
+    <p-multiSelect
+        class="w-full"
+        [options]="options"
+        [(ngModel)]="value"
+        [placeholder]="defaultLabel"
+        [optionLabel]="optionLabel"
+        [appendTo]="appendTo"
+        [virtualScroll]="virtualScroll"
+        display="chip"
+        (onChange)="onValueChange($event.value)"
+    />
+</div>

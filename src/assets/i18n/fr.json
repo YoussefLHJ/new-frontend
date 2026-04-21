@@ -148,7 +148,66 @@
         "deleteCommandesConfirmationMessage": "Are you sure you want to delete the selected elements"
     },
 
-"appName": "GED"
+"common": {
+        "viewDetails": "Voir les détails",
+        "close": "Fermer",
+        "view": "Voir",
+        "edit": "Modifier",
+        "delete": "Supprimer",
+        "groupBy": "Grouper par",
+        "collapse": "Réduire",
+        "expand": "Développer",
+        "active": "Actif",
+        "inactive": "Inactif",
+        "noData": "Aucun enregistrement trouvé",
+        "searchPlaceholder": "Rechercher..."
+    },
+
+    "dataGrid": {
+        "filter": {
+            "title": "Filtres avancés",
+            "subtitle": "Filtrer les enregistrements par une ou plusieurs conditions",
+            "allConditionsMustMatch": "Toutes les conditions doivent correspondre",
+            "condition": "Condition",
+            "removeCondition": "Supprimer la condition",
+            "field": "Champ",
+            "selectField": "Sélectionner un champ",
+            "operator": "Opérateur",
+            "selectOperator": "Sélectionner un opérateur",
+            "value": "Valeur",
+            "enterValue": "Saisir une valeur",
+            "and": "ET",
+            "addCondition": "Ajouter une condition",
+            "apply": "Appliquer les filtres",
+            "clearAll": "Tout effacer"
+        },
+        "grouping": {
+            "clearGrouping": "Supprimer le regroupement",
+            "count": "Nombre"
+        },
+        "operators": {
+            "contains": "Contient",
+            "equals": "Égal à",
+            "startsWith": "Commence par",
+            "endsWith": "Se termine par",
+            "greaterThan": "Supérieur à",
+            "lessThan": "Inférieur à"
+        },
+        "selection": {
+            "rowSelected": "ligne sélectionnée",
+            "rowsSelected": "lignes sélectionnées",
+            "clearSelection": "Effacer la sélection"
+        },
+        "export": {
+            "title": "Exporter",
+            "filtersLabel": "Filtres appliqués"
+        },
+        "columns": {
+            "title": "Colonnes"
+        }
+    },
+
+    "appName": "GED"
 }
 
 

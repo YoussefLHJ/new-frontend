@@ -1,0 +1,13 @@
+@if (!hidden) {
+    <div class="flex flex-col gap-2">
+        @if (label) {
+            <label class="text-sm font-semibold" [for]="id">{{ label }}</label>
+        }
+        <p-toggleswitch
+            [id]="id"
+            [ngModel]="value"
+            (ngModelChange)="onValueChange($event)"
+            [disabled]="disabled || readonly"
+        />
+    </div>
+}

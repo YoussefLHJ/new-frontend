@@ -1,0 +1,17 @@
+@if (!hidden) {
+    <div class="flex flex-col gap-2">
+        <p-inputnumber
+            [inputId]="id"
+            [placeholder]="placeholder || label"
+            [ngModel]="value"
+            (ngModelChange)="onValueChange($event)"
+            [showButtons]="showButtons"
+            [disabled]="disabled"
+            [readonly]="readonly"
+            styleClass="w-full"
+        />
+        @if (isInvalid && errorMessage) {
+            <small class="text-red-500">{{ errorMessage }}</small>
+        }
+    </div>
+}

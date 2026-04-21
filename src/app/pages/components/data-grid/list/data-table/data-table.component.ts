@@ -12,6 +12,8 @@ import { InputIconModule } from 'primeng/inputicon';
 import { InputTextModule } from 'primeng/inputtext';
 import { TagModule } from 'primeng/tag';
 import { TooltipModule } from 'primeng/tooltip';
+import { Menu, MenuModule } from 'primeng/menu';
+import { MenuItem } from 'primeng/api';
 import { TranslateService } from '@ngx-translate/core';
 import { SignalTranslatePipe } from '@/app/pages/pipe/signal-translate.pipe';
 import { ExportService } from '@/app/zynerator/util/Export.service';
@@ -20,13 +22,15 @@ import { ViewDetailDialogComponent } from '../../view/view-detail-dialog/view-de
 import { ColumnConfig, FilterCondition, GroupOption, GroupingConfig } from '../../models/data-grid.models';
 import { DataGridFilterService } from '../../services/data-grid-filter.service';
 import { DataGridGroupingService } from '../../services/data-grid-grouping.service';
+import { DataDisplayService } from '../../services/data-display.service';
 
 @Component({
     selector: 'app-data-table',
     imports: [
         FormsModule, TableModule, ButtonModule, ToolbarModule,
         IconFieldModule, InputIconModule, InputTextModule, TagModule, TooltipModule,
-        NgTemplateOutlet, SignalTranslatePipe, DataGridToolbarComponent, ViewDetailDialogComponent, DatePipe
+        MenuModule, NgTemplateOutlet, SignalTranslatePipe, DataGridToolbarComponent,
+        ViewDetailDialogComponent, DatePipe
     ],
     templateUrl: './data-table.component.html',
     changeDetection: ChangeDetectionStrategy.OnPush,
@@ -35,6 +39,7 @@ export class DataTableComponent {
     // --- Queries ---
     dt = viewChild<Table>('dt');
     toolbar = viewChild(DataGridToolbarComponent);
+    rowMenu = viewChild<Menu>('rowMenu');
     customCellTpl = contentChild<TemplateRef<any>>('customCell');
 
     // --- Inputs ---
@@ -62,12 +67,14 @@ export class DataTableComponent {
     private readonly filterService = inject(DataGridFilterService);
     private readonly groupingService = inject(DataGridGroupingService);
     private readonly exportService = inject(ExportService);
+    private readonly display = inject(DataDisplayService);
     readonly translate = inject(TranslateService);
     private readonly destroyRef = inject(DestroyRef);
 
     // --- State ---
     displayItems = signal<any[]>([]);
     selectedItems = signal<any[]>([]);
+    rowMenuItems = signal<MenuItem[]>([]);
     viewDialogVisible = false;
     viewItem: any = null;
     activeGroupFields: string[] = [];
@@ -91,7 +98,6 @@ export class DataTableComponent {
     });
 
     constructor() {
-        // React to columns changes
         effect(() => {
             const columns = this.columns();
             untracked(() => {
@@ -99,7 +105,6 @@ export class DataTableComponent {
             });
         });
 
-        // React to items changes
         effect(() => {
             this.items();
             untracked(() => {
@@ -111,6 +116,18 @@ export class DataTableComponent {
         this.destroyRef.onDestroy(() => clearTimeout(this.globalFilterTimeout));
     }
 
+    // --- Row menu ---
+
+    openRowMenu(event: MouseEvent, item: any) {
+        this.rowMenuItems.set([
+            { label: this.translate.instant('common.view'), icon: 'pi pi-eye', command: () => this.openViewDialog(item) },
+            { label: this.translate.instant('common.edit'), icon: 'pi pi-pencil', command: () => this.onEdit.emit(item) },
+            { separator: true },
+            { label: this.translate.instant('common.delete'), icon: 'pi pi-trash', styleClass: 'text-red-500', command: () => this.onDelete.emit(item) },
+        ]);
+        this.rowMenu()?.toggle(event);
+    }
+
     // --- View dialog ---
 
     openViewDialog(item: any) {
@@ -118,31 +135,22 @@ export class DataTableComponent {
         this.viewDialogVisible = true;
     }
 
-    // --- Cell rendering ---
+    // --- Cell rendering (delegates to DataDisplayService) ---
 
     hasCustomCell(col: ColumnConfig): boolean {
         return this.customCellFields().includes(col.field);
     }
 
     getBooleanLabel(item: any, col: ColumnConfig): string {
-        return item[col.field]
-            ? this.translate.instant(col.booleanTrueLabel || 'common.active')
-            : this.translate.instant(col.booleanFalseLabel || 'common.inactive');
+        return this.display.getBooleanLabel(item[col.field], col);
     }
 
     getBooleanSeverity(item: any, col: ColumnConfig): string {
-        return item[col.field]
-            ? (col.booleanTrueSeverity || 'success')
-            : (col.booleanFalseSeverity || 'danger');
+        return this.display.getBooleanSeverity(item[col.field], col);
     }
 
     getDefaultWidth(col: ColumnConfig): string {
-        switch (col.type) {
-            case 'boolean': return '8rem';
-            case 'date': return '10rem';
-            case 'entity': return '12rem';
-            default: return '10rem';
-        }
+        return this.display.getDefaultColumnWidth(col);
     }
 
     // --- Column Visibility ---
@@ -160,7 +168,7 @@ export class DataTableComponent {
         }, 300);
     }
 
-    // --- Multi-column Grouping (delegated to service) ---
+    // --- Multi-column Grouping ---
 
     onGroupFieldsChange(fields: string[]) {
         this.activeGroupFields = fields;
@@ -197,23 +205,7 @@ export class DataTableComponent {
     }
 
     getFilterChipLabel(condition: FilterCondition): string {
-        const col = this.columns().find(c => c.field === condition.field);
-        const fieldLabel = col ? this.translate.instant(col.header) : condition.field;
-        const opLabel = this.translate.instant(`dataGrid.operators.${condition.operator}`);
-
-        let valueStr: string;
-        if (col?.type === 'boolean') {
-            valueStr = condition.value
-                ? this.translate.instant(col.booleanTrueLabel || 'common.active')
-                : this.translate.instant(col.booleanFalseLabel || 'common.inactive');
-        } else if (col?.type === 'date' && condition.value) {
-            const d = new Date(condition.value);
-            valueStr = `${d.getDate().toString().padStart(2, '0')}/${(d.getMonth() + 1).toString().padStart(2, '0')}/${d.getFullYear()}`;
-        } else {
-            valueStr = String(condition.value ?? '');
-        }
-
-        return `${fieldLabel} ${opLabel} ${valueStr}`;
+        return this.display.getFilterChipLabel(condition, this.columns());
     }
 
     removeFilter(condition: FilterCondition) {
@@ -237,7 +229,6 @@ export class DataTableComponent {
         const columns = this.columns();
         const filtered = this.filterService.applyFilters(items, this.activeFilters, columns);
 
-        // Add flat entity labels for global search
         for (const col of columns) {
             if (col.type === 'entity') {
                 const labelKey = `_${col.field}_label`;
@@ -254,7 +245,6 @@ export class DataTableComponent {
             return;
         }
 
-        // Delegate grouping computation to the service
         this.groupCountMap = this.groupingService.computeGroups(
             filtered, this.activeGroupFields, columns, this.translate
         );
@@ -271,42 +261,13 @@ export class DataTableComponent {
     // --- Export ---
 
     private getExportData(): any[] {
-        const columns = this.columns();
         const source = (this.dt()?.filteredValue ?? this.displayItems()) as any[];
-        return source.map(item => {
-            const row: Record<string, any> = {};
-            for (const col of columns) {
-                if (col.visible === false) continue;
-                const header = this.translate.instant(col.header);
-                const value = item[col.field];
-                switch (col.type) {
-                    case 'boolean':
-                        row[header] = value
-                            ? this.translate.instant(col.booleanTrueLabel || 'common.active')
-                            : this.translate.instant(col.booleanFalseLabel || 'common.inactive');
-                        break;
-                    case 'date':
-                        if (value) {
-                            const d = new Date(value);
-                            row[header] = `${d.getDate().toString().padStart(2, '0')}/${(d.getMonth() + 1).toString().padStart(2, '0')}/${d.getFullYear()}`;
-                        } else {
-                            row[header] = '';
-                        }
-                        break;
-                    case 'entity':
-                        row[header] = value?.[col.entityLabelField || 'libelle'] ?? '';
-                        break;
-                    default:
-                        row[header] = value ?? '';
-                }
-            }
-            return row;
-        });
+        return source.map(item => this.display.formatExportRow(item, this.columns()));
     }
 
     private getExportCriteria(): string[] {
         if (!this.activeFilters?.length) return [];
-        return this.activeFilters.map(c => this.getFilterChipLabel(c));
+        return this.activeFilters.map(c => this.display.getFilterChipLabel(c, this.columns()));
     }
 
     exportToExcel() {
