@@ -1,0 +1,56 @@
+<div class="flex items-center gap-1.5 flex-wrap">
+    <!-- Filter -->
+    <p-button icon="pi pi-filter" [rounded]="true" [text]="true"
+              [pTooltip]="'dataGrid.filter.title' | translate" tooltipPosition="top"
+              (onClick)="filterDialogVisible = true"
+              [severity]="hasActiveFilters ? 'primary' : 'secondary'"
+              [badge]="hasActiveFilters ? activeFilterCount.toString() : undefined"
+              badgeSeverity="contrast" />
+
+    <!-- Separator -->
+    @if (groupingEnabled()) {
+        <div class="w-px h-6 bg-surface-200 dark:bg-surface-600 mx-0.5"></div>
+    }
+
+    <!-- Grouping MultiSelect -->
+    @if (groupingEnabled()) {
+        <div class="flex items-center gap-1">
+            <p-multiselect [options]="groupableColumns()" [(ngModel)]="selectedGroupFields"
+                           optionLabel="label" optionValue="value"
+                           [placeholder]="'common.groupBy' | translate"
+                           [showToggleAll]="false"
+                           display="chip"
+                           appendTo="body"
+                           styleClass="w-56"
+                           (onChange)="onGroupChange()" />
+            @if (selectedGroupFields.length) {
+                <p-button icon="pi pi-times" [rounded]="true" [text]="true" severity="secondary"
+                          size="small"
+                          [pTooltip]="'dataGrid.grouping.clearGrouping' | translate" tooltipPosition="top"
+                          (onClick)="clearGrouping()" />
+            }
+        </div>
+    }
+
+    <!-- Separator -->
+    <div class="w-px h-6 bg-surface-200 dark:bg-surface-600 mx-0.5"></div>
+
+    <!-- Column selector -->
+    <app-column-selector [columns]="columns()" [storageKey]="storageKey()"
+                         (columnsChanged)="columnsChanged.emit($event)" />
+
+    <!-- Export menu -->
+    <app-export-menu
+        (exportExcel)="exportExcel.emit()"
+        (exportCsv)="exportCsv.emit()"
+        (exportPdf)="exportPdf.emit()" />
+</div>
+
+<!-- Filter dialog -->
+<app-filter-dialog
+    [(visible)]="filterDialogVisible"
+    [columns]="columns()"
+    [criteriaFactory]="criteriaFactory()"
+    (filtersApplied)="onFiltersApplied($event)"
+    (filtersCleared)="onFiltersCleared()"
+    (backendCriteriaApplied)="backendCriteriaApplied.emit($event)" />

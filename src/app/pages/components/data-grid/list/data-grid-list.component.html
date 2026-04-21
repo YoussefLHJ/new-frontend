@@ -1,0 +1,55 @@
+@if (mode() === 'client') {
+    <app-data-table
+        [items]="items()"
+        [columns]="$any(columns())"
+        [title]="title()"
+        [storageKey]="storageKey()"
+        [groupOptions]="groupOptions()"
+        [groupingConfig]="groupingConfig()"
+        [globalFilterFields]="globalFilterFields()"
+        [dataKey]="dataKey()"
+        [exportFileName]="exportFileName()"
+        [tableMinWidth]="tableMinWidth()"
+        [loading]="loading()"
+        [emptyMessage]="emptyMessage()"
+        [customCellFields]="customCellFields()"
+        (onCreate)="onCreate.emit()"
+        (onEdit)="onEdit.emit($event)"
+        (onDelete)="onDelete.emit($event)"
+        (onDeleteSelected)="onDeleteSelected.emit($event)">
+        @if (customCellTpl()) {
+            <ng-template #customCell let-item let-column="column">
+                <ng-container [ngTemplateOutlet]="customCellTpl()!"
+                              [ngTemplateOutletContext]="{ $implicit: item, column: column }" />
+            </ng-template>
+        }
+    </app-data-table>
+} @else {
+    <app-server-data-table
+        [columns]="$any(columns())"
+        [title]="title()"
+        [storageKey]="storageKey()"
+        [groupOptions]="groupOptions()"
+        [groupingConfig]="groupingConfig()"
+        [globalFilterFields]="globalFilterFields()"
+        [dataKey]="dataKey()"
+        [exportFileName]="exportFileName()"
+        [tableMinWidth]="tableMinWidth()"
+        [emptyMessage]="emptyMessage()"
+        [customCellFields]="customCellFields()"
+        [dataLoader]="$any(dataLoader())"
+        [criteriaFactory]="$any(criteriaFactory())"
+        [exportDataLoader]="exportDataLoader()"
+        [initialRows]="initialRows()"
+        (onCreate)="onCreate.emit()"
+        (onEdit)="onEdit.emit($event)"
+        (onDelete)="onDelete.emit($event)"
+        (onDeleteSelected)="onDeleteSelected.emit($event)">
+        @if (customCellTpl()) {
+            <ng-template #customCell let-item let-column="column">
+                <ng-container [ngTemplateOutlet]="customCellTpl()!"
+                              [ngTemplateOutletContext]="{ $implicit: item, column: column }" />
+            </ng-template>
+        }
+    </app-server-data-table>
+}

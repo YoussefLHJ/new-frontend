@@ -1,0 +1,164 @@
+<p-dialog [(visible)]="visible" [style]="{ width: '800px' }"
+          [modal]="true" [dismissableMask]="true" (onHide)="onDialogHide()"
+          [closable]="true" styleClass="filter-dialog"
+          [breakpoints]="{ '850px': '95vw' }">
+
+    <!-- Custom header -->
+    <ng-template #header>
+        <div class="flex items-start gap-3 w-full">
+            <div class="flex items-center justify-center w-8 h-8 rounded-lg bg-primary/10 shrink-0 mt-0.5">
+                <i class="pi pi-filter text-primary text-sm"></i>
+            </div>
+            <div class="flex-1 min-w-0">
+                <h3 class="text-lg font-semibold m-0 leading-none">{{ 'dataGrid.filter.title' | translate }}</h3>
+                <p class="text-xs text-muted-color m-0 mt-1.5">{{ 'dataGrid.filter.subtitle' | translate }}</p>
+            </div>
+        </div>
+    </ng-template>
+
+    <ng-template #content>
+        <div class="flex flex-col gap-4">
+
+            <!-- Info banner: all conditions are AND-ed -->
+            @if (filterRows.length > 1) {
+                <div class="flex items-center gap-3 px-4 py-3 rounded-xl bg-surface-50 dark:bg-surface-700/50 border border-surface-200 dark:border-surface-600">
+                    <i class="pi pi-info-circle text-muted-color text-sm"></i>
+                    <span class="text-sm font-medium text-muted-color">{{ 'dataGrid.filter.allConditionsMustMatch' | translate }}</span>
+                </div>
+            }
+
+            <!-- Condition cards -->
+            <div class="flex flex-col gap-0">
+                @for (row of filterRows; track $index) {
+
+                    <!-- Condition card -->
+                    <div class="relative border border-surface-200 dark:border-surface-600 rounded-xl p-4
+                                bg-surface-0 dark:bg-surface-800
+                                transition-all duration-200
+                                hover:border-primary/40 hover:shadow-sm">
+
+                        <!-- Card header -->
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="flex items-center gap-2.5">
+                                <span class="flex items-center justify-center w-6 h-6 rounded-full
+                                             bg-primary text-primary-contrast text-xs font-bold">
+                                    {{ $index + 1 }}
+                                </span>
+                                <span class="text-xs font-semibold text-muted-color uppercase tracking-widest">
+                                    {{ 'dataGrid.filter.condition' | translate }} {{ $index + 1 }}
+                                </span>
+                            </div>
+                            <p-button icon="pi pi-trash" [rounded]="true" [text]="true" severity="danger"
+                                      size="small" (onClick)="removeRow($index)"
+                                      [pTooltip]="'dataGrid.filter.removeCondition' | translate"
+                                      tooltipPosition="left" />
+                        </div>
+
+                        <!-- Inputs grid -->
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                            <!-- Column select -->
+                            <div class="flex flex-col gap-2">
+                                <label class="text-xs font-medium text-muted-color flex items-center gap-1.5">
+                                    <i class="pi pi-table text-[0.65rem] opacity-70"></i>
+                                    {{ 'dataGrid.filter.field' | translate }}
+                                </label>
+                                <p-select [options]="fieldOptions" [(ngModel)]="row.field"
+                                          optionLabel="label" optionValue="value"
+                                          [placeholder]="'dataGrid.filter.selectField' | translate"
+                                          appendTo="body" (onChange)="onFieldChange(row)" />
+                            </div>
+
+                            <!-- Operator select -->
+                            <div class="flex flex-col gap-2">
+                                <label class="text-xs font-medium text-muted-color flex items-center gap-1.5">
+                                    <i class="pi pi-sliders-h text-[0.65rem] opacity-70"></i>
+                                    {{ 'dataGrid.filter.operator' | translate }}
+                                </label>
+                                <p-select [options]="getOperatorsForField(row.field)" [(ngModel)]="row.operator"
+                                          optionLabel="translatedLabel" optionValue="value"
+                                          [placeholder]="'dataGrid.filter.selectOperator' | translate"
+                                          appendTo="body" />
+                            </div>
+
+                            <!-- Value input -->
+                            <div class="flex flex-col gap-2">
+                                <label class="text-xs font-medium text-muted-color flex items-center gap-1.5">
+                                    <i class="pi pi-pencil text-[0.65rem] opacity-70"></i>
+                                    {{ 'dataGrid.filter.value' | translate }}
+                                </label>
+                                @switch (getFieldType(row.field)) {
+                                    @case ('date') {
+                                        <p-datepicker [(ngModel)]="row.value"
+                                                      dateFormat="dd/mm/yy" appendTo="body"
+                                                      [placeholder]="'dataGrid.filter.enterValue' | translate" />
+                                    }
+                                    @case ('boolean') {
+                                        <div class="flex items-center gap-3 h-[2.375rem] px-3 rounded-md
+                                                    border border-surface-300 dark:border-surface-600
+                                                    bg-surface-0 dark:bg-surface-900">
+                                            <p-toggleswitch [(ngModel)]="row.value" />
+                                            <span class="text-sm select-none"
+                                                  [class]="row.value ? 'text-green-600 dark:text-green-400 font-medium' : 'text-muted-color'">
+                                                {{ row.value ? getBooleanLabel(row, true) : getBooleanLabel(row, false) }}
+                                            </span>
+                                        </div>
+                                    }
+                                    @case ('numeric') {
+                                        <input pInputText [(ngModel)]="row.value"
+                                               [placeholder]="'dataGrid.filter.enterValue' | translate"
+                                               type="number" class="w-full" />
+                                    }
+                                    @default {
+                                        <input pInputText [(ngModel)]="row.value"
+                                               [placeholder]="'dataGrid.filter.enterValue' | translate"
+                                               type="text" class="w-full" />
+                                    }
+                                }
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- AND connector between cards -->
+                    @if (!$last) {
+                        <div class="flex items-center justify-center py-1.5">
+                            <div class="w-px h-3 bg-surface-300 dark:bg-surface-500"></div>
+                            <span class="mx-3 px-3 py-0.5 rounded-full text-[0.65rem] font-bold uppercase tracking-widest leading-relaxed
+                                         bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300">
+                                {{ 'dataGrid.filter.and' | translate }}
+                            </span>
+                            <div class="w-px h-3 bg-surface-300 dark:bg-surface-500"></div>
+                        </div>
+                    }
+                }
+            </div>
+
+            <!-- Add condition button -->
+            <button type="button" (click)="addRow()"
+                    class="w-full py-3.5 border-2 border-dashed border-surface-300 dark:border-surface-500 rounded-xl
+                           text-sm font-medium text-muted-color flex items-center justify-center gap-2
+                           hover:border-primary hover:text-primary hover:bg-primary/5
+                           focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20
+                           transition-all duration-200 cursor-pointer bg-transparent">
+                <i class="pi pi-plus-circle text-base"></i>
+                {{ 'dataGrid.filter.addCondition' | translate }}
+            </button>
+        </div>
+    </ng-template>
+
+    <!-- Footer -->
+    <ng-template #footer>
+        <div class="flex items-center justify-between w-full pt-1">
+            <p-button [label]="'dataGrid.filter.clearAll' | translate" icon="pi pi-filter-slash"
+                      [text]="true" severity="danger" (onClick)="clearAll()" />
+            <div class="flex items-center gap-2">
+                <p-button [label]="'cancel' | translate" icon="pi pi-times" [outlined]="true"
+                          severity="secondary" (onClick)="close()" />
+                <p-button [label]="applyLabel" icon="pi pi-check"
+                          (onClick)="applyFilters()"
+                          [disabled]="!validConditionCount"
+                          [badge]="validConditionCount ? validConditionCount.toString() : undefined"
+                          badgeSeverity="contrast" />
+            </div>
+        </div>
+    </ng-template>
+</p-dialog>

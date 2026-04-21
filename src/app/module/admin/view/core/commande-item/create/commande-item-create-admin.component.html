@@ -1,0 +1,41 @@
+    <app-data-grid-create [(visible)]="createDialog"  title="{{'commandeItem.tabPan' | translate}}" (onSave)="save()" (onCancel)="hideCreateDialog()">
+<ng-template #formContent >
+        <p-tabs value="0">
+            <p-tablist>
+                <p-tab value="0">{{'commandeItem.tabPan' | translate}}</p-tab>
+            </p-tablist>
+            <p-tabpanels>
+            <p-tabpanel value="0">
+                <ng-template pTemplate="header">
+                    {{'commandeItem.tabPan' | translate}}
+                </ng-template>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 p-4">
+                            <app-select id="commandeItem-commande" [placeholder]="'commandeItem.commande'" [options]="commandes" optionLabel="code"  [(ngModel)]="item.commande"  ></app-select>
+                                <app-input id="commandeItem-produit" [placeholder]="'commandeItem.produit'"   [(ngModel)]="item.produit"  ></app-input>
+                                <app-input-number id="commandeItem-prix" label="'commandeItem.prix'" [(ngModel)]="item.prix"  ></app-input-number>
+                                <app-input-number id="commandeItem-quantite" label="'commandeItem.quantite'" [(ngModel)]="item.quantite"  ></app-input-number>
+                                <app-textarea id="commandeItem-description"  [placeholder]="'commandeItem.description'"   [(ngModel)]="item.description"  ></app-textarea>
+                                <app-textarea id="commandeItem-commentaireClient"  [placeholder]="'commandeItem.commentaireClient'"   [(ngModel)]="item.commentaireClient"  ></app-textarea>
+                                <app-textarea id="commandeItem-commentaireVendeur"  [placeholder]="'commandeItem.commentaireVendeur'"   [(ngModel)]="item.commentaireVendeur"  ></app-textarea>
+                                <app-input id="commandeItem-code" [placeholder]="'commandeItem.code'"   [(ngModel)]="item.code"  ></app-input>
+                </div>
+            </p-tabpanel>
+            </p-tabpanels>
+        </p-tabs>
+
+</ng-template>
+
+<ng-template pTemplate="footer" >
+    <div class="flex justify-end space-x-3 p-4">
+            <button (click)="save()"  class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-primary">
+                <i class="pi pi-check"></i> {{'validate' | translate}}
+            </button>
+
+                <button (click)="hideCreateDialog()" class="border border-gray-400 text-gray-600 hover:bg-gray-200 px-4 py-2 rounded-md">
+                    <i class="pi pi-times"></i> {{'cancel' | translate}}
+                </button>
+
+    </div>
+</ng-template>
+
+    </app-data-grid-create>

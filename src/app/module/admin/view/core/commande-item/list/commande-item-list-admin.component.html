@@ -1,0 +1,33 @@
+@if (listActionIsValid) {
+<div class="grid">
+    <app-data-grid-list
+	  mode="server"
+	  [columns]="columns"
+	  [dataLoader]="dataLoader"
+	  [criteriaFactory]="criteriaFactory"
+	  [exportDataLoader]="exportDataLoader"
+	  [groupingConfig]="groupingConfig"
+	  title="commandeItem.header"
+	  storageKey="commandeItem"
+	  exportFileName="CommandeItem"
+	  [globalFilterFields]="filterColumns"
+	  (onCreate)="openCreate()"
+	  (onEdit)="openEdit($event)"
+	  (onDelete)="delete($event)"
+	  (onDeleteSelected)="deleteSelected($event)" />
+
+    <app-commande-item-create-admin (onSaved)="onSaved()" />
+    <app-commande-item-edit-admin (onUpdated)="onUpdated()" />
+    <app-commande-item-view-admin />
+
+    <p-confirmDialog [style]="{width: '450px'}"></p-confirmDialog>
+</div>
+} @else{
+	<p-card header="Permission not allowed">
+		<p class="m-0">
+			You don't have permission to access !
+		</p>
+	</p-card>
+}
+
+

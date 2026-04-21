@@ -1,0 +1,63 @@
+<p-dialog [(visible)]="viewDialog" [style]="{width: '70vw'}" header="{{'commande.tabPan' | translate}}" [modal]="true" class="p-fluid">
+    <ng-template pTemplate="content">
+        <p-tabs [value]="0">
+            <p-tablist>
+                <p-tab [value]="0">{{'commande.tabPan' | translate}}</p-tab>
+                <p-tab [value]="1">{{'commande.commandeItems' | translate}}</p-tab>
+            </p-tablist>
+
+
+            <p-tabpanels>
+                <p-tabpanel [value]="0">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 p-4">
+                                <app-input id="commande-code" [disabled]="true" [placeholder]="'commande.code'"  [(ngModel)]="item.code"  errorMessage="Code is invalid." ></app-input>
+                                <app-input-number id="commande-total" [disabled]="true" [placeholder]="'commande.total'" [(ngModel)]="item.total"  ></app-input-number>
+                                <app-input-number id="commande-totalPayer" [disabled]="true" [placeholder]="'commande.totalPayer'" [(ngModel)]="item.totalPayer"  ></app-input-number>
+                                <app-datepicker id="commande-dateCommande"  [disabled]="true" [placeholder]="'commande.dateCommande'"  [(ngModel)]="item.dateCommande"  ></app-datepicker>
+                                <app-input id="commande-etatComande" [disabled]="true" [placeholder]="'commande.etatComande'"  [(ngModel)]="item.etatComande"  ></app-input>
+                </div>
+                </p-tabpanel>
+
+                    <p-tabpanel [value]="1">
+                        <div class="card p-4">
+                            <p-table [value]="item.commandeItems" [scrollable]="true" scrollHeight="200px">
+                                <ng-template pTemplate="header">
+                                    <tr>
+                                                    <th>Produit</th>
+                                                    <th>Prix</th>
+                                                    <th>Quantite</th>
+                                                    <th>Description</th>
+                                                    <th>Commentaire client</th>
+                                                    <th>Commentaire vendeur</th>
+                                                    <th>Code</th>
+                                    </tr>
+                                </ng-template>
+                                <ng-template pTemplate="body" let-p>
+                                    <tr>
+                                                    <td>{{p.produit}}</td>
+                                                    <td>{{p.prix}}</td>
+                                                    <td>{{p.quantite}}</td>
+                                                    <td>{{p.description}}</td>
+                                                    <td>{{p.commentaireClient}}</td>
+                                                    <td>{{p.commentaireVendeur}}</td>
+                                                    <td>{{p.code}}</td>
+                                    </tr>
+                                </ng-template>
+                            </p-table>
+                        </div>
+                    </p-tabpanel>
+            </p-tabpanels>
+        </p-tabs>
+
+    </ng-template>
+
+    <ng-template pTemplate="footer" >
+        <div class="flex justify-end p-4">
+            <div>
+                <button class="border border-gray-400 font-semibold py-2 px-4 rounded shadow" (click)="hideViewDialog()">
+                    <i class="pi pi-times"></i> Annuler
+                </button>
+            </div>
+        </div>
+    </ng-template>
+</p-dialog>

@@ -1,0 +1,58 @@
+<p-button icon="pi pi-download" [rounded]="true" [text]="true"
+          [pTooltip]="'dataGrid.export.title' | translate" tooltipPosition="top"
+          (onClick)="op.toggle($event)" />
+<p-popover #op appendTo="body">
+    <div class="flex flex-col w-52 py-1">
+                <span class="text-[0.65rem] font-semibold text-muted-color uppercase tracking-wider px-3 pb-2">
+                    {{ 'dataGrid.export.title' | translate }}
+                </span>
+
+        <button type="button" (click)="exportExcel.emit(); op.hide()"
+                class="flex items-center gap-3 px-3 py-2.5 rounded-lg cursor-pointer
+                           bg-transparent border-none outline-none w-full text-left
+                           hover:bg-surface-100 dark:hover:bg-surface-700
+                           focus-visible:ring-2 focus-visible:ring-primary/50
+                           transition-colors duration-150 group">
+            <div class="flex items-center justify-center w-9 h-9 rounded-lg
+                                bg-green-500/10 group-hover:bg-green-500/20 transition-colors">
+                <i class="pi pi-file-excel text-green-600 dark:text-green-400"></i>
+            </div>
+            <div class="flex flex-col gap-0.5">
+                <span class="text-sm font-medium text-color">Excel</span>
+                <span class="text-[0.65rem] text-muted-color leading-none">.xlsx</span>
+            </div>
+        </button>
+
+        <button type="button" (click)="exportCsv.emit(); op.hide()"
+                class="flex items-center gap-3 px-3 py-2.5 rounded-lg cursor-pointer
+                           bg-transparent border-none outline-none w-full text-left
+                           hover:bg-surface-100 dark:hover:bg-surface-700
+                           focus-visible:ring-2 focus-visible:ring-primary/50
+                           transition-colors duration-150 group">
+            <div class="flex items-center justify-center w-9 h-9 rounded-lg
+                                bg-blue-500/10 group-hover:bg-blue-500/20 transition-colors">
+                <i class="pi pi-file text-blue-600 dark:text-blue-400"></i>
+            </div>
+            <div class="flex flex-col gap-0.5">
+                <span class="text-sm font-medium text-color">CSV</span>
+                <span class="text-[0.65rem] text-muted-color leading-none">.csv</span>
+            </div>
+        </button>
+
+        <button type="button" (click)="exportPdf.emit(); op.hide()"
+                class="flex items-center gap-3 px-3 py-2.5 rounded-lg cursor-pointer
+                           bg-transparent border-none outline-none w-full text-left
+                           hover:bg-surface-100 dark:hover:bg-surface-700
+                           focus-visible:ring-2 focus-visible:ring-primary/50
+                           transition-colors duration-150 group">
+            <div class="flex items-center justify-center w-9 h-9 rounded-lg
+                                bg-red-500/10 group-hover:bg-red-500/20 transition-colors">
+                <i class="pi pi-file-pdf text-red-600 dark:text-red-400"></i>
+            </div>
+            <div class="flex flex-col gap-0.5">
+                <span class="text-sm font-medium text-color">PDF</span>
+                <span class="text-[0.65rem] text-muted-color leading-none">.pdf</span>
+            </div>
+        </button>
+    </div>
+</p-popover>

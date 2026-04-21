@@ -1,0 +1,17 @@
+<p-button icon="pi pi-objects-column" [rounded]="true" [text]="true"
+          [pTooltip]="'dataGrid.columns.title' | translate" tooltipPosition="top"
+          (onClick)="op.toggle($event)" />
+<p-popover #op appendTo="body">
+    <div class="flex flex-col gap-3 p-2" style="min-width: 200px">
+        <span class="font-semibold text-sm mb-1">{{ 'dataGrid.columns.title' | translate }}</span>
+        @for (col of columns(); track col.field) {
+            <div class="flex items-center gap-2">
+                <p-checkbox [(ngModel)]="col.visible" [binary]="true"
+                            (onChange)="onVisibilityChange()" [inputId]="'col-' + $index" />
+                <label [for]="'col-' + $index" class="cursor-pointer text-sm">
+                    {{ col.header | translate }}
+                </label>
+            </div>
+        }
+    </div>
+</p-popover>
