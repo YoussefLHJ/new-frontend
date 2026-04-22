@@ -2,27 +2,15 @@ import { Injectable } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { ColumnConfig, GroupInfo } from '../models/data-grid.models';
 
-/**
- * Stateless service that computes grouping for data-grid tables.
- *
- * Handles:
- * - Composite group key computation from one or more fields
- * - Sorting items by group key for PrimeNG subheader mode
- * - Group count aggregation
- * - Expand/collapse state management
- * - Display value resolution (entity labels, booleans, dates, etc.)
- *
- * Both DataTableComponent and ServerDataTableComponent delegate to this
- * service so grouping logic lives in one place.
- */
 @Injectable({ providedIn: 'root' })
 export class DataGridGroupingService {
 
     /**
-     * Computes `_groupKey` on each item, sorts by that key,
-     * and returns a map of group key → count.
+     * Computes `_groupKey` (display) and `_groupSortKey` (sortable string) on
+     * each item, sorts by `_groupSortKey` for correct ordering across all types,
+     * and returns a map of display key → count.
      *
-     * Mutates items in place (adds `_groupKey` property).
+     * Mutates items in place.
      */
     computeGroups(
         items: any[],
@@ -34,12 +22,18 @@ export class DataGridGroupingService {
         if (!groupFields.length) return countMap;
 
         for (const item of items) {
+            item._groupSortKey = groupFields
+                .map(f => this.getFieldSortValue(item, f, columns))
+                .join('\x00');
             item._groupKey = groupFields
                 .map(f => this.getFieldDisplayValue(item, f, columns, translate))
                 .join(' / ');
         }
 
-        items.sort((a, b) => (a._groupKey ?? '').localeCompare(b._groupKey ?? ''));
+        // Sort by the type-aware sort key so numeric/date groups order correctly
+        items.sort((a, b) =>
+            (a._groupSortKey ?? '').localeCompare(b._groupSortKey ?? '', undefined, { sensitivity: 'base' })
+        );
 
         for (const item of items) {
             const key = item._groupKey;
@@ -65,30 +59,6 @@ export class DataGridGroupingService {
     }
 
     /**
-     * Filters the full item list down to what should be rendered,
-     * hiding items in collapsed groups (keeping one representative row).
-     */
-    applyGroupVisibility(
-        items: any[],
-        expanded: Record<string, boolean>
-    ): any[] {
-        const result: any[] = [];
-        const seenCollapsed = new Set<string>();
-
-        for (const item of items) {
-            const key = item._groupKey;
-            if (expanded[key]) {
-                result.push(item);
-            } else if (!seenCollapsed.has(key)) {
-                seenCollapsed.add(key);
-                result.push(item);
-            }
-        }
-
-        return result;
-    }
-
-    /**
      * Returns label/value pairs for a group header row.
      */
     getGroupParts(
@@ -104,6 +74,42 @@ export class DataGridGroupingService {
                 value: this.getFieldDisplayValue(item, field, columns, translate)
             };
         });
+    }
+
+    /**
+     * Returns a string that sorts correctly for any column type.
+     * Used as `_groupSortKey` so that numeric and date groups appear in proper order
+     * even under PrimeNG's alphabetical sort on the sort field.
+     */
+    getFieldSortValue(item: any, field: string, columns: ColumnConfig[]): string {
+        const col = columns.find(c => c.field === field);
+        const value = item[field];
+        if (value === null || value === undefined) return '';
+
+        if (col?.type === 'numeric') {
+            const num = Number(value);
+            if (isNaN(num)) return '';
+            // Shift by large offset so negatives stay positive, then zero-pad
+            const shifted = num + 1e15;
+            return shifted.toFixed(6).padStart(32, '0');
+        }
+        if (col?.type === 'date') {
+            const d = new Date(value);
+            if (isNaN(d.getTime())) return '';
+            // YYYY-MM-DD: day-level normalization so same-day rows share one group;
+            // ISO date format sorts chronologically without extra padding.
+            const y = d.getFullYear();
+            const mo = (d.getMonth() + 1).toString().padStart(2, '0');
+            const dy = d.getDate().toString().padStart(2, '0');
+            return `${y}-${mo}-${dy}`;
+        }
+        if (col?.type === 'boolean') {
+            return value ? '1' : '0';
+        }
+        if (col?.type === 'entity') {
+            return (value?.[col.entityLabelField || 'libelle'] ?? '').toLowerCase();
+        }
+        return String(value).toLowerCase();
     }
 
     /**

@@ -10,8 +10,9 @@ import { AppTextareaComponent } from './app-textarea/app-textarea.component';
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { TabsModule } from 'primeng/tabs';
-import { DataGridCreateComponent } from '@/app/pages/components/data-grid';
+import { DataGridCreateComponent, DataGridInlineTableComponent } from '@/app/pages/components/data-grid';
 import { AppMultiSelectComponent } from './app-multiSelect/app-multiSelect.component';
+import { AppCollapsibleSectionComponent } from './app-collapsible-section/app-collapsible-section.component';
 
 export const CommunCreate = [
     CommonModule,
@@ -25,11 +26,13 @@ export const CommunCreate = [
     AppTextareaComponent,
     AppDatepickerComponent,
     AppMultiSelectComponent,
+    AppCollapsibleSectionComponent,
 
     TableModule,
     ButtonModule,
     TabsModule,
     DataGridCreateComponent,
+    DataGridInlineTableComponent,
 ] as const;
 
 export {
@@ -40,4 +43,5 @@ export {
     AppTextareaComponent,
     AppDatepickerComponent,
     AppMultiSelectComponent,
+    AppCollapsibleSectionComponent,
 };

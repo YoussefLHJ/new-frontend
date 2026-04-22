@@ -188,6 +188,9 @@ export class CommandeItemListAdminComponent implements OnInit {
     public exportDataLoader = (criteria: CommandeItemCriteria) => this.service.findByCriteria(criteria);
 	dataGridList = viewChild(DataGridListComponent);
 
+    /** Exposes the domain service to the template for the data-grid [service] binding. */
+    get gridService() { return this.service; }
+
 
 
     commandes: Array<CommandeDto>;

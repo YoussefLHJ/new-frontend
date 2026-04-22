@@ -1,5 +1,6 @@
 @if (listActionIsValid) {
 <div class="grid">
+    <app-breadcrumb labelKey="commande.header" />
     <app-data-grid-list
 	  mode="server"
 	  [columns]="columns"
@@ -7,6 +8,7 @@
 	  [criteriaFactory]="criteriaFactory"
 	  [exportDataLoader]="exportDataLoader"
 	  [groupingConfig]="groupingConfig"
+	  [service]="gridService"
 	  title="commande.header"
 	  storageKey="commande"
 	  exportFileName="Commande"

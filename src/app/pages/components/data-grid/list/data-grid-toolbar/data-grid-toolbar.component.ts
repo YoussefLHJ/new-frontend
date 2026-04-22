@@ -100,6 +100,11 @@ export class DataGridToolbarComponent {
         this.groupChanged.emit([]);
     }
 
+    /** Programmatically update selected group fields (e.g. when a grouped column is hidden). */
+    setGroupFields(fields: string[]) {
+        this.selectedGroupFields = [...fields];
+    }
+
     onFiltersApplied(conditions: FilterCondition[]) {
         this.hasActiveFilters = true;
         this.activeFilterCount = conditions.length;

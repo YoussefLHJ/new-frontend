@@ -9,6 +9,7 @@ import { AppToggleComponent } from './app-toggle/app-toggle.component';
 import { AppDatepickerComponent } from './app-datepicker/app-datepicker.component';
 import { AppTextareaComponent } from './app-textarea/app-textarea.component';
 import { AppMultiSelectComponent } from './app-multiSelect/app-multiSelect.component';
+import { AppDialogFormComponent } from './app-dialog-form/app-dialog-form.component';
 
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
@@ -26,6 +27,7 @@ export const CommunView = [
     AppToggleComponent,
     AppDatepickerComponent,
     AppMultiSelectComponent,
+    AppDialogFormComponent,
 
     TableModule,
     ButtonModule,
@@ -40,4 +42,5 @@ export {
     AppTextareaComponent,
     AppDatepickerComponent,
     AppMultiSelectComponent,
+    AppDialogFormComponent,
 };

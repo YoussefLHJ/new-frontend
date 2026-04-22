@@ -14,6 +14,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { TagModule } from 'primeng/tag';
 import { TooltipModule } from 'primeng/tooltip';
 import { PaginatorModule } from 'primeng/paginator';
+import { SkeletonModule } from 'primeng/skeleton';
 import { Menu, MenuModule } from 'primeng/menu';
 import { MenuItem } from 'primeng/api';
 import { TranslateService } from '@ngx-translate/core';
@@ -34,7 +35,7 @@ import { DataDisplayService } from '../../services/data-display.service';
     imports: [
         FormsModule, TableModule, ButtonModule, ToolbarModule,
         IconFieldModule, InputIconModule, InputTextModule, TagModule, TooltipModule,
-        PaginatorModule, MenuModule,
+        PaginatorModule, MenuModule, SkeletonModule,
         NgTemplateOutlet, SignalTranslatePipe, DataGridToolbarComponent, ViewDetailDialogComponent, DatePipe
     ],
     templateUrl: './server-data-table.component.html',
@@ -82,17 +83,18 @@ export class ServerDataTableComponent implements OnInit {
     private readonly destroyRef = inject(DestroyRef);
 
     // --- State ---
+    readonly skeletonItems = Array.from({ length: 6 }, () => ({}));
     items = signal<any[]>([]);
     displayItems = signal<any[]>([]);
     totalRecords = signal(0);
     loading = signal(false);
     selectedItems = signal<any[]>([]);
     rowMenuItems = signal<MenuItem[]>([]);
+    expandedGroups = signal<Record<string, boolean>>({});
     viewDialogVisible = false;
     viewItem: any = null;
     activeGroupFields: string[] = [];
     activeFilters: FilterCondition[] | null = null;
-    expandedGroups: { [key: string]: boolean } = {};
     groupCountMap = new Map<string, number>();
     cachedVisibleColumnCount = signal(0);
 
@@ -100,7 +102,6 @@ export class ServerDataTableComponent implements OnInit {
     currentRows = 10;
     paginatorFirst = 0;
 
-    private allPageItems: any[] = [];
     private globalFilterTimeout: ReturnType<typeof setTimeout> | undefined;
 
     // --- Computed ---
@@ -241,7 +242,13 @@ export class ServerDataTableComponent implements OnInit {
     // ─── Column Visibility ──────────────────────────────────────────────
 
     onColumnsChanged() {
-        this.cachedVisibleColumnCount.set(this.columns().filter(c => c.visible !== false).length);
+        const cols = this.columns();
+        this.cachedVisibleColumnCount.set(cols.filter(c => c.visible !== false).length);
+        // Spread into a new array so PrimeNG's [value] input gets a new reference
+        // and re-renders body rows with the updated col.visible state.
+        // activeGroupFields is intentionally left untouched: grouping persists
+        // independently of whether a grouped column is visible in the row cells.
+        this.displayItems.set([...this.displayItems()]);
     }
 
     // ─── Global Filter ──────────────────────────────────────────────────
@@ -269,14 +276,11 @@ export class ServerDataTableComponent implements OnInit {
     toggleGroup(item: any) {
         const key = item._groupKey;
         if (!key) return;
-        this.expandedGroups = { ...this.expandedGroups, [key]: !this.expandedGroups[key] };
-        this.displayItems.set(
-            this.groupingService.applyGroupVisibility(this.allPageItems, this.expandedGroups)
-        );
+        this.expandedGroups.update(g => ({ ...g, [key]: !g[key] }));
     }
 
     isGroupExpanded(key: string): boolean {
-        return !this.activeGroupFields.length || this.expandedGroups[key];
+        return !this.activeGroupFields.length || !!this.expandedGroups()[key];
     }
 
     getGroupParts(item: any): { label: string; value: string }[] {
@@ -339,7 +343,6 @@ export class ServerDataTableComponent implements OnInit {
 
         if (!this.activeGroupFields.length) {
             this.groupCountMap.clear();
-            this.allPageItems = items;
             this.displayItems.set(items);
             return;
         }
@@ -348,14 +351,11 @@ export class ServerDataTableComponent implements OnInit {
         this.groupCountMap = this.groupingService.computeGroups(
             grouped, this.activeGroupFields, columns, this.translate
         );
-        this.expandedGroups = this.groupingService.reconcileExpandedState(
-            this.groupCountMap, this.expandedGroups
+        const reconciled = this.groupingService.reconcileExpandedState(
+            this.groupCountMap, this.expandedGroups()
         );
-
-        this.allPageItems = grouped;
-        this.displayItems.set(
-            this.groupingService.applyGroupVisibility(grouped, this.expandedGroups)
-        );
+        this.expandedGroups.set(reconciled);
+        this.displayItems.set(grouped);
     }
 
     // ─── Export ─────────────────────────────────────────────────────────
@@ -415,27 +415,28 @@ export class ServerDataTableComponent implements OnInit {
 
     exportToPdf() {
         const svc = this.service();
-        if (svc) {
-            const serverCriteria = this.criteriaMapper.buildCriteria(
-                this.criteriaFactory(),
-                this.activeFilters,
-                this.columns(),
-                0, 0
-            );
-            svc.exportPdf(serverCriteria)
-                .pipe(takeUntilDestroyed(this.destroyRef))
-                .subscribe(buffer => {
-                    const blob = new Blob([buffer], { type: 'application/pdf' });
-                    const url = URL.createObjectURL(blob);
-                    const a = document.createElement('a');
-                    a.href = url;
-                    a.download = `${this.exportFileName()}.pdf`;
-                    a.click();
-                    URL.revokeObjectURL(url);
-                });
-        } else {
-            this.doExport((title, data, criteria, fileName, filterLabel) =>
-                this.exportService.exportPdf(title, data, criteria, fileName, filterLabel));
+        if (!svc) return;
+
+        const serverCriteria = this.criteriaMapper.buildCriteria(
+            this.criteriaFactory(),
+            this.activeFilters,
+            this.columns(),
+            0, 0
+        );
+        if (this.isBackendGrouping) {
+            const key = this.groupingConfig().backendGroupCriteriaKey || 'groupBy';
+            serverCriteria[key] = [...this.activeGroupFields];
         }
+        svc.exportPdf(serverCriteria)
+            .pipe(takeUntilDestroyed(this.destroyRef))
+            .subscribe(buffer => {
+                const blob = new Blob([buffer], { type: 'application/pdf' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `${this.exportFileName()}.pdf`;
+                a.click();
+                URL.revokeObjectURL(url);
+            });
     }
 }

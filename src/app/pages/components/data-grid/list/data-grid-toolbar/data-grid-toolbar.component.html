@@ -1,18 +1,5 @@
 <div class="flex items-center gap-1.5 flex-wrap">
-    <!-- Filter -->
-    <p-button icon="pi pi-filter" [rounded]="true" [text]="true"
-              [pTooltip]="'dataGrid.filter.title' | translate" tooltipPosition="top"
-              (onClick)="filterDialogVisible = true"
-              [severity]="hasActiveFilters ? 'primary' : 'secondary'"
-              [badge]="hasActiveFilters ? activeFilterCount.toString() : undefined"
-              badgeSeverity="contrast" />
-
-    <!-- Separator -->
-    @if (groupingEnabled()) {
-        <div class="w-px h-6 bg-surface-200 dark:bg-surface-600 mx-0.5"></div>
-    }
-
-    <!-- Grouping MultiSelect -->
+    <!-- Grouping MultiSelect (left of filter) -->
     @if (groupingEnabled()) {
         <div class="flex items-center gap-1">
             <p-multiselect [options]="groupableColumns()" [(ngModel)]="selectedGroupFields"
@@ -30,7 +17,16 @@
                           (onClick)="clearGrouping()" />
             }
         </div>
+        <div class="w-px h-6 bg-surface-200 dark:bg-surface-600 mx-0.5"></div>
     }
+
+    <!-- Filter -->
+    <p-button icon="pi pi-filter" [rounded]="true" [text]="true"
+              [pTooltip]="'dataGrid.filter.title' | translate" tooltipPosition="top"
+              (onClick)="filterDialogVisible = true"
+              [severity]="hasActiveFilters ? 'primary' : 'secondary'"
+              [badge]="hasActiveFilters ? activeFilterCount.toString() : undefined"
+              badgeSeverity="contrast" />
 
     <!-- Separator -->
     <div class="w-px h-6 bg-surface-200 dark:bg-surface-600 mx-0.5"></div>

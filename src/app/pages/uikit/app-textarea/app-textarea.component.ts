@@ -2,12 +2,13 @@ import { Component, Input, forwardRef } from '@angular/core';
 import { NG_VALUE_ACCESSOR, FormsModule } from '@angular/forms';
 import { TextareaModule } from 'primeng/textarea';
 import { NgClass } from '@angular/common';
+import { TranslateModule } from '@ngx-translate/core';
 import { CvaBase } from '../base/cva-base';
 
 @Component({
     selector: 'app-textarea',
     standalone: true,
-    imports: [FormsModule, TextareaModule, NgClass],
+    imports: [FormsModule, TextareaModule, NgClass, TranslateModule],
     providers: [{
         provide: NG_VALUE_ACCESSOR,
         useExisting: forwardRef(() => AppTextareaComponent),

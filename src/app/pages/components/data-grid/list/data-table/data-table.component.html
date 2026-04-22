@@ -63,11 +63,13 @@
 
 <p-table
     #dt
-    [value]="displayItems()"
+    [value]="loading() ? skeletonItems : displayItems()"
     [rows]="10"
     [paginator]="true"
     [globalFilterFields]="cachedGlobalFilterFields()"
     [tableStyle]="{ 'min-width': tableMinWidth() }"
+    [scrollable]="true"
+    scrollDirection="horizontal"
     [selection]="selectedItems()"
     (selectionChange)="selectedItems.set($event)"
     [rowHover]="true"
@@ -75,10 +77,9 @@
     [currentPageReportTemplate]="'from-to' | translate"
     [showCurrentPageReport]="true"
     [rowsPerPageOptions]="[10, 25, 50]"
-    [loading]="loading()"
-    [rowGroupMode]="activeGroupFields.length ? 'subheader' : undefined"
-    [groupRowsBy]="activeGroupFields.length ? '_groupKey' : undefined"
-    [sortField]="activeGroupFields.length ? '_groupKey' : undefined"
+    [rowGroupMode]="!loading() && activeGroupFields.length ? 'subheader' : undefined"
+    [groupRowsBy]="!loading() && activeGroupFields.length ? '_groupSortKey' : undefined"
+    [sortField]="!loading() && activeGroupFields.length ? '_groupSortKey' : undefined"
     [sortOrder]="1"
 >
     <ng-template #caption>
@@ -106,7 +107,7 @@
                     </th>
                 }
             }
-            <th style="min-width: 5rem; text-align: center">{{ 'actions' | translate }}</th>
+            <th style="width: 3.5rem"></th>
         </tr>
     </ng-template>
 
@@ -163,8 +164,22 @@
     </ng-template>
 
     <ng-template #body let-item>
-        @if (isGroupExpanded(item._groupKey)) {
+        @if (loading()) {
             <tr>
+                <td><p-skeleton shape="circle" size="1.25rem" /></td>
+                @for (col of columns(); track col.field) {
+                    @if (col.visible !== false) {
+                        <td>
+                            <p-skeleton height="0.85rem"
+                                        [width]="col.type === 'boolean' ? '4rem' : col.type === 'date' ? '6rem' : col.type === 'numeric' ? '4rem' : '75%'"
+                                        styleClass="rounded" />
+                        </td>
+                    }
+                }
+                <td><p-skeleton width="2rem" height="2rem" styleClass="rounded-full mx-auto" /></td>
+            </tr>
+        } @else {
+            <tr [hidden]="activeGroupFields.length > 0 && !isGroupExpanded(item._groupKey)">
                 <td [class]="activeGroupFields.length ? 'border-l-[3px] border-emerald-500/30' : ''">
                     <p-tableCheckbox [value]="item" /></td>
                 @for (col of columns(); track col.field) {

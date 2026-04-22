@@ -1,115 +1,47 @@
-    <app-data-grid-edit [(visible)]="editDialog"  title="{{'commande.tabPan' | translate}}" (onUpdate)="edit()" (onCancel)="hideEditDialog()">
+<app-data-grid-edit [(visible)]="editDialog" title="{{'commande.tabPan' | translate}}"
+                   dialogWidth="80vw" (onUpdate)="edit()" (onCancel)="hideEditDialog()">
+    <ng-template #formContent>
+        <div class="flex flex-col divide-y divide-surface-200 dark:divide-surface-700">
 
+            <!-- ── Section 1: General Info ──────────────────────────────── -->
+            <app-collapsible-section title="commande.tabPan"
+                                     subtitle="commande.sectionGeneral"
+                                     icon="pi-file-edit">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                    <app-input [placeholder]="'commande.code'" [(ngModel)]="item.code"
+                               [required]="true" [isInvalid]="!validCommandeCode"
+                               [errorMessage]="'common.fieldRequired'" />
+                    <app-input [placeholder]="'commande.etatComande'" [(ngModel)]="item.etatComande" />
+                    <app-input-number [placeholder]="'commande.total'" [(ngModel)]="item.total" />
+                    <app-input-number [placeholder]="'commande.totalPayer'" [(ngModel)]="item.totalPayer" />
+                    <app-datepicker [placeholder]="'commande.dateCommande'" [(ngModel)]="item.dateCommande" />
+                </div>
+            </app-collapsible-section>
 
-        <ng-template #formContent >
-                <p-tabs value="0">
-                    <p-tablist>
-                        <p-tab value="0">{{'commande.tabPan' | translate}}</p-tab>
-                    </p-tablist>
-                    <p-tabpanels>
-                        <p-tabpanel value="0">
-                            <ng-template pTemplate="header">
-                                {{'commande.tabPan' | translate}}
-                            </ng-template>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 p-4">
-                                            <app-input id="commande-code" [placeholder]="'commande.code'"   [(ngModel)]="item.code"  [isInvalid]="!validCommandeCode" errorMessage="Code is invalid." ></app-input>
-                                            <app-input-number id="commande-total" label="'commande.total'" [(ngModel)]="item.total"  ></app-input-number>
-                                            <app-input-number id="commande-totalPayer" label="'commande.totalPayer'" [(ngModel)]="item.totalPayer"  ></app-input-number>
-                                            <app-datepicker id="commande-dateCommande" [placeholder]="'commande.dateCommande'" [(ngModel)]="item.dateCommande"  ></app-datepicker>
-                                            <app-input id="commande-etatComande" [placeholder]="'commande.etatComande'"   [(ngModel)]="item.etatComande"  ></app-input>
-                            </div>
-                        </p-tabpanel>
-                                <p-tabpanel value="7">
-                                    <ng-template pTemplate="header">
-                                        {{'commande.commandeItems' | translate}}
-                                    </ng-template>
-                                    <p-tabs [(value)]="activeTab">
-                                        <p-tablist>
-                                            <p-tab value="0">Création</p-tab>
-                                            <p-tab value="1">List</p-tab>
-                                        </p-tablist>
-                                        <p-tabpanels>
-                                            <p-tabpanel  value="0">
-                                                <ng-template pTemplate="header">
-                                                    Création
-                                                </ng-template>
+            <!-- ── Section 2: Commande Items ────────────────────────────── -->
+            <app-collapsible-section title="commande.commandeItems"
+                                     subtitle="commande.sectionItems"
+                                     icon="pi-list">
+                <app-data-grid-inline-table [(items)]="item.commandeItems"
+                                            [columns]="commandeItemColumns"
+                                            [itemFactory]="commandeItemFactory"
+                                            [existingItems]="availableCommandeItems"
+                                            existingItemLabelField="produit"
+                                            existingItemSubLabelField="code">
+                    <ng-template #form let-el>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <app-input [placeholder]="'commandeItem.produit'" [(ngModel)]="el.produit" />
+                            <app-input-number [placeholder]="'commandeItem.prix'" [(ngModel)]="el.prix" />
+                            <app-input-number [placeholder]="'commandeItem.quantite'" [(ngModel)]="el.quantite" />
+                            <app-input [placeholder]="'commandeItem.code'" [(ngModel)]="el.code" />
+                            <app-textarea [placeholder]="'commandeItem.description'" [(ngModel)]="el.description" />
+                            <app-textarea [placeholder]="'commandeItem.commentaireClient'" [(ngModel)]="el.commentaireClient" />
+                            <app-textarea [placeholder]="'commandeItem.commentaireVendeur'" [(ngModel)]="el.commentaireVendeur" />
+                        </div>
+                    </ng-template>
+                </app-data-grid-inline-table>
+            </app-collapsible-section>
 
-                                                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 p-4">
-
-
-                                                                <app-input id="commandeItems-produit" [placeholder]="'commandeItem.produit'" [(ngModel)]="commandeItemsElement.produit"  ></app-input>
-                                                                <app-input-number id="commandeItems-prix" label="'commandeItem.prix'" [(ngModel)]="commandeItemsElement.prix"  ></app-input-number>
-                                                                <app-input-number id="commandeItems-quantite" label="'commandeItem.quantite'" [(ngModel)]="commandeItemsElement.quantite"  ></app-input-number>
-                                                                <app-textarea id="commandeItems-description"  [placeholder]="'commandeItem.description'"  [(ngModel)]="commandeItemsElement.description"  ></app-textarea>
-                                                                <app-textarea id="commandeItems-commentaireClient"  [placeholder]="'commandeItem.commentaireClient'"  [(ngModel)]="commandeItemsElement.commentaireClient"  ></app-textarea>
-                                                                <app-textarea id="commandeItems-commentaireVendeur"  [placeholder]="'commandeItem.commentaireVendeur'"  [(ngModel)]="commandeItemsElement.commentaireVendeur"  ></app-textarea>
-                                                                <app-input id="commandeItems-code" [placeholder]="'commandeItem.code'" [(ngModel)]="commandeItemsElement.code"  ></app-input>
-                                                    <div class="flex justify-end md:col-span-3">
-                                                        <button pButton type="button" class="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-700" (click)="addCommandeItems()">
-                                                            <i class="pi pi-plus"></i> OK
-                                                        </button>
-                                                    </div>
-
-                                                </div>
-                                            </p-tabpanel>
-                                            <p-tabpanel  value="1">
-                                                <ng-template pTemplate="header">
-                                                    Liste {{item.commandeItems.length > 0 ? '(' + item.commandeItems.length + ')' : ''}}
-                                                </ng-template>
-
-                                                <div class="card p-4">
-                                                    <p-table [value]="item.commandeItems" [scrollable]="true" scrollHeight="200px">
-                                                        <ng-template pTemplate="header">
-                                                            <tr>
-                                                                            <th>Produit</th>
-                                                                            <th>Prix</th>
-                                                                            <th>Quantite</th>
-                                                                            <th>Description</th>
-                                                                            <th>Commentaire client</th>
-                                                                            <th>Commentaire vendeur</th>
-                                                                            <th>Code</th>
-                                                                <th>Actions</th>
-                                                            </tr>
-                                                        </ng-template>
-                                                        <ng-template pTemplate="body" let-p let-i="rowIndex">
-                                                            <tr>
-                                                                            <td>{{p.produit}}</td>
-                                                                            <td>{{p.prix}}</td>
-                                                                            <td>{{p.quantite}}</td>
-                                                                            <td>{{p.description}}</td>
-                                                                            <td>{{p.commentaireClient}}</td>
-                                                                            <td>{{p.commentaireVendeur}}</td>
-                                                                            <td>{{p.code}}</td>
-                                                                <td>
-                                                                    <p-button (click)="deleteCommandeItems(p,i)" pButton type="button" icon="pi pi-times" severity="danger"  [rounded]="true"  class="mr-2"></p-button>
-                                                                    <p-button (click)="editCommandeItems(p,i)" pButton type="button" icon="pi pi-pencil" severity="success"  [rounded]="true" class="mr-2"></p-button>
-                                                                </td>
-                                                            </tr>
-                                                        </ng-template>
-                                                    </p-table>
-                                                </div>
-
-                                            </p-tabpanel>
-                                        </p-tabpanels>
-                                    </p-tabs>
-                                </p-tabpanel>
-                    </p-tabpanels>
-                </p-tabs>
-
-        </ng-template>
-
-        <ng-template pTemplate="footer" >
-    <div class="flex justify-end space-x-3 p-4">
-
-            <button class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-primary"  (click)="edit()">
-                <i class="pi pi-check"></i> {{'validate' | translate}}
-            </button>
-
-                <button (click)="hideEditDialog()" class="border border-gray-400 text-gray-600 hover:bg-gray-200 px-4 py-2 rounded-md">
-                    <i class="pi pi-times"></i> {{'cancel' | translate}}
-                </button>
-
-    </div>
-</ng-template>
-
-    </app-data-grid-edit>
+        </div>
+    </ng-template>
+</app-data-grid-edit>

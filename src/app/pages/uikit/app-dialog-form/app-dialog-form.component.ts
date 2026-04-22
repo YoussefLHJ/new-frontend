@@ -16,7 +16,8 @@ export class AppDialogFormComponent {
     title = input('');
     dialogWidth = input('70vw');
     actionDisabled = input(false);
-    /** Optional TemplateRef to render as form content instead of ng-content. */
+    showAction = input(true);
+    cancelLabel = input('cancel');
     contentTpl = input<TemplateRef<any> | null>(null);
 
     onAction = output<void>();

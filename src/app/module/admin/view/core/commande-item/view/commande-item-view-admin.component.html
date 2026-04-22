@@ -1,37 +1,22 @@
-<p-dialog [(visible)]="viewDialog" [style]="{width: '70vw'}" header="{{'commandeItem.tabPan' | translate}}" [modal]="true" class="p-fluid">
-    <ng-template pTemplate="content">
-        <p-tabs [value]="0">
-            <p-tablist>
-                <p-tab [value]="0">{{'commandeItem.tabPan' | translate}}</p-tab>
-            </p-tablist>
-
-
-            <p-tabpanels>
-                <p-tabpanel [value]="0">
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 p-4">
-                            <app-select id="commandeItem-commande" [placeholder]="'commandeItem.commande'"  [options]="commandes" optionLabel="code"   [(ngModel)]="item.commande"  ></app-select>
-                                <app-input id="commandeItem-produit" [disabled]="true" [placeholder]="'commandeItem.produit'"  [(ngModel)]="item.produit"  ></app-input>
-                                <app-input-number id="commandeItem-prix" [disabled]="true" [placeholder]="'commandeItem.prix'" [(ngModel)]="item.prix"  ></app-input-number>
-                                <app-input-number id="commandeItem-quantite" [disabled]="true" [placeholder]="'commandeItem.quantite'" [(ngModel)]="item.quantite"  ></app-input-number>
-                                <app-textarea id="commandeItem-description"  [disabled]="true"  [placeholder]="'commandeItem.description'"  [(ngModel)]="item.description"  ></app-textarea>
-                                <app-textarea id="commandeItem-commentaireClient"  [disabled]="true"  [placeholder]="'commandeItem.commentaireClient'"  [(ngModel)]="item.commentaireClient"  ></app-textarea>
-                                <app-textarea id="commandeItem-commentaireVendeur"  [disabled]="true"  [placeholder]="'commandeItem.commentaireVendeur'"  [(ngModel)]="item.commentaireVendeur"  ></app-textarea>
-                                <app-input id="commandeItem-code" [disabled]="true" [placeholder]="'commandeItem.code'"  [(ngModel)]="item.code"  ></app-input>
-                </div>
-                </p-tabpanel>
-
-            </p-tabpanels>
-        </p-tabs>
-
-    </ng-template>
-
-    <ng-template pTemplate="footer" >
-        <div class="flex justify-end p-4">
-            <div>
-                <button class="border border-gray-400 font-semibold py-2 px-4 rounded shadow" (click)="hideViewDialog()">
-                    <i class="pi pi-times"></i> Annuler
-                </button>
-            </div>
-        </div>
-    </ng-template>
-</p-dialog>
+<app-dialog-form [(visible)]="viewDialog" title="commandeItem.tabPan"
+                 [showAction]="false" cancelLabel="common.close"
+                 (onCancel)="hideViewDialog()">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 p-4">
+        <app-select [disabled]="true" [placeholder]="'commandeItem.commande'"
+                    [options]="commandes" optionLabel="code" [(ngModel)]="item.commande" />
+        <app-input [disabled]="true" [placeholder]="'commandeItem.produit'"
+                   [(ngModel)]="item.produit" />
+        <app-input-number [disabled]="true" [placeholder]="'commandeItem.prix'"
+                          [(ngModel)]="item.prix" />
+        <app-input-number [disabled]="true" [placeholder]="'commandeItem.quantite'"
+                          [(ngModel)]="item.quantite" />
+        <app-textarea [disabled]="true" [placeholder]="'commandeItem.description'"
+                      [(ngModel)]="item.description" />
+        <app-textarea [disabled]="true" [placeholder]="'commandeItem.commentaireClient'"
+                      [(ngModel)]="item.commentaireClient" />
+        <app-textarea [disabled]="true" [placeholder]="'commandeItem.commentaireVendeur'"
+                      [(ngModel)]="item.commentaireVendeur" />
+        <app-input [disabled]="true" [placeholder]="'commandeItem.code'"
+                   [(ngModel)]="item.code" />
+    </div>
+</app-dialog-form>

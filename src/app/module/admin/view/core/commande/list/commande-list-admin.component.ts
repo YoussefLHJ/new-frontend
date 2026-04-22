@@ -37,7 +37,7 @@ export class CommandeListAdminComponent implements OnInit {
 
 
     protected filterColumns: string[] = ['code','total','totalPayer','dateCommande','etatComande',];
-    groupingConfig: GroupingConfig = {} ;
+    groupingConfig: GroupingConfig = { enabled: true };
 
     protected columns: ServerColumnConfig[] = [
 
@@ -47,7 +47,7 @@ export class CommandeListAdminComponent implements OnInit {
             field: 'code',
             header: 'commande.code',
             visible:  true,
-
+            groupable: true,
             type: 'text',
             criteriaMapping: {
               contains: 'codeLike',
@@ -92,7 +92,7 @@ export class CommandeListAdminComponent implements OnInit {
             field: 'dateCommande',
             header: 'commande.dateCommande',
             visible:  true,
-
+            groupable: true,
             type: 'date',
             dateFormat : 'dd/MM/yyyy',
             criteriaMapping: {
@@ -107,7 +107,7 @@ export class CommandeListAdminComponent implements OnInit {
             field: 'etatComande',
             header: 'commande.etatComande',
             visible:  true,
-
+            groupable: true,
             type: 'text',
             criteriaMapping: {
               contains: 'etatComandeLike',
@@ -147,6 +147,9 @@ export class CommandeListAdminComponent implements OnInit {
     public criteriaFactory = () => new CommandeCriteria();
     public exportDataLoader = (criteria: CommandeCriteria) => this.service.findByCriteria(criteria);
 	dataGridList = viewChild(DataGridListComponent);
+
+    /** Exposes the domain service to the template for the data-grid [service] binding. */
+    get gridService() { return this.service; }
 
 
 
@@ -224,10 +227,11 @@ export class CommandeListAdminComponent implements OnInit {
     public async edit(dto: CommandeDto) {
         this.service.findByIdWithAssociatedList(dto).subscribe(res => {
             this.item = res;
-            console.log(res);
+            if (!this.item.commandeItems) {
+                this.item.commandeItems = [];
+            }
             this.editDialog = true;
         });
-
     }
 
 

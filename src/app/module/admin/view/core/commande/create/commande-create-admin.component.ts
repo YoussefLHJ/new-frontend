@@ -4,6 +4,7 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 
 
 import {CommunCreate} from '@/app/pages/uikit/commun-create';
+import { ColumnConfig } from '@/app/pages/components/data-grid';
 
 
 import {DatePipe} from '@angular/common';
@@ -54,6 +55,19 @@ export class CommandeCreateAdminComponent  implements OnInit {
 
     public onSaved = output<void>();
 
+    availableCommandeItems: any[] = [];
+
+    readonly commandeItemColumns: ColumnConfig[] = [
+        { field: 'produit', header: 'commandeItem.produit', type: 'text' },
+        { field: 'prix', header: 'commandeItem.prix', type: 'numeric' },
+        { field: 'quantite', header: 'commandeItem.quantite', type: 'numeric' },
+        { field: 'description', header: 'commandeItem.description', type: 'text' },
+        { field: 'commentaireClient', header: 'commandeItem.commentaireClient', type: 'text' },
+        { field: 'commentaireVendeur', header: 'commandeItem.commentaireVendeur', type: 'text' },
+        { field: 'code', header: 'commandeItem.code', type: 'text' },
+    ];
+    readonly commandeItemFactory = () => new CommandeItemDto();
+
 	constructor(private service: CommandeAdminService , private commandeItemService: CommandeItemAdminService, @Inject(PLATFORM_ID) private platformId?: Object ) {
         this.datePipe = ServiceLocator.injector.get(DatePipe);
         this.messageService = ServiceLocator.injector.get(MessageService);
@@ -64,17 +78,34 @@ export class CommandeCreateAdminComponent  implements OnInit {
     }
 
     ngOnInit(): void {
+        this.commandeItemService.findAll().subscribe(items => {
+            this.availableCommandeItems = items ?? [];
+        });
     }
 
 
 
     public save(): void {
         this.submitted = true;
+        this.prepareSave();
         this.validateForm();
         if (this.errorMessages.length === 0) {
             this.saveWithShowOption(false);
         } else {
             this.messageService.add({severity: 'error',summary: 'Erreurs',detail: 'Merci de corrigé les erreurs sur le formulaire'});
+        }
+    }
+
+    private prepareSave() {
+        const raw = this.item.dateCommande as any;
+        if (raw) {
+            const d = raw instanceof Date ? raw : new Date(raw);
+            if (!isNaN(d.getTime())) {
+                const y = d.getFullYear();
+                const mo = (d.getMonth() + 1).toString().padStart(2, '0');
+                const dy = d.getDate().toString().padStart(2, '0');
+                (this.item as any).dateCommande = `${y}-${mo}-${dy}`;
+            }
         }
     }
 
@@ -85,6 +116,7 @@ export class CommandeCreateAdminComponent  implements OnInit {
                 this.createDialog = false;
                 this.submitted = false;
                 this.item = new CommandeDto();
+                this.onSaved.emit();
             } else {
                 this.messageService.add({severity: 'error', summary: 'Erreurs', detail: 'Element existant'});
             }

@@ -138,6 +138,8 @@
         "dateCommandeMax": "Date commande Max",
         "etatComande": "Etat comande",
         "commandeItems": "Commande items",
+        "sectionGeneral": "General information",
+        "sectionItems": "Order line items",
         "commande": "Commande",
         "tabPan": "Commande",
         "header": "Liste des commandes",
@@ -157,7 +159,8 @@
         "active": "Active",
         "inactive": "Inactive",
         "noData": "No records found",
-        "searchPlaceholder": "Search..."
+        "searchPlaceholder": "Search...",
+        "fieldRequired": "This field is required"
     },
 
     "dataGrid": {
@@ -201,6 +204,12 @@
         },
         "columns": {
             "title": "Columns"
+        },
+        "inline": {
+            "createNew": "Create New",
+            "selectExisting": "Select Existing",
+            "selected": "selected",
+            "addSelected": "Add Selected"
         }
     },
 

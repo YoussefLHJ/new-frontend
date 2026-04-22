@@ -2,6 +2,7 @@ import {
     Component, ChangeDetectionStrategy, TemplateRef, computed, contentChild, effect,
     inject, input, output, signal, untracked, viewChild, DestroyRef
 } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { DatePipe, NgTemplateOutlet } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Table, TableModule } from 'primeng/table';
@@ -12,6 +13,7 @@ import { InputIconModule } from 'primeng/inputicon';
 import { InputTextModule } from 'primeng/inputtext';
 import { TagModule } from 'primeng/tag';
 import { TooltipModule } from 'primeng/tooltip';
+import { SkeletonModule } from 'primeng/skeleton';
 import { Menu, MenuModule } from 'primeng/menu';
 import { MenuItem } from 'primeng/api';
 import { TranslateService } from '@ngx-translate/core';
@@ -19,7 +21,7 @@ import { SignalTranslatePipe } from '@/app/pages/pipe/signal-translate.pipe';
 import { ExportService } from '@/app/zynerator/util/Export.service';
 import { DataGridToolbarComponent } from '../data-grid-toolbar/data-grid-toolbar.component';
 import { ViewDetailDialogComponent } from '../../view/view-detail-dialog/view-detail-dialog.component';
-import { ColumnConfig, FilterCondition, GroupOption, GroupingConfig } from '../../models/data-grid.models';
+import { ColumnConfig, FilterCondition, GroupOption, GroupingConfig, DataGridServiceContract } from '../../models/data-grid.models';
 import { DataGridFilterService } from '../../services/data-grid-filter.service';
 import { DataGridGroupingService } from '../../services/data-grid-grouping.service';
 import { DataDisplayService } from '../../services/data-display.service';
@@ -29,7 +31,7 @@ import { DataDisplayService } from '../../services/data-display.service';
     imports: [
         FormsModule, TableModule, ButtonModule, ToolbarModule,
         IconFieldModule, InputIconModule, InputTextModule, TagModule, TooltipModule,
-        MenuModule, NgTemplateOutlet, SignalTranslatePipe, DataGridToolbarComponent,
+        MenuModule, SkeletonModule, NgTemplateOutlet, SignalTranslatePipe, DataGridToolbarComponent,
         ViewDetailDialogComponent, DatePipe
     ],
     templateUrl: './data-table.component.html',
@@ -56,6 +58,7 @@ export class DataTableComponent {
     loading = input(false);
     emptyMessage = input('common.noData');
     customCellFields = input<string[]>([]);
+    service = input<DataGridServiceContract | null>(null);
 
     // --- Outputs ---
     onCreate = output<void>();
@@ -72,18 +75,18 @@ export class DataTableComponent {
     private readonly destroyRef = inject(DestroyRef);
 
     // --- State ---
+    readonly skeletonItems = Array.from({ length: 6 }, () => ({}));
     displayItems = signal<any[]>([]);
     selectedItems = signal<any[]>([]);
     rowMenuItems = signal<MenuItem[]>([]);
+    expandedGroups = signal<Record<string, boolean>>({});
     viewDialogVisible = false;
     viewItem: any = null;
     activeGroupFields: string[] = [];
     activeFilters: FilterCondition[] | null = null;
-    expandedGroups: { [key: string]: boolean } = {};
     groupCountMap = new Map<string, number>();
     cachedVisibleColumnCount = signal(0);
 
-    private allFilteredItems: any[] = [];
     private globalFilterTimeout: ReturnType<typeof setTimeout> | undefined;
 
     // --- Computed ---
@@ -156,7 +159,13 @@ export class DataTableComponent {
     // --- Column Visibility ---
 
     onColumnsChanged() {
-        this.cachedVisibleColumnCount.set(this.columns().filter(c => c.visible !== false).length);
+        const cols = this.columns();
+        this.cachedVisibleColumnCount.set(cols.filter(c => c.visible !== false).length);
+        // Spread into a new array so PrimeNG's [value] input gets a new reference
+        // and re-renders body rows with the updated col.visible state.
+        // activeGroupFields is intentionally left untouched: grouping persists
+        // independently of whether a grouped column is visible in the row cells.
+        this.displayItems.set([...this.displayItems()]);
     }
 
     // --- Global Filter (debounced) ---
@@ -178,14 +187,11 @@ export class DataTableComponent {
     toggleGroup(item: any) {
         const key = item._groupKey;
         if (!key) return;
-        this.expandedGroups = { ...this.expandedGroups, [key]: !this.expandedGroups[key] };
-        this.displayItems.set(
-            this.groupingService.applyGroupVisibility(this.allFilteredItems, this.expandedGroups)
-        );
+        this.expandedGroups.update(g => ({ ...g, [key]: !g[key] }));
     }
 
     isGroupExpanded(key: string): boolean {
-        return !this.activeGroupFields.length || this.expandedGroups[key];
+        return !this.activeGroupFields.length || !!this.expandedGroups()[key];
     }
 
     getGroupParts(item: any): { label: string; value: string }[] {
@@ -240,7 +246,6 @@ export class DataTableComponent {
 
         if (!this.activeGroupFields.length) {
             this.groupCountMap.clear();
-            this.allFilteredItems = filtered;
             this.displayItems.set(filtered);
             return;
         }
@@ -248,14 +253,11 @@ export class DataTableComponent {
         this.groupCountMap = this.groupingService.computeGroups(
             filtered, this.activeGroupFields, columns, this.translate
         );
-        this.expandedGroups = this.groupingService.reconcileExpandedState(
-            this.groupCountMap, this.expandedGroups
+        const reconciled = this.groupingService.reconcileExpandedState(
+            this.groupCountMap, this.expandedGroups()
         );
-
-        this.allFilteredItems = filtered;
-        this.displayItems.set(
-            this.groupingService.applyGroupVisibility(filtered, this.expandedGroups)
-        );
+        this.expandedGroups.set(reconciled);
+        this.displayItems.set(filtered);
     }
 
     // --- Export ---
@@ -287,6 +289,21 @@ export class DataTableComponent {
     }
 
     exportToPdf() {
+        const svc = this.service();
+        if (svc) {
+            svc.exportPdf(null)
+                .pipe(takeUntilDestroyed(this.destroyRef))
+                .subscribe(buffer => {
+                    const blob = new Blob([buffer], { type: 'application/pdf' });
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = `${this.exportFileName()}.pdf`;
+                    a.click();
+                    URL.revokeObjectURL(url);
+                });
+            return;
+        }
         const data = this.getExportData();
         if (!data.length) return;
         const titleStr = this.translate.instant(this.title());

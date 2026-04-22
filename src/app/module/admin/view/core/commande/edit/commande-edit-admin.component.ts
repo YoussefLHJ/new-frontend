@@ -3,6 +3,7 @@ import {ConfirmationService, MessageService} from 'primeng/api';
 
 
 import {CommunEdit} from '@/app/pages/uikit/commun-edit';
+import { ColumnConfig } from '@/app/pages/components/data-grid';
 
 import {DatePipe} from '@angular/common';
 import {Router} from '@angular/router';
@@ -58,8 +59,18 @@ export class CommandeEditAdminComponent implements OnInit {
 
     private _validCommandeCode = true;
 
+    availableCommandeItems: any[] = [];
 
-
+    readonly commandeItemColumns: ColumnConfig[] = [
+        { field: 'produit', header: 'commandeItem.produit', type: 'text' },
+        { field: 'prix', header: 'commandeItem.prix', type: 'numeric' },
+        { field: 'quantite', header: 'commandeItem.quantite', type: 'numeric' },
+        { field: 'description', header: 'commandeItem.description', type: 'text' },
+        { field: 'commentaireClient', header: 'commandeItem.commentaireClient', type: 'text' },
+        { field: 'commentaireVendeur', header: 'commandeItem.commentaireVendeur', type: 'text' },
+        { field: 'code', header: 'commandeItem.code', type: 'text' },
+    ];
+    readonly commandeItemFactory = () => new CommandeItemDto();
 
     constructor(private service: CommandeAdminService , private commandeItemService: CommandeItemAdminService, @Inject(PLATFORM_ID) private platformId?: Object) {
         this.datePipe = ServiceLocator.injector.get(DatePipe);
@@ -71,11 +82,24 @@ export class CommandeEditAdminComponent implements OnInit {
     }
 
     ngOnInit(): void {
-
+        this.commandeItemService.findAll().subscribe(items => {
+            this.availableCommandeItems = items ?? [];
+        });
     }
 
     public prepareEdit() {
-        this.item.dateCommande = this.service.format(this.item.dateCommande);
+        const raw = this.item.dateCommande as any;
+        if (raw) {
+            const d = raw instanceof Date ? raw : new Date(raw);
+            if (!isNaN(d.getTime())) {
+                const y = d.getFullYear();
+                const mo = (d.getMonth() + 1).toString().padStart(2, '0');
+                const dy = d.getDate().toString().padStart(2, '0');
+                (this.item as any).dateCommande = `${y}-${mo}-${dy}`;
+            } else {
+                (this.item as any).dateCommande = null;
+            }
+        }
     }
 
 
@@ -102,6 +126,7 @@ export class CommandeEditAdminComponent implements OnInit {
             this.editDialog = false;
             this.submitted = false;
             this.item = new CommandeDto();
+            this.onUpdated.emit();
         } , error =>{
             console.log(error);
         });

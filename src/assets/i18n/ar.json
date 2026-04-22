@@ -1,10 +1,9 @@
 {
     "from-to": "العناصر من {first} إلى {last} (الإجمالي {totalRecords})",
     "new": "جديد",
-    "search": "بحث",
+    "search": "البحث...",
     "export": "تصدير",
     "validate": "التحقق",
-    "search": "البحث...",
     "delete": "حذف",
     "cancel": "إلغاء",
     "save": "حفظ",
@@ -15,7 +14,6 @@
     "confirm": "تأكيد",
     "creation": "إنشاء",
     "list": "قائمة",
-
     "actionPermission": {
         "reference": "المرجع",
         "libelle": "التسمية",
@@ -25,7 +23,6 @@
         "deleteActionPermissionConfirmationMessage": "هل أنت متأكد أنك تريد حذف إذن الإجراء؟",
         "deleteActionPermissionsConfirmationMessage": "هل أنت متأكد أنك تريد حذف العناصر المحددة؟"
     },
-
     "modelPermissionUser": {
         "actionPermission": "إذن الإجراء",
         "actionPermissionPlaceHolder": "اختر إذن الإجراء",
@@ -44,7 +41,6 @@
         "deleteModelPermissionUserConfirmationMessage": "هل أنت متأكد أنك تريد حذف مستخدم إذن النموذج؟",
         "deleteModelPermissionUsersConfirmationMessage": "هل أنت متأكد أنك تريد حذف العناصر المحددة؟"
     },
-
     "role": {
         "authority": "السلطة",
         "role": "الدور",
@@ -53,7 +49,6 @@
         "deleteRoleConfirmationMessage": "هل أنت متأكد أنك تريد حذف الدور؟",
         "deleteRolesConfirmationMessage": "هل أنت متأكد أنك تريد حذف العناصر المحددة؟"
     },
-
     "roleUser": {
         "role": "الدور",
         "rolePlaceHolder": "اختر دورًا",
@@ -67,7 +62,6 @@
         "deleteRoleUserConfirmationMessage": "هل أنت متأكد أنك تريد حذف مستخدم الدور؟",
         "deleteRoleUsersConfirmationMessage": "هل أنت متأكد أنك تريد حذف العناصر المحددة؟"
     },
-
     "user": {
         "credentialsNonExpired": "صلاحية الاعتماد غير منتهية",
         "enabled": "مفعل",
@@ -86,20 +80,16 @@
         "deleteUserConfirmationMessage": "هل أنت متأكد أنك تريد حذف المستخدم؟",
         "deleteUsersConfirmationMessage": "هل أنت متأكد أنك تريد حذف العناصر المحددة؟"
     },
-
-	"modelPermission": {
-		"reference": "المرجع",
-		"libelle": "التسمية",
-		"modelPermission": "إذن النموذج",
-		"tabPan": "إذن النموذج",
-		"header": "قائمة أذونات النماذج",
-		"deleteModelPermissionConfirmationMessage": "هل أنت متأكد أنك تريد حذف إذن النموذج؟",
-		"deleteModelPermissionsConfirmationMessage": "هل أنت متأكد أنك تريد حذف العناصر المحددة؟"
-	},
-
-
-
-    "commandeItem":{
+    "modelPermission": {
+        "reference": "المرجع",
+        "libelle": "التسمية",
+        "modelPermission": "إذن النموذج",
+        "tabPan": "إذن النموذج",
+        "header": "قائمة أذونات النماذج",
+        "deleteModelPermissionConfirmationMessage": "هل أنت متأكد أنك تريد حذف إذن النموذج؟",
+        "deleteModelPermissionsConfirmationMessage": "هل أنت متأكد أنك تريد حذف العناصر المحددة؟"
+    },
+    "commandeItem": {
         "commande": "Commande",
         "commandePlaceHolder": "Select a Commande",
         "commandePlaceHolderFilter": "Search by Commande",
@@ -120,9 +110,7 @@
         "deleteCommandeItemConfirmationMessage": "Are you sure you want to delete commande item",
         "deleteCommandeItemsConfirmationMessage": "Are you sure you want to delete the selected elements"
     },
-
-
-    "commande":{
+    "commande": {
         "code": "Code",
         "total": "Total",
         "totalMin": "Total Min",
@@ -139,10 +127,14 @@
         "tabPan": "Commande",
         "header": "Liste des commandes",
         "deleteCommandeConfirmationMessage": "Are you sure you want to delete commande",
-        "deleteCommandesConfirmationMessage": "Are you sure you want to delete the selected elements"
+        "deleteCommandesConfirmationMessage": "Are you sure you want to delete the selected elements",
+        "section": {
+            "general": "معلومات عامة",
+            "financial": "تفاصيل مالية",
+            "scheduling": "الجدولة"
+        }
     },
-
-"common": {
+    "common": {
         "viewDetails": "عرض التفاصيل",
         "close": "إغلاق",
         "view": "عرض",
@@ -154,9 +146,9 @@
         "active": "نشط",
         "inactive": "غير نشط",
         "noData": "لا توجد سجلات",
-        "searchPlaceholder": "بحث..."
+        "searchPlaceholder": "بحث...",
+        "fieldRequired": "هذا الحقل مطلوب"
     },
-
     "dataGrid": {
         "filter": {
             "title": "فلاتر متقدمة",
@@ -200,8 +192,5 @@
             "title": "الأعمدة"
         }
     },
-
     "appName": "GED"
 }
-
-

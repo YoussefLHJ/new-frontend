@@ -16,10 +16,12 @@
 
     <ng-template #footer>
         <div class="flex justify-end gap-2 p-4">
-            <p-button [label]="'validate' | translate" icon="pi pi-check"
-                      (onClick)="onAction.emit()"
-                      [disabled]="actionDisabled()" />
-            <p-button [label]="'cancel' | translate" icon="pi pi-times"
+            @if (showAction()) {
+                <p-button [label]="'validate' | translate" icon="pi pi-check"
+                          (onClick)="onAction.emit()"
+                          [disabled]="actionDisabled()" />
+            }
+            <p-button [label]="cancelLabel() | translate" icon="pi pi-times"
                       [outlined]="true" severity="secondary"
                       (onClick)="hide()" />
         </div>

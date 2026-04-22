@@ -16,7 +16,6 @@ import {RoleService} from 'src/app/zynerator/security/shared/service/Role.servic
 import {StringUtilService} from 'src/app/zynerator/util/StringUtil.service';
 import {ServiceLocator} from 'src/app/zynerator/service/ServiceLocator';
 import {ConfirmationService, MessageService,MenuItem} from 'primeng/api';
-import { DialogModule } from 'primeng/dialog';
 
 import {CommandeItemAdminService} from 'src/app/shared/service/admin/core/CommandeItemAdmin.service';
 import {CommandeItemDto} from 'src/app/shared/model/core/CommandeItem.model';
@@ -28,7 +27,7 @@ import {CommandeAdminService} from 'src/app/shared/service/admin/core/CommandeAd
   selector: 'app-commande-item-view-admin',
   standalone: true,
   imports: [
-    ...CommunView, DialogModule
+    ...CommunView,
     ],
   templateUrl: './commande-item-view-admin.component.html'
 })

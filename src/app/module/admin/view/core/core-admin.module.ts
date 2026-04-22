@@ -45,6 +45,7 @@ import {PaginatorModule} from 'primeng/paginator';
 import { IconField } from 'primeng/iconfield';
 import { InputIcon } from 'primeng/inputicon';
 import { TabsModule } from 'primeng/tabs';
+import { AppBreadcrumbComponent } from '@/app/pages/uikit/breadcrumb/app-breadcrumb.component';
 
 
 @NgModule({
@@ -87,8 +88,7 @@ import { TabsModule } from 'primeng/tabs';
     IconField,
     InputIcon,
     DataGridListComponent,
-
-
+    AppBreadcrumbComponent,
 
     CommandeItemCreateAdminComponent,
     CommandeItemViewAdminComponent,

@@ -1,12 +1,13 @@
 import { Component, Input, forwardRef } from '@angular/core';
 import { NG_VALUE_ACCESSOR, FormsModule } from '@angular/forms';
 import { ToggleSwitchModule } from 'primeng/toggleswitch';
+import { TranslateModule } from '@ngx-translate/core';
 import { CvaBase } from '../base/cva-base';
 
 @Component({
     selector: 'app-toggle',
     standalone: true,
-    imports: [FormsModule, ToggleSwitchModule],
+    imports: [FormsModule, ToggleSwitchModule, TranslateModule],
     providers: [{
         provide: NG_VALUE_ACCESSOR,
         useExisting: forwardRef(() => AppToggleComponent),

@@ -2,12 +2,13 @@ import { Component, Input, forwardRef } from '@angular/core';
 import { NG_VALUE_ACCESSOR, FormsModule } from '@angular/forms';
 import { InputTextModule } from 'primeng/inputtext';
 import { NgClass } from '@angular/common';
+import { TranslateModule } from '@ngx-translate/core';
 import { CvaBase } from '../base/cva-base';
 
 @Component({
     selector: 'app-input',
     standalone: true,
-    imports: [FormsModule, InputTextModule, NgClass],
+    imports: [FormsModule, InputTextModule, NgClass, TranslateModule],
     providers: [{
         provide: NG_VALUE_ACCESSOR,
         useExisting: forwardRef(() => AppInputComponent),
