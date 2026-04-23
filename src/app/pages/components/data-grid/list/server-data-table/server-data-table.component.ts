@@ -187,25 +187,11 @@ export class ServerDataTableComponent implements OnInit {
     }
 
     handleDelete(item: any) {
-        const svc = this.service();
-        if (svc) {
-            svc.delete(item).pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => this.loadData());
-        } else {
-            this.onDelete.emit(item);
-        }
+        this.onDelete.emit(item);
     }
 
     handleDeleteSelected(items: any[]) {
-        const svc = this.service();
-        if (svc) {
-            svc.selections = items;
-            svc.deleteMultiple().pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
-                this.selectedItems.set([]);
-                this.loadData();
-            });
-        } else {
-            this.onDeleteSelected.emit(items);
-        }
+        this.onDeleteSelected.emit(items);
     }
 
     // ─── View Dialog ────────────────────────────────────────────────────

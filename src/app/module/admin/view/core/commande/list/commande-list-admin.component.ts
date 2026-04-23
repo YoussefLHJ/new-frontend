@@ -241,6 +241,9 @@ export class CommandeListAdminComponent implements OnInit {
     }
 	public async openEdit(dto: CommandeDto) {
         this.service.findByIdWithAssociatedList(dto).subscribe(res => {
+            if (!res.commandeItems) {
+                res.commandeItems = [];
+            }
             this.service.item = res;
             this.service.editDialog = true;
         });
@@ -287,9 +290,8 @@ export class CommandeListAdminComponent implements OnInit {
             accept: () => {
                 this.service.delete(dto).subscribe(status => {
                     if (status > 0) {
-                        const position = this.items.indexOf(dto);
-                        position > -1 ? this.items.splice(position, 1) : false;
                         this.notificationService.success('Suppression réussie', 'La commande a été supprimée');
+                        this.dataGridList()?.refresh();
                     }
                 }, (error: any) => {
                     console.error(error);
