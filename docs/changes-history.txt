@@ -5179,3 +5179,1144 @@ With :
 }
 
 ------------------------------------------------------------
+
+66/- In 'frontend/src/app/layout/component/app.layout.component.html' :
+
+> Add :
+    <app-message></app-message>
+
+------------------------------------------------------------
+
+67/- In 'frontend/src/app/layout/component/app.layout.component.ts' :
+
+> Add :
+import { AppMessageComponent } from 'src/app/pages/uikit/app-message/app-message.component';
+
+> Replace :
+    imports: [AppLayoutModule, RouterOutlet, AppTopBarComponent, AppSidebarComponent, NgClass],
+With :
+    imports: [AppLayoutModule, RouterOutlet, AppTopBarComponent, AppSidebarComponent, NgClass, AppMessageComponent],
+
+------------------------------------------------------------
+
+68/- In 'frontend/src/app/module/admin/view/core/commande/create/commande-create-admin.component.html' :
+
+> Replace :
+        <div class="flex flex-col divide-y divide-surface-200 dark:divide-surface-700">
+With :
+        <p-tabs [value]="0">
+
+> Add :
+            <p-tablist>
+                <p-tab [value]="0">{{'commande.tabPan' | translate}}</p-tab>
+                <p-tab [value]="1">{{'commande.commandeItems' | translate}}</p-tab>
+            </p-tablist>
+            <p-tabpanels>
+
+> Replace :
+            <!-- ── Section 1: General Info ──────────────────────────────── -->
+            <app-collapsible-section title="commande.tabPan"
+                                     subtitle="commande.sectionGeneral"
+                                     icon="pi-file-edit">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                    <app-input [placeholder]="'commande.code'" [(ngModel)]="item.code"
+                               [required]="true" [isInvalid]="!validCommandeCode"
+                               [errorMessage]="'common.fieldRequired'" />
+                    <app-input [placeholder]="'commande.etatComande'" [(ngModel)]="item.etatComande" />
+                    <app-input-number [placeholder]="'commande.total'" [(ngModel)]="item.total" />
+                    <app-input-number [placeholder]="'commande.totalPayer'" [(ngModel)]="item.totalPayer" />
+                    <app-datepicker [placeholder]="'commande.dateCommande'" [(ngModel)]="item.dateCommande" />
+                </div>
+            </app-collapsible-section>
+With :
+                <!-- ── Tab 1: General Info ─────────────────────────────────── -->
+
+> Add :
+                <p-tabpanel [value]="0">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5 p-4">
+                        <app-input [placeholder]="'commande.code'" [(ngModel)]="item.code"
+                                   [required]="true" [isInvalid]="!validCommandeCode"
+                                   [errorMessage]="'common.fieldRequired'" />
+                        <app-input [placeholder]="'commande.etatComande'" [(ngModel)]="item.etatComande" />
+                        <app-input-number [placeholder]="'commande.total'" [(ngModel)]="item.total" />
+                        <app-input-number [placeholder]="'commande.totalPayer'" [(ngModel)]="item.totalPayer" />
+                        <app-datepicker [placeholder]="'commande.dateCommande'" [(ngModel)]="item.dateCommande" />
+                    </div>
+                </p-tabpanel>
+
+> Replace :
+            <!-- ── Section 2: Commande Items ────────────────────────────── -->
+            <app-collapsible-section title="commande.commandeItems"
+                                     subtitle="commande.sectionItems"
+                                     icon="pi-list">
+                <app-data-grid-inline-table [(items)]="item.commandeItems"
+                                            [columns]="commandeItemColumns"
+                                            [itemFactory]="commandeItemFactory"
+                                            [existingItems]="availableCommandeItems"
+                                            existingItemLabelField="produit"
+                                            existingItemSubLabelField="code">
+                    <ng-template #form let-el>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <app-input [placeholder]="'commandeItem.produit'" [(ngModel)]="el.produit" />
+                            <app-input-number [placeholder]="'commandeItem.prix'" [(ngModel)]="el.prix" />
+                            <app-input-number [placeholder]="'commandeItem.quantite'" [(ngModel)]="el.quantite" />
+                            <app-input [placeholder]="'commandeItem.code'" [(ngModel)]="el.code" />
+                            <app-textarea [placeholder]="'commandeItem.description'" [(ngModel)]="el.description" />
+                            <app-textarea [placeholder]="'commandeItem.commentaireClient'" [(ngModel)]="el.commentaireClient" />
+                            <app-textarea [placeholder]="'commandeItem.commentaireVendeur'" [(ngModel)]="el.commentaireVendeur" />
+                        </div>
+                    </ng-template>
+                </app-data-grid-inline-table>
+            </app-collapsible-section>
+With :
+                <!-- ── Tab 2: Commande Items ───────────────────────────────── -->
+
+> Add :
+                <p-tabpanel [value]="1">
+                    <div class="p-4">
+                        <app-data-grid-inline-table [(items)]="item.commandeItems"
+                                                    [columns]="commandeItemColumns"
+                                                    [itemFactory]="commandeItemFactory">
+                            <ng-template #form let-el>
+                                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                    <app-input [placeholder]="'commandeItem.produit'" [(ngModel)]="el.produit" />
+                                    <app-input-number [placeholder]="'commandeItem.prix'" [(ngModel)]="el.prix" />
+                                    <app-input-number [placeholder]="'commandeItem.quantite'" [(ngModel)]="el.quantite" />
+                                    <app-input [placeholder]="'commandeItem.code'" [(ngModel)]="el.code" />
+                                    <app-textarea [placeholder]="'commandeItem.description'" [(ngModel)]="el.description" />
+                                    <app-textarea [placeholder]="'commandeItem.commentaireClient'" [(ngModel)]="el.commentaireClient" />
+                                    <app-textarea [placeholder]="'commandeItem.commentaireVendeur'" [(ngModel)]="el.commentaireVendeur" />
+                                </div>
+                            </ng-template>
+                        </app-data-grid-inline-table>
+                    </div>
+                </p-tabpanel>
+
+> Replace :
+        </div>
+With :
+            </p-tabpanels>
+
+> Add :
+        </p-tabs>
+
+------------------------------------------------------------
+
+69/- In 'frontend/src/app/module/admin/view/core/commande/create/commande-create-admin.component.ts' :
+
+> Add :
+import { AppNotificationService } from 'src/app/shared/service/AppNotification.service';
+
+> Remove :
+import {CommandeItemAdminService} from 'src/app/shared/service/admin/core/CommandeItemAdmin.service';
+
+> Add :
+    protected notificationService: AppNotificationService;
+
+> Remove :
+    availableCommandeItems: any[] = [];
+
+
+> Replace :
+	constructor(private service: CommandeAdminService , private commandeItemService: CommandeItemAdminService, @Inject(PLATFORM_ID) private platformId?: Object ) {
+With :
+	constructor(private service: CommandeAdminService, @Inject(PLATFORM_ID) private platformId?: Object) {
+
+> Add :
+        this.notificationService = ServiceLocator.injector.get(AppNotificationService);
+
+> Replace :
+    ngOnInit(): void {
+        this.commandeItemService.findAll().subscribe(items => {
+            this.availableCommandeItems = items ?? [];
+        });
+    }
+With :
+    ngOnInit(): void {}
+
+> Replace :
+            this.messageService.add({severity: 'error',summary: 'Erreurs',detail: 'Merci de corrigé les erreurs sur le formulaire'});
+With :
+            this.notificationService.error('Formulaire invalide', 'Merci de corriger les erreurs sur le formulaire');
+
+> Replace :
+        this.service.save().subscribe(item => {
+            if (item != null) {
+                this.items.push({...item});
+                this.createDialog = false;
+                this.submitted = false;
+                this.item = new CommandeDto();
+                this.onSaved.emit();
+            } else {
+                this.messageService.add({severity: 'error', summary: 'Erreurs', detail: 'Element existant'});
+With :
+        this.service.save().subscribe({
+
+> Add :
+            next: item => {
+                if (item != null) {
+                    this.createDialog = false;
+                    this.submitted = false;
+                    this.item = new CommandeDto();
+                    this.onSaved.emit();
+                    this.notificationService.success('Commande créée', 'Commande créée avec succès');
+                } else {
+                    this.notificationService.error('Erreur création', 'Cet élément existe déjà');
+                }
+            },
+            error: err => {
+                console.error(err);
+                this.notificationService.error('Erreur création', 'Une erreur est survenue lors de la sauvegarde');
+
+> Remove :
+        }, error => {
+            console.log(error);
+
+> Add :
+                this.notificationService.info('Article ajouté', 'L\'article a été ajouté à la commande');
+
+> Replace :
+                this.item.commandeItems[this.commandeItemsIndex] =this.commandeItemsElement;
+With :
+                this.item.commandeItems[this.commandeItemsIndex] = this.commandeItemsElement;
+
+> Add :
+                this.notificationService.info('Article modifié', 'L\'article a été mis à jour');
+
+> Replace :
+           this.messageService.add({severity: 'error',summary: 'Erreurs',detail: 'Merci de corrigé les erreurs suivant : ' + this.errorMessages});
+With :
+           this.notificationService.error('Erreur article', 'Merci de corriger les erreurs : ' + this.errorMessages);
+
+> Add :
+        this.notificationService.warn('Article supprimé', 'L\'article a été retiré de la commande');
+
+------------------------------------------------------------
+
+70/- In 'frontend/src/app/module/admin/view/core/commande/edit/commande-edit-admin.component.html' :
+
+> Replace :
+        <div class="flex flex-col divide-y divide-surface-200 dark:divide-surface-700">
+With :
+        <p-tabs [value]="0">
+
+> Add :
+            <p-tablist>
+                <p-tab [value]="0">{{'commande.tabPan' | translate}}</p-tab>
+                <p-tab [value]="1">{{'commande.commandeItems' | translate}}</p-tab>
+            </p-tablist>
+            <p-tabpanels>
+
+> Replace :
+            <!-- ── Section 1: General Info ──────────────────────────────── -->
+            <app-collapsible-section title="commande.tabPan"
+                                     subtitle="commande.sectionGeneral"
+                                     icon="pi-file-edit">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                    <app-input [placeholder]="'commande.code'" [(ngModel)]="item.code"
+                               [required]="true" [isInvalid]="!validCommandeCode"
+                               [errorMessage]="'common.fieldRequired'" />
+                    <app-input [placeholder]="'commande.etatComande'" [(ngModel)]="item.etatComande" />
+                    <app-input-number [placeholder]="'commande.total'" [(ngModel)]="item.total" />
+                    <app-input-number [placeholder]="'commande.totalPayer'" [(ngModel)]="item.totalPayer" />
+                    <app-datepicker [placeholder]="'commande.dateCommande'" [(ngModel)]="item.dateCommande" />
+                </div>
+            </app-collapsible-section>
+With :
+                <!-- ── Tab 1: General Info ─────────────────────────────────── -->
+
+> Add :
+                <p-tabpanel [value]="0">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5 p-4">
+                        <app-input [placeholder]="'commande.code'" [(ngModel)]="item.code"
+                                   [required]="true" [isInvalid]="!validCommandeCode"
+                                   [errorMessage]="'common.fieldRequired'" />
+                        <app-input [placeholder]="'commande.etatComande'" [(ngModel)]="item.etatComande" />
+                        <app-input-number [placeholder]="'commande.total'" [(ngModel)]="item.total" />
+                        <app-input-number [placeholder]="'commande.totalPayer'" [(ngModel)]="item.totalPayer" />
+                        <app-datepicker [placeholder]="'commande.dateCommande'" [(ngModel)]="item.dateCommande" />
+                    </div>
+                </p-tabpanel>
+
+> Replace :
+            <!-- ── Section 2: Commande Items ────────────────────────────── -->
+            <app-collapsible-section title="commande.commandeItems"
+                                     subtitle="commande.sectionItems"
+                                     icon="pi-list">
+                <app-data-grid-inline-table [(items)]="item.commandeItems"
+                                            [columns]="commandeItemColumns"
+                                            [itemFactory]="commandeItemFactory"
+                                            [existingItems]="availableCommandeItems"
+                                            existingItemLabelField="produit"
+                                            existingItemSubLabelField="code">
+                    <ng-template #form let-el>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <app-input [placeholder]="'commandeItem.produit'" [(ngModel)]="el.produit" />
+                            <app-input-number [placeholder]="'commandeItem.prix'" [(ngModel)]="el.prix" />
+                            <app-input-number [placeholder]="'commandeItem.quantite'" [(ngModel)]="el.quantite" />
+                            <app-input [placeholder]="'commandeItem.code'" [(ngModel)]="el.code" />
+                            <app-textarea [placeholder]="'commandeItem.description'" [(ngModel)]="el.description" />
+                            <app-textarea [placeholder]="'commandeItem.commentaireClient'" [(ngModel)]="el.commentaireClient" />
+                            <app-textarea [placeholder]="'commandeItem.commentaireVendeur'" [(ngModel)]="el.commentaireVendeur" />
+                        </div>
+                    </ng-template>
+                </app-data-grid-inline-table>
+            </app-collapsible-section>
+With :
+                <!-- ── Tab 2: Commande Items ───────────────────────────────── -->
+
+> Add :
+                <p-tabpanel [value]="1">
+                    <div class="p-4">
+                        <app-data-grid-inline-table [(items)]="item.commandeItems"
+                                                    [columns]="commandeItemColumns"
+                                                    [itemFactory]="commandeItemFactory">
+                            <ng-template #form let-el>
+                                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                    <app-input [placeholder]="'commandeItem.produit'" [(ngModel)]="el.produit" />
+                                    <app-input-number [placeholder]="'commandeItem.prix'" [(ngModel)]="el.prix" />
+                                    <app-input-number [placeholder]="'commandeItem.quantite'" [(ngModel)]="el.quantite" />
+                                    <app-input [placeholder]="'commandeItem.code'" [(ngModel)]="el.code" />
+                                    <app-textarea [placeholder]="'commandeItem.description'" [(ngModel)]="el.description" />
+                                    <app-textarea [placeholder]="'commandeItem.commentaireClient'" [(ngModel)]="el.commentaireClient" />
+                                    <app-textarea [placeholder]="'commandeItem.commentaireVendeur'" [(ngModel)]="el.commentaireVendeur" />
+                                </div>
+                            </ng-template>
+                        </app-data-grid-inline-table>
+                    </div>
+                </p-tabpanel>
+
+> Replace :
+        </div>
+With :
+            </p-tabpanels>
+
+> Add :
+        </p-tabs>
+
+------------------------------------------------------------
+
+71/- In 'frontend/src/app/module/admin/view/core/commande/edit/commande-edit-admin.component.ts' :
+
+> Add :
+import { AppNotificationService } from 'src/app/shared/service/AppNotification.service';
+
+> Remove :
+import {CommandeItemAdminService} from 'src/app/shared/service/admin/core/CommandeItemAdmin.service';
+
+> Add :
+    protected notificationService: AppNotificationService;
+
+> Remove :
+    availableCommandeItems: any[] = [];
+
+
+> Replace :
+    constructor(private service: CommandeAdminService , private commandeItemService: CommandeItemAdminService, @Inject(PLATFORM_ID) private platformId?: Object) {
+With :
+    constructor(private service: CommandeAdminService, @Inject(PLATFORM_ID) private platformId?: Object) {
+
+> Add :
+        this.notificationService = ServiceLocator.injector.get(AppNotificationService);
+
+> Replace :
+    ngOnInit(): void {
+        this.commandeItemService.findAll().subscribe(items => {
+            this.availableCommandeItems = items ?? [];
+        });
+    }
+With :
+    ngOnInit(): void {}
+
+> Replace :
+            this.messageService.add({
+                severity: 'error',
+                summary: 'Erreurs',
+                detail: 'Merci de corrigé les erreurs sur le formulaire'
+            });
+With :
+            this.notificationService.error('Formulaire invalide', 'Merci de corriger les erreurs sur le formulaire');
+
+> Replace :
+        this.service.edit().subscribe(religion=>{
+            const myIndex = this.items.findIndex(e => e.id === this.item.id);
+            this.items[myIndex] = religion;
+            this.editDialog = false;
+            this.submitted = false;
+            this.item = new CommandeDto();
+            this.onUpdated.emit();
+        } , error =>{
+            console.log(error);
+With :
+        this.service.edit().subscribe({
+
+> Add :
+            next: () => {
+                this.editDialog = false;
+                this.submitted = false;
+                this.item = new CommandeDto();
+                this.onUpdated.emit();
+                this.notificationService.success('Commande mise à jour', 'La commande a été modifiée avec succès');
+            },
+            error: err => {
+                console.error(err);
+                this.notificationService.error('Erreur modification', 'Une erreur est survenue lors de la mise à jour');
+            }
+
+> Add :
+                this.notificationService.info('Article ajouté', 'L\'article a été ajouté à la commande');
+
+> Replace :
+                this.item.commandeItems[this.commandeItemsIndex] =this.commandeItemsElement;
+With :
+                this.item.commandeItems[this.commandeItemsIndex] = this.commandeItemsElement;
+
+> Add :
+                this.notificationService.info('Article modifié', 'L\'article a été mis à jour');
+
+> Replace :
+           this.messageService.add({severity: 'error',summary: 'Erreurs',detail: 'Merci de corrigé les erreurs suivant : ' + this.errorMessages});
+With :
+           this.notificationService.error('Erreur article', 'Merci de corriger les erreurs : ' + this.errorMessages);
+
+> Add :
+        this.notificationService.warn('Article supprimé', 'L\'article a été retiré de la commande');
+
+------------------------------------------------------------
+
+72/- In 'frontend/src/app/module/admin/view/core/commande/list/commande-list-admin.component.ts' :
+
+> Add :
+import {AppNotificationService} from 'src/app/shared/service/AppNotification.service';
+
+> Add :
+    protected notificationService: AppNotificationService;
+
+> Add :
+        this.notificationService = ServiceLocator.injector.get(AppNotificationService);
+
+> Replace :
+                    this.messageService.add({
+                        severity: 'success',
+                        summary: 'Success',
+                        detail: 'File uploaded successfully!',
+                        life: 3000
+                    });
+With :
+                    this.notificationService.success('Import réussi', 'Fichier importé avec succès');
+
+> Replace :
+                    this.messageService.add({
+                        severity: 'error',
+                        summary: 'Error',
+                        detail: 'File uploaded with Error!',
+                        life: 3000
+                    });
+With :
+                    console.error(error);
+
+> Add :
+                    this.notificationService.error('Erreur import', 'Une erreur est survenue lors de l\'importation');
+
+> Add :
+            if (!res.commandeItems) {
+                res.commandeItems = [];
+            }
+
+> Replace :
+                    this.messageService.add({ severity: 'success', summary: 'Succès', detail: 'Les éléments sélectionnés ont été supprimés', life: 3000 });
+With :
+                    this.notificationService.success('Suppression réussie', 'Les éléments sélectionnés ont été supprimés');
+
+> Replace :
+                }, (error: any) => console.log(error));
+With :
+                }, (error: any) => {
+
+> Add :
+                    console.error(error);
+                    this.notificationService.error('Erreur suppression', 'Une erreur est survenue lors de la suppression');
+                });
+
+> Replace :
+                        const position = this.items.indexOf(dto);
+                        position > -1 ? this.items.splice(position, 1) : false;
+                        this.messageService.add({
+                            severity: 'success',
+                            summary: 'Succès',
+                            detail: 'Element Supprimé',
+                            life: 3000
+                        });
+With :
+                        this.notificationService.success('Suppression réussie', 'La commande a été supprimée');
+
+> Add :
+                        this.dataGridList()?.refresh();
+
+> Replace :
+                }, (error: any) => console.log(error));
+With :
+                }, (error: any) => {
+
+> Add :
+                    console.error(error);
+                    this.notificationService.error('Erreur suppression', 'Une erreur est survenue lors de la suppression');
+                });
+
+> Remove :
+
+
+
+> Add :
+                this.notificationService.success('Succès', 'Commande créée avec succès');
+
+> Replace :
+                this.messageService.add({severity: 'error', summary: 'Erreurs', detail: 'Element existant'});
+With :
+                this.notificationService.error('Erreur', 'Cet élément existe déjà');
+
+> Replace :
+            console.log(error);
+With :
+            console.error(error);
+
+> Add :
+            this.notificationService.error('Erreur', 'Une erreur est survenue lors de la sauvegarde');
+
+------------------------------------------------------------
+
+73/- In 'frontend/src/app/pages/components/data-grid/list/data-table/data-table.component.html' :
+
+> Replace :
+<p-menu #rowMenu [model]="rowMenuItems()" [popup]="true" appendTo="body" />
+With :
+<p-popover #rowMenu appendTo="body">
+
+> Add :
+    <div class="flex flex-col w-52 py-1">
+        <span class="text-[0.65rem] font-semibold text-muted-color uppercase tracking-wider px-3 pb-2">
+            {{ 'actions' | translate }}
+        </span>
+
+        <!-- View -->
+        <button type="button" (click)="openViewDialog(activeRowItem()); rowMenu.hide()"
+                class="flex items-center gap-3 px-3 py-2.5 rounded-lg cursor-pointer
+                       bg-transparent border-none outline-none w-full text-left
+                       hover:bg-surface-100 dark:hover:bg-surface-700
+                       focus-visible:ring-2 focus-visible:ring-primary/50
+                       transition-colors duration-150 group">
+            <div class="flex items-center justify-center w-9 h-9 rounded-lg
+                        bg-blue-500/10 group-hover:bg-blue-500/20 transition-colors">
+                <i class="pi pi-eye text-blue-600 dark:text-blue-400"></i>
+            </div>
+            <span class="text-sm font-medium text-color">{{ 'common.view' | translate }}</span>
+        </button>
+
+        <!-- Edit -->
+        <button type="button" (click)="onEdit.emit(activeRowItem()); rowMenu.hide()"
+                class="flex items-center gap-3 px-3 py-2.5 rounded-lg cursor-pointer
+                       bg-transparent border-none outline-none w-full text-left
+                       hover:bg-surface-100 dark:hover:bg-surface-700
+                       focus-visible:ring-2 focus-visible:ring-primary/50
+                       transition-colors duration-150 group">
+            <div class="flex items-center justify-center w-9 h-9 rounded-lg
+                        bg-primary/10 group-hover:bg-primary/20 transition-colors">
+                <i class="pi pi-pencil text-primary"></i>
+            </div>
+            <span class="text-sm font-medium text-color">{{ 'common.edit' | translate }}</span>
+        </button>
+
+        <div class="my-1 mx-3 border-t border-surface-200 dark:border-surface-700"></div>
+
+        <!-- Delete -->
+        <button type="button" (click)="onDelete.emit(activeRowItem()); rowMenu.hide()"
+                class="flex items-center gap-3 px-3 py-2.5 rounded-lg cursor-pointer
+                       bg-transparent border-none outline-none w-full text-left
+                       hover:bg-red-50 dark:hover:bg-red-950/20
+                       focus-visible:ring-2 focus-visible:ring-red-500/50
+                       transition-colors duration-150 group">
+            <div class="flex items-center justify-center w-9 h-9 rounded-lg
+                        bg-red-500/10 group-hover:bg-red-500/20 transition-colors">
+                <i class="pi pi-trash text-red-600 dark:text-red-400"></i>
+            </div>
+            <span class="text-sm font-medium text-red-600 dark:text-red-400">{{ 'common.delete' | translate }}</span>
+        </button>
+    </div>
+</p-popover>
+
+------------------------------------------------------------
+
+74/- In 'frontend/src/app/pages/components/data-grid/list/data-table/data-table.component.ts' :
+
+> Replace :
+import { Menu, MenuModule } from 'primeng/menu';
+import { MenuItem } from 'primeng/api';
+With :
+import { Popover, PopoverModule } from 'primeng/popover';
+
+> Replace :
+        MenuModule, SkeletonModule, NgTemplateOutlet, SignalTranslatePipe, DataGridToolbarComponent,
+With :
+        PopoverModule, SkeletonModule, NgTemplateOutlet, SignalTranslatePipe, DataGridToolbarComponent,
+
+> Replace :
+    rowMenu = viewChild<Menu>('rowMenu');
+With :
+    rowMenu = viewChild<Popover>('rowMenu');
+
+> Replace :
+    rowMenuItems = signal<MenuItem[]>([]);
+With :
+    activeRowItem = signal<any>(null);
+
+> Replace :
+        this.rowMenuItems.set([
+            { label: this.translate.instant('common.view'), icon: 'pi pi-eye', command: () => this.openViewDialog(item) },
+            { label: this.translate.instant('common.edit'), icon: 'pi pi-pencil', command: () => this.onEdit.emit(item) },
+            { separator: true },
+            { label: this.translate.instant('common.delete'), icon: 'pi pi-trash', styleClass: 'text-red-500', command: () => this.onDelete.emit(item) },
+        ]);
+With :
+        this.activeRowItem.set(item);
+
+------------------------------------------------------------
+
+75/- In 'frontend/src/app/pages/components/data-grid/list/server-data-table/server-data-table.component.html' :
+
+> Replace :
+<p-menu #rowMenu [model]="rowMenuItems()" [popup]="true" appendTo="body" />
+With :
+<p-popover #rowMenu appendTo="body">
+
+> Add :
+    <div class="flex flex-col w-52 py-1">
+        <span class="text-[0.65rem] font-semibold text-muted-color uppercase tracking-wider px-3 pb-2">
+            {{ 'actions' | translate }}
+        </span>
+
+        <!-- View -->
+        <button type="button" (click)="openViewDialog(activeRowItem()); rowMenu.hide()"
+                class="flex items-center gap-3 px-3 py-2.5 rounded-lg cursor-pointer
+                       bg-transparent border-none outline-none w-full text-left
+                       hover:bg-surface-100 dark:hover:bg-surface-700
+                       focus-visible:ring-2 focus-visible:ring-primary/50
+                       transition-colors duration-150 group">
+            <div class="flex items-center justify-center w-9 h-9 rounded-lg
+                        bg-blue-500/10 group-hover:bg-blue-500/20 transition-colors">
+                <i class="pi pi-eye text-blue-600 dark:text-blue-400"></i>
+            </div>
+            <span class="text-sm font-medium text-color">{{ 'common.view' | translate }}</span>
+        </button>
+
+        <!-- Edit -->
+        <button type="button" (click)="onEdit.emit(activeRowItem()); rowMenu.hide()"
+                class="flex items-center gap-3 px-3 py-2.5 rounded-lg cursor-pointer
+                       bg-transparent border-none outline-none w-full text-left
+                       hover:bg-surface-100 dark:hover:bg-surface-700
+                       focus-visible:ring-2 focus-visible:ring-primary/50
+                       transition-colors duration-150 group">
+            <div class="flex items-center justify-center w-9 h-9 rounded-lg
+                        bg-primary/10 group-hover:bg-primary/20 transition-colors">
+                <i class="pi pi-pencil text-primary"></i>
+            </div>
+            <span class="text-sm font-medium text-color">{{ 'common.edit' | translate }}</span>
+        </button>
+
+        <div class="my-1 mx-3 border-t border-surface-200 dark:border-surface-700"></div>
+
+        <!-- Delete -->
+        <button type="button" (click)="handleDelete(activeRowItem()); rowMenu.hide()"
+                class="flex items-center gap-3 px-3 py-2.5 rounded-lg cursor-pointer
+                       bg-transparent border-none outline-none w-full text-left
+                       hover:bg-red-50 dark:hover:bg-red-950/20
+                       focus-visible:ring-2 focus-visible:ring-red-500/50
+                       transition-colors duration-150 group">
+            <div class="flex items-center justify-center w-9 h-9 rounded-lg
+                        bg-red-500/10 group-hover:bg-red-500/20 transition-colors">
+                <i class="pi pi-trash text-red-600 dark:text-red-400"></i>
+            </div>
+            <span class="text-sm font-medium text-red-600 dark:text-red-400">{{ 'common.delete' | translate }}</span>
+        </button>
+    </div>
+</p-popover>
+
+------------------------------------------------------------
+
+76/- In 'frontend/src/app/pages/components/data-grid/list/server-data-table/server-data-table.component.ts' :
+
+> Replace :
+import { Menu, MenuModule } from 'primeng/menu';
+import { MenuItem } from 'primeng/api';
+With :
+import { Popover, PopoverModule } from 'primeng/popover';
+
+> Replace :
+        PaginatorModule, MenuModule, SkeletonModule,
+With :
+        PaginatorModule, PopoverModule, SkeletonModule,
+
+> Replace :
+    rowMenu = viewChild<Menu>('rowMenu');
+With :
+    rowMenu = viewChild<Popover>('rowMenu');
+
+> Replace :
+    rowMenuItems = signal<MenuItem[]>([]);
+With :
+    activeRowItem = signal<any>(null);
+
+> Replace :
+        this.rowMenuItems.set([
+            { label: this.translate.instant('common.view'), icon: 'pi pi-eye', command: () => this.openViewDialog(item) },
+            { label: this.translate.instant('common.edit'), icon: 'pi pi-pencil', command: () => this.onEdit.emit(item) },
+            { separator: true },
+            { label: this.translate.instant('common.delete'), icon: 'pi pi-trash', styleClass: 'text-red-500', command: () => this.handleDelete(item) },
+        ]);
+With :
+        this.activeRowItem.set(item);
+
+> Replace :
+        const svc = this.service();
+        if (svc) {
+            svc.delete(item).pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => this.loadData());
+        } else {
+            this.onDelete.emit(item);
+        }
+With :
+        this.onDelete.emit(item);
+
+> Replace :
+        const svc = this.service();
+        if (svc) {
+            svc.selections = items;
+            svc.deleteMultiple().pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
+                this.selectedItems.set([]);
+                this.loadData();
+            });
+        } else {
+            this.onDeleteSelected.emit(items);
+        }
+With :
+        this.onDeleteSelected.emit(items);
+
+------------------------------------------------------------
+
+77/- In 'frontend/src/app/pages/components/data-grid/shared/inline-table/data-grid-inline-table.component.html' :
+
+> Replace :
+    <!-- ── Mode Switcher (visible only when existing items are provided) ─── -->
+    @if (existingItems().length > 0) {
+        <div class="flex items-center rounded-lg border border-surface-200 dark:border-surface-600 w-fit overflow-hidden">
+            <button type="button"
+                    [class]="mode() === 'create'
+                        ? 'flex items-center gap-1.5 px-4 py-2 text-xs font-semibold bg-primary text-primary-contrast transition-colors duration-150'
+                        : 'flex items-center gap-1.5 px-4 py-2 text-xs font-medium text-muted-color hover:bg-surface-50 dark:hover:bg-surface-800 transition-colors duration-150'"
+                    (click)="setMode('create')">
+                <i class="pi pi-plus-circle text-xs"></i>
+                {{ 'dataGrid.inline.createNew' | translate }}
+            </button>
+            <div class="w-px self-stretch bg-surface-200 dark:bg-surface-600"></div>
+            <button type="button"
+                    [class]="mode() === 'select'
+                        ? 'flex items-center gap-1.5 px-4 py-2 text-xs font-semibold bg-primary text-primary-contrast transition-colors duration-150'
+                        : 'flex items-center gap-1.5 px-4 py-2 text-xs font-medium text-muted-color hover:bg-surface-50 dark:hover:bg-surface-800 transition-colors duration-150'"
+                    (click)="setMode('select')">
+                <i class="pi pi-search text-xs"></i>
+                {{ 'dataGrid.inline.selectExisting' | translate }}
+            </button>
+With :
+    <!-- ── Header: count badge + Add button ─────────────────────────────── -->
+
+> Add :
+    <div class="flex items-center justify-between">
+        <div class="flex items-center gap-2">
+            <span class="inline-flex items-center justify-center min-w-[1.5rem] h-6 px-1.5 rounded-full
+                         bg-primary/10 text-primary text-xs font-bold">
+                {{ items().length }}
+            </span>
+            <span class="text-sm text-muted-color font-medium">
+                {{ 'dataGrid.inline.itemCount' | translate }}
+            </span>
+
+> Replace :
+    }
+With :
+        @if (!showForm) {
+
+> Add :
+            <p-button [label]="'new' | translate" icon="pi pi-plus" size="small"
+                      (click)="addItem()" />
+        }
+    </div>
+
+> Replace :
+    <!-- ── CREATE MODE ──────────────────────────────────────────────────── -->
+    @if (mode() === 'create') {
+        <!-- Item list table -->
+        <p-table [value]="items()" [scrollable]="true" scrollHeight="220px" styleClass="p-datatable-sm">
+With :
+    <!-- ── Items table ───────────────────────────────────────────────────── -->
+
+> Add :
+    <div class="rounded-xl border border-surface-200 dark:border-surface-700 overflow-hidden">
+        <p-table [value]="items()" [scrollable]="true" scrollHeight="200px" styleClass="p-datatable-sm">
+
+> Replace :
+                            <th>{{ col.header | translate }}</th>
+With :
+                            <th class="!text-[0.7rem] !font-semibold !uppercase !tracking-wider !text-muted-color">
+
+> Add :
+                                {{ col.header | translate }}
+                            </th>
+
+> Replace :
+                    <th style="width: 6rem; text-align: center">{{ 'actions' | translate }}</th>
+With :
+                    <th class="!w-20 !text-center !text-[0.7rem] !font-semibold !uppercase !tracking-wider !text-muted-color">
+
+> Add :
+                        {{ 'actions' | translate }}
+                    </th>
+
+> Add :
+
+
+> Replace :
+                <tr>
+With :
+                <tr class="hover:bg-surface-50 dark:hover:bg-surface-800/60 transition-colors duration-100">
+
+> Replace :
+                            <td>
+With :
+                            <td class="!py-2.5 !text-sm">
+
+> Replace :
+                    <td class="text-center">
+                        <p-button icon="pi pi-pencil" [rounded]="true" [text]="true" size="small"
+                                  (click)="editItem(item, i)" />
+                        <p-button icon="pi pi-times" severity="danger" [rounded]="true" [text]="true" size="small"
+                                  (click)="deleteItem(i)" />
+With :
+                    <td class="!py-2.5">
+
+> Add :
+                        <div class="flex items-center justify-center gap-0.5">
+                            <!-- Edit -->
+                            <button type="button" (click)="editItem(item, i)"
+                                    class="flex items-center justify-center w-7 h-7 rounded-lg
+                                           hover:bg-primary/10 text-muted-color hover:text-primary
+                                           transition-colors duration-150 border-none bg-transparent cursor-pointer
+                                           outline-none focus-visible:ring-2 focus-visible:ring-primary/40">
+                                <i class="pi pi-pencil" style="font-size: 0.7rem"></i>
+                            </button>
+                            <!-- Delete -->
+                            <button type="button" (click)="deleteItem(i)"
+                                    class="flex items-center justify-center w-7 h-7 rounded-lg
+                                           hover:bg-red-500/10 text-muted-color hover:text-red-500
+                                           transition-colors duration-150 border-none bg-transparent cursor-pointer
+                                           outline-none focus-visible:ring-2 focus-visible:ring-red-500/40">
+                                <i class="pi pi-trash" style="font-size: 0.7rem"></i>
+                            </button>
+                        </div>
+
+> Add :
+
+
+> Replace :
+                    <td [attr.colspan]="columns().length + 1" class="text-center py-4 text-muted-color text-sm">
+                        {{ 'common.noData' | translate }}
+With :
+                    <td [attr.colspan]="columns().length + 1">
+
+> Add :
+                        <div class="flex flex-col items-center justify-center py-10 text-muted-color gap-2">
+                            <i class="pi pi-inbox text-3xl opacity-30"></i>
+                            <span class="text-sm">{{ 'common.noData' | translate }}</span>
+                        </div>
+
+> Add :
+    </div>
+
+> Replace :
+        <!-- Add button -->
+        @if (!showForm) {
+            <div class="flex justify-start">
+                <p-button [label]="'new' | translate" icon="pi pi-plus" severity="secondary" size="small"
+                          (click)="addItem()" />
+With :
+    <!-- ── Add / Edit form card ───────────────────────────────────────────── -->
+
+> Add :
+    @if (showForm && editingItem !== null) {
+        <div class="rounded-xl border border-primary/20 dark:border-primary/30 overflow-hidden
+                    bg-primary/[0.03] dark:bg-primary/[0.06]">
+
+            <!-- Form card header -->
+            <div class="flex items-center gap-2.5 px-4 py-3
+                        border-b border-primary/10 dark:border-primary/20">
+                <div class="flex items-center justify-center w-7 h-7 rounded-lg bg-primary/10 shrink-0">
+                    <i [class]="'pi text-primary ' + (editingIndex >= 0 ? 'pi-pencil' : 'pi-plus')"
+                       style="font-size: 0.7rem"></i>
+                </div>
+                <span class="text-sm font-semibold text-color">
+                    {{ (editingIndex >= 0 ? 'dataGrid.inline.editItem' : 'dataGrid.inline.newItem') | translate }}
+                </span>
+
+> Remove :
+        }
+
+> Replace :
+        <!-- Inline add/edit form -->
+        @if (showForm && editingItem !== null) {
+            <p-divider />
+            <div>
+With :
+            <!-- Form content -->
+
+> Add :
+            <div class="p-4">
+
+> Replace :
+                <div class="flex justify-end gap-2 pt-3">
+With :
+
+
+> Add :
+                <!-- Form actions -->
+                <div class="flex justify-end gap-2 pt-4 mt-3
+                            border-t border-primary/10 dark:border-primary/20">
+
+> Remove :
+        }
+    }
+
+    <!-- ── SELECT MODE ──────────────────────────────────────────────────── -->
+    @if (mode() === 'select') {
+        <div class="flex flex-col gap-3">
+
+            <!-- Search input -->
+            <div class="relative">
+                <i class="pi pi-search absolute left-3 top-1/2 -translate-y-1/2 text-muted-color text-xs pointer-events-none"></i>
+                <input type="text"
+                       class="w-full pl-8 pr-3 py-2 text-sm
+                              border border-surface-300 dark:border-surface-600 rounded-lg
+                              bg-surface-0 dark:bg-surface-900 text-color
+                              placeholder-muted-color
+                              focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary
+                              transition-colors"
+                       [placeholder]="'common.searchPlaceholder' | translate"
+                       [value]="existingSearch()"
+                       (input)="existingSearch.set($any($event.target).value)" />
+            </div>
+
+            <!-- Scrollable item list -->
+            <div class="border border-surface-200 dark:border-surface-700 rounded-lg overflow-auto"
+                 style="max-height: 220px">
+                @if (filteredExisting().length === 0) {
+                    <div class="py-10 text-center text-muted-color text-sm">
+                        <i class="pi pi-inbox text-2xl block mb-2 opacity-40"></i>
+                        {{ 'common.noData' | translate }}
+                    </div>
+                }
+                @for (ei of filteredExisting(); track $index) {
+                    <div class="flex items-center gap-3 px-4 py-2.5 cursor-pointer
+                                border-b border-surface-100 dark:border-surface-800 last:border-0
+                                hover:bg-surface-50 dark:hover:bg-surface-800
+                                transition-colors duration-100"
+                         [class.bg-primary/5]="isExistingSelected(ei)"
+                         (click)="toggleExistingSelection(ei)">
+                        <!-- Custom checkbox -->
+                        <span class="flex items-center justify-center w-4 h-4 rounded border-2 shrink-0 transition-all"
+                              [class.border-primary]="isExistingSelected(ei)"
+                              [class.bg-primary]="isExistingSelected(ei)"
+                              [class.border-surface-400]="!isExistingSelected(ei)">
+                            @if (isExistingSelected(ei)) {
+                                <i class="pi pi-check text-white" style="font-size: 8px"></i>
+                            }
+                        </span>
+                        <!-- Label -->
+                        <div class="flex-1 min-w-0">
+                            <p class="text-sm font-medium text-color m-0 truncate">
+                                {{ ei[existingItemLabelField()] ?? '—' }}
+                            </p>
+                            @if (existingItemSubLabelField() && ei[existingItemSubLabelField()]) {
+                                <p class="text-xs text-muted-color m-0 truncate mt-0.5">
+                                    {{ ei[existingItemSubLabelField()] }}
+                                </p>
+                            }
+                        </div>
+                    </div>
+                }
+            </div>
+
+            <!-- Footer: count + add button -->
+            <div class="flex items-center justify-between">
+                <span class="text-xs text-muted-color">
+                    @if (selectedExistingItems().length > 0) {
+                        {{ selectedExistingItems().length }}&nbsp;{{ 'dataGrid.inline.selected' | translate }}
+                    }
+                </span>
+                <p-button [label]="'dataGrid.inline.addSelected' | translate"
+                          icon="pi pi-arrow-up-left"
+                          size="small"
+                          [disabled]="selectedExistingItems().length === 0"
+                          (click)="addSelectedItems()" />
+            </div>
+
+------------------------------------------------------------
+
+78/- In 'frontend/src/app/pages/components/data-grid/shared/inline-table/data-grid-inline-table.component.ts' :
+
+> Replace :
+    contentChild, input, model, signal, computed
+With :
+    contentChild, input, model
+
+> Replace :
+    // ── Core ──────────────────────────────────────────────────────────────
+    items           = model<any[]>([]);
+    columns         = input<ColumnConfig[]>([]);
+    itemFactory     = input.required<() => any>();
+
+    // ── Select-mode inputs ─────────────────────────────────────────────
+    /** Items to pick from when mode === 'select'. Mode switcher hidden when empty. */
+    existingItems            = input<any[]>([]);
+    /** Field used as the primary label in the select list. */
+    existingItemLabelField   = input('libelle');
+    /** Optional secondary field shown as a subtitle in each row. */
+    existingItemSubLabelField = input('');
+With :
+    items       = model<any[]>([]);
+
+> Add :
+    columns     = input<ColumnConfig[]>([]);
+    itemFactory = input.required<() => any>();
+
+> Remove :
+    // ── Create-mode state ─────────────────────────────────────────────
+
+> Remove :
+    // ── Mode-switching state ──────────────────────────────────────────
+    mode                  = signal<'create' | 'select'>('create');
+    selectedExistingItems = signal<any[]>([]);
+    existingSearch        = signal('');
+
+    filteredExisting = computed(() => {
+        const search   = this.existingSearch().toLowerCase().trim();
+        const field    = this.existingItemLabelField();
+        const subField = this.existingItemSubLabelField();
+        const items    = this.existingItems();
+        if (!search) return items;
+        return items.filter(item =>
+            String(item[field] ?? '').toLowerCase().includes(search) ||
+            (subField && String(item[subField] ?? '').toLowerCase().includes(search))
+        );
+    });
+
+    // ── Create-mode actions ───────────────────────────────────────────
+
+
+> Remove :
+    // ── Select-mode actions ───────────────────────────────────────────
+
+    setMode(m: 'create' | 'select') {
+        this.mode.set(m);
+        this.existingSearch.set('');
+        this.selectedExistingItems.set([]);
+        if (m === 'create') this.cancelEdit();
+    }
+
+    isExistingSelected(existingItem: any): boolean {
+        return this.selectedExistingItems().some(s =>
+            s === existingItem || (existingItem?.id != null && s?.id === existingItem.id)
+        );
+    }
+
+    toggleExistingSelection(existingItem: any) {
+        const current = this.selectedExistingItems();
+        const idx = current.findIndex(s =>
+            s === existingItem || (existingItem?.id != null && s?.id === existingItem.id)
+        );
+        if (idx >= 0) {
+            this.selectedExistingItems.set(current.filter((_, i) => i !== idx));
+        } else {
+            this.selectedExistingItems.set([...current, existingItem]);
+        }
+    }
+
+    addSelectedItems() {
+        if (!this.selectedExistingItems().length) return;
+        const toAdd = this.selectedExistingItems().map(i => ({ ...i }));
+        this.items.set([...(this.items() ?? []), ...toAdd]);
+        this.setMode('create');
+    }
+
+    // ── Shared ───────────────────────────────────────────────────────
+
+------------------------------------------------------------
+
+79/- New folder added: 'frontend/src/app/pages/uikit/app-message/'
+
+------------------------------------------------------------
+
+80/- New file added: 'frontend/src/app/shared/service/AppNotification.service.ts'
+
+------------------------------------------------------------
+
+81/- In 'frontend/src/assets/i18n/ar.json' :
+
+> Add :
+        },
+        "inline": {
+            "createNew": "إنشاء جديد",
+            "selectExisting": "اختيار موجود",
+            "selected": "محدد",
+            "addSelected": "إضافة المحدد",
+            "newItem": "عنصر جديد",
+            "editItem": "تعديل العنصر",
+            "itemCount": "عنصر"
+
+------------------------------------------------------------
+
+82/- In 'frontend/src/assets/i18n/en.json' :
+
+> Replace :
+            "addSelected": "Add Selected"
+With :
+            "addSelected": "Add Selected",
+
+> Add :
+            "newItem": "New item",
+            "editItem": "Edit item",
+            "itemCount": "item(s)"
+
+------------------------------------------------------------
+
+83/- In 'frontend/src/assets/i18n/es.json' :
+
+> Add :
+    "dataGrid": {
+        "inline": {
+            "newItem": "Nuevo elemento",
+            "editItem": "Editar elemento",
+            "itemCount": "elemento(s)"
+        }
+    },
+
+------------------------------------------------------------
+
+84/- In 'frontend/src/assets/i18n/fr.json' :
+
+> Replace :
+            "addSelected": "Ajouter la sélection"
+With :
+            "addSelected": "Ajouter la sélection",
+
+> Add :
+            "newItem": "Nouvel élément",
+            "editItem": "Modifier l'élément",
+            "itemCount": "élément(s)"
+
+------------------------------------------------------------

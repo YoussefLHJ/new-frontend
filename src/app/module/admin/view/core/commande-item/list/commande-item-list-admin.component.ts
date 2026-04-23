@@ -296,17 +296,24 @@ export class CommandeItemListAdminComponent implements OnInit {
 
 	public deleteSelected(dtos: CommandeItemDto[]) {
         this.confirmationService.confirm({
-            message: 'Voulez-vous supprimer ces éléments ?',
+            message: 'Êtes-vous sûr de vouloir supprimer les éléments sélectionnés ?',
             header: 'Confirmation',
             icon: 'pi pi-exclamation-triangle',
             rejectButtonProps: { label: 'Cancel', severity: 'secondary', outlined: true },
             acceptButtonProps: { label: 'Ok' },
             accept: () => {
                 this.service.selections = dtos;
-                this.service.deleteMultiple().subscribe(() => {
-                    this.messageService.add({ severity: 'success', summary: 'Succès', detail: 'Les éléments sélectionnés ont été supprimés', life: 3000 });
-                    this.dataGridList()?.refresh();
-                }, (error: any) => console.log(error));
+                this.service.deleteMultiple().subscribe({
+                    next: () => {
+                        console.log('Suppression réussie :', dtos.length, 'élément(s) supprimé(s)');
+                        this.messageService.add({ severity: 'success', summary: 'Succès', detail: 'Les éléments sélectionnés ont été supprimés', life: 3000 });
+                        this.dataGridList()?.refresh();
+                    },
+                    error: (error: any) => {
+                        console.error('Erreur lors de la suppression :', error);
+                        this.messageService.add({ severity: 'error', summary: 'Erreur', detail: 'Une erreur est survenue lors de la suppression', life: 3000 });
+                    }
+                });
             }
         });
     }

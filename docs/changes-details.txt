@@ -1,15 +1,18 @@
 1/- In all files 'frontend/src/app/module/admin/view/core/commande-item/create/commande-item-create-admin.component.html' and 'frontend/src/app/module/admin/view/core/commande-item/edit/commande-item-edit-admin.component.html' :
 
-> Remove :
+> In root dialog template :
+Remove :
 <p-tabs value="0">
 <ng-template pTemplate="footer" >
 
-> Replace :
+> In tag `<app-input-number id="commandeItem-prix">` :
+Replace attribute :
 label="'commandeItem.prix'"
 With :
 [placeholder]="'commandeItem.prix'"
 
-> Replace :
+> In tag `<app-input-number id="commandeItem-quantite">` :
+Replace attribute :
 label="'commandeItem.quantite'"
 With :
 [placeholder]="'commandeItem.quantite'"
@@ -18,37 +21,44 @@ With :
 
 2/- In 'frontend/src/app/module/admin/view/core/commande-item/list/commande-item-list-admin.component.html' :
 
-> Add :
+> In root template, before the grid :
+Add tag :
 <app-breadcrumb labelKey="commandeItem.header" />
 
 ------------------------------------------------------------
 
 3/- In all files 'frontend/src/app/module/admin/view/core/commande-item/list/commande-item-list-admin.component.html' and 'frontend/src/app/module/admin/view/core/commande/list/commande-list-admin.component.html' :
 
-> Add :
+> In tag `<app-data-grid-list>` :
+Add attribute :
 [service]="gridService"
 
 ------------------------------------------------------------
 
 4/- In all files 'frontend/src/app/module/admin/view/core/commande-item/list/commande-item-list-admin.component.ts' and 'frontend/src/app/module/admin/view/core/commande/list/commande-list-admin.component.ts' :
 
-> Add :
+> In class body :
+Add getter :
 get gridService() { return this.service; }
 
 ------------------------------------------------------------
 
 5/- In 'frontend/src/app/module/admin/view/core/commande-item/view/commande-item-view-admin.component.html' :
 
-> Replace :
+> In root dialog tag :
+Replace tag :
 <p-dialog [(visible)]="viewDialog" [style]="{width: '70vw'}" header="{{'commandeItem.tabPan' | translate}}" [modal]="true" class="p-fluid">
 With :
 <app-dialog-form [(visible)]="viewDialog" title="commandeItem.tabPan"
 
-> Add :
-[showAction]="false" cancelLabel="common.close"
+> In root tag `<app-dialog-form>` :
+Add attributes :
+[showAction]="false"
+cancelLabel="common.close"
 (onCancel)="hideViewDialog()"
 
-> Remove :
+> In root template structure :
+Remove :
 <p-tabs [value]="0">
 <ng-template pTemplate="footer" >
 
@@ -56,10 +66,12 @@ With :
 
 6/- In all files 'frontend/src/app/module/admin/view/core/commande-item/view/commande-item-view-admin.component.ts' and 'frontend/src/app/module/admin/view/core/commande/view/commande-view-admin.component.ts' :
 
-> Remove :
+> In imports section :
+Remove :
 import { DialogModule } from 'primeng/dialog';
 
-> Replace :
+> In component imports array :
+Replace :
 ...CommunView, DialogModule
 With :
 ...CommunView,
@@ -68,480 +80,355 @@ With :
 
 7/- In all files 'frontend/src/app/module/admin/view/core/commande/create/commande-create-admin.component.html' and 'frontend/src/app/module/admin/view/core/commande/edit/commande-edit-admin.component.html' :
 
-> Add :
+> In root tag `<app-data-grid-create>` / `<app-data-grid-edit>` :
+Add attribute :
 dialogWidth="80vw"
+
+> In tag `<app-collapsible-section title="commande.tabPan">` :
+Add tag :
 <app-collapsible-section title="commande.tabPan"
+
+> In tag `<app-collapsible-section title="commande.commandeItems">` :
+Add tag :
 <app-collapsible-section title="commande.commandeItems"
-<app-data-grid-inline-table [(items)]="item.commandeItems"
+
+> In tag `<app-data-grid-inline-table>` :
+Add attributes :
 [columns]="commandeItemColumns"
 [itemFactory]="commandeItemFactory"
 [existingItems]="availableCommandeItems"
 existingItemLabelField="produit"
 existingItemSubLabelField="code"
 
-> Replace :
+> In tag `<app-input>` for `commande.code` :
+Add attribute :
+[required]="true"
+
+> In tag `<app-input>` for `commande.code` :
+Replace attribute :
 errorMessage="Code is invalid."
 With :
 [errorMessage]="'common.fieldRequired'"
 
-> Add :
-[required]="true"
-
-> Replace :
+> In tag `<app-input-number>` for `commande.total` :
+Replace attribute :
 label="'commande.total'"
 With :
 [placeholder]="'commande.total'"
 
-> Replace :
+> In tag `<app-input-number>` for `commande.totalPayer` :
+Replace attribute :
 label="'commande.totalPayer'"
 With :
 [placeholder]="'commande.totalPayer'"
 
-> Remove :
+> In old items section :
+Remove :
 <p-tabpanel value="7">
 <p-table [value]="item.commandeItems" [scrollable]="true" scrollHeight="200px">
 
 ------------------------------------------------------------
 
-8/- In all files 'frontend/src/app/module/admin/view/core/commande/create/commande-create-admin.component.ts' and 'frontend/src/app/module/admin/view/core/commande/edit/commande-edit-admin.component.ts' :
+8/- In 'frontend/src/app/module/admin/view/core/commande/create/commande-create-admin.component.ts' :
 
-> Add :
-import { ColumnConfig } from '@/app/pages/components/data-grid';
-availableCommandeItems: any[] = [];
-readonly commandeItemColumns: ColumnConfig[] = [
-readonly commandeItemFactory = () => new CommandeItemDto();
-this.commandeItemService.findAll().subscribe(items => {
-this.availableCommandeItems = items ?? [];
-
-------------------------------------------------------------
-
-9/- In 'frontend/src/app/module/admin/view/core/commande/create/commande-create-admin.component.ts' :
-
-> Add :
+> In method `save()` :
+Add call :
 this.prepareSave();
+
+> In class body :
+Add method :
 private prepareSave() {
+
+> In method `prepareSave()` :
+Add assignment :
 (this.item as any).dateCommande = `${y}-${mo}-${dy}`;
+
+> In save success flow :
+Add :
 this.onSaved.emit();
 
 ------------------------------------------------------------
 
-10/- In 'frontend/src/app/module/admin/view/core/commande/edit/commande-edit-admin.component.ts' :
+9/- In 'frontend/src/app/module/admin/view/core/commande/edit/commande-edit-admin.component.ts' :
 
-> Replace :
+> In method `edit()` :
+Replace :
 this.item.dateCommande = this.service.format(this.item.dateCommande);
 With :
 const raw = this.item.dateCommande as any;
+
+> In method `edit()` :
+Add normalized assignment :
 (this.item as any).dateCommande = `${y}-${mo}-${dy}`;
+
+> In method `edit()` :
+Add fallback :
 (this.item as any).dateCommande = null;
 
-> Add :
+> In update success flow :
+Add :
 this.onUpdated.emit();
 
 ------------------------------------------------------------
 
-11/- In 'frontend/src/app/module/admin/view/core/commande/list/commande-list-admin.component.html' :
+10/- In 'frontend/src/app/module/admin/view/core/commande/list/commande-list-admin.component.html' :
 
-> Add :
+> In root template, before the grid :
+Add tag :
 <app-breadcrumb labelKey="commande.header" />
 
 ------------------------------------------------------------
 
-12/- In 'frontend/src/app/module/admin/view/core/commande/list/commande-list-admin.component.ts' :
+11/- In 'frontend/src/app/module/admin/view/core/commande/list/commande-list-admin.component.ts' :
 
-> Replace :
+> In class variable `groupingConfig` :
+Replace :
 groupingConfig: GroupingConfig = {} ;
 With :
 groupingConfig: GroupingConfig = { enabled: true };
 
-> Add :
+> In column definitions :
+Add property :
 groupable: true,
 
-> Remove :
+> In load success flow :
+Remove :
 console.log(res);
 
-> Add :
+> In load success flow :
+Add guard :
 if (!this.item.commandeItems) {
 this.item.commandeItems = [];
 }
 
 ------------------------------------------------------------
 
-13/- In 'frontend/src/app/module/admin/view/core/commande/view/commande-view-admin.component.html' :
+12/- In 'frontend/src/app/module/admin/view/core/commande/view/commande-view-admin.component.html' :
 
-> Replace :
+> In root dialog tag :
+Replace tag :
 <p-dialog [(visible)]="viewDialog" [style]="{width: '70vw'}" header="{{'commande.tabPan' | translate}}" [modal]="true" class="p-fluid">
 With :
 <app-dialog-form [(visible)]="viewDialog" title="commande.tabPan"
 
-> Add :
-[showAction]="false" cancelLabel="common.close"
+> In root tag `<app-dialog-form>` :
+Add attributes :
+[showAction]="false"
+cancelLabel="common.close"
 (onCancel)="hideViewDialog()"
+
+> In tag `<p-table>` for `commandeItems` :
+Add attribute :
 styleClass="p-datatable-sm"
-<ng-template #emptymessage>
+
+> In tag `<ng-template #emptymessage>` :
+Add :
 {{'common.noData' | translate}}
 
-> Replace :
+> In table header tag `<th>` for product column :
+Replace text :
 <th>Produit</th>
 With :
 <th>{{'commandeItem.produit' | translate}}</th>
 
 ------------------------------------------------------------
 
-14/- In 'frontend/src/app/module/admin/view/core/core-admin.module.ts' :
-
-> Add :
-import { AppBreadcrumbComponent } from '@/app/pages/uikit/breadcrumb/app-breadcrumb.component';
-AppBreadcrumbComponent,
+13/- New file added: 'frontend/src/app/shared/service/AppNotification.service.ts'
 
 ------------------------------------------------------------
 
-15/- In 'frontend/src/app/pages/components/data-grid/create/data-grid-create.component.ts' :
+14/- In all files 'frontend/src/app/module/admin/view/core/commande/create/commande-create-admin.component.html' and 'frontend/src/app/module/admin/view/core/commande/edit/commande-edit-admin.component.html' :
 
-> Replace :
-imports: [DialogModule, ButtonModule, NgTemplateOutlet, SignalTranslatePipe]
+> In root content wrapper :
+Replace tag :
+<app-collapsible-section title="commande.tabPan"
 With :
-imports: [AppDialogFormComponent]
+<p-tabs [value]="0">
 
-> Replace :
-templateUrl: 'data-grid-create.component.html'
+> In tag `<p-tablist>` :
+Add tags :
+<p-tab [value]="0">{{'commande.tabPan' | translate}}</p-tab>
+<p-tab [value]="1">{{'commande.commandeItems' | translate}}</p-tab>
+
+> In tag `<app-data-grid-inline-table>` :
+Remove attributes :
+[existingItems]="availableCommandeItems"
+existingItemLabelField="produit"
+existingItemSubLabelField="code"
+
+------------------------------------------------------------
+
+15/- In all files 'frontend/src/app/module/admin/view/core/commande/create/commande-create-admin.component.ts' and 'frontend/src/app/module/admin/view/core/commande/edit/commande-edit-admin.component.ts' :
+
+> In imports section :
+Add :
+import { AppNotificationService } from 'src/app/shared/service/AppNotification.service';
+
+> In class variables :
+Add :
+protected notificationService: AppNotificationService;
+
+> In constructor :
+Add :
+this.notificationService = ServiceLocator.injector.get(AppNotificationService);
+
+> In imports section :
+Remove :
+import {CommandeItemAdminService} from 'src/app/shared/service/admin/core/CommandeItemAdmin.service';
+
+> In class variables :
+Remove :
+availableCommandeItems: any[] = [];
+
+> In constructor signature :
+Replace :
+constructor(private service: CommandeAdminService , private commandeItemService: CommandeItemAdminService, @Inject(PLATFORM_ID) private platformId?: Object ) {
 With :
-template: `
+constructor(private service: CommandeAdminService, @Inject(PLATFORM_ID) private platformId?: Object) {
 
-> Add :
-standalone: true,
-<app-dialog-form
-[actionDisabled]="saveDisabled()"
-[contentTpl]="customContentTpl() ?? null"
-(onAction)="onSave.emit()"
+> In lifecycle hook `ngOnInit()` :
+Replace previous fetch logic with :
+ngOnInit(): void {}
 
 ------------------------------------------------------------
 
-16/- In 'frontend/src/app/pages/components/data-grid/edit/data-grid-edit.component.ts' :
+16/- In 'frontend/src/app/module/admin/view/core/commande/create/commande-create-admin.component.ts' :
 
-> Replace :
-imports: [DialogModule, ButtonModule, NgTemplateOutlet, SignalTranslatePipe]
+> In form validation branch of method `save()` :
+Replace :
+this.messageService.add({severity: 'error',summary: 'Erreurs',detail: 'Merci de corrigé les erreurs sur le formulaire'});
 With :
-imports: [AppDialogFormComponent]
+this.notificationService.error('Formulaire invalide', 'Merci de corriger les erreurs sur le formulaire');
 
-> Replace :
-templateUrl: './data-grid-edit.component.html'
+> In save request block :
+Replace :
+this.service.save().subscribe(item => {
 With :
-template: `
+this.service.save().subscribe({
 
-> Add :
-<app-dialog-form
-[actionDisabled]="updateDisabled()"
-[contentTpl]="customContentTpl() ?? null"
-(onAction)="onUpdate.emit()"
-
-------------------------------------------------------------
-
-17/- In 'frontend/src/app/pages/components/data-grid/index.ts' :
-
-> Add :
-export * from './services/data-display.service';
-export * from './shared/inline-table/data-grid-inline-table.component';
-
-------------------------------------------------------------
-
-18/- In all files 'frontend/src/app/pages/components/data-grid/list/data-grid-list.component.html' and 'frontend/src/app/pages/components/data-grid/list/data-grid-list.component.ts' :
-
-> Add :
-service = input<DataGridServiceContract | null>(null);
-[service]="service()"
-
-> Add :
-import { DataLoadFn, ExportLoadFn, DataGridServiceContract } from '../../models/data-grid.models';
-
-------------------------------------------------------------
-
-19/- In 'frontend/src/app/pages/components/data-grid/list/data-grid-toolbar/data-grid-toolbar.component.html' :
-
-> Replace :
-<!-- Grouping MultiSelect -->
+> In save error callback :
+Replace :
+console.log(error);
 With :
-<!-- Grouping MultiSelect (left of filter) -->
+console.error(err);
 
-> Add :
-<div class="w-px h-6 bg-surface-200 dark:bg-surface-600 mx-0.5"></div>
+> In save success callback :
+Add :
+this.notificationService.success('Commande créée', 'Commande créée avec succès');
+
+> In duplicate item branch :
+Add :
+this.notificationService.error('Erreur création', 'Cet élément existe déjà');
+
+> In save error callback :
+Add :
+this.notificationService.error('Erreur création', 'Une erreur est survenue lors de la sauvegarde');
+
+> In method `addCommandeItems()` :
+Add :
+this.notificationService.info('Article ajouté', 'L'article a été ajouté à la commande');
+
+> In method `editCommandeItems()` :
+Add :
+this.notificationService.info('Article modifié', 'L'article a été mis à jour');
+
+> In method `deleteCommandeItems()` :
+Add :
+this.notificationService.warn('Article supprimé', 'L'article a été retiré de la commande');
 
 ------------------------------------------------------------
 
-20/- In 'frontend/src/app/pages/components/data-grid/list/data-grid-toolbar/data-grid-toolbar.component.ts' :
+17/- In 'frontend/src/app/module/admin/view/core/commande/edit/commande-edit-admin.component.ts' :
 
-> Add :
-setGroupFields(fields: string[]) {
-this.selectedGroupFields = [...fields];
+> In form validation branch of method `edit()` :
+Replace :
+this.messageService.add({
+severity: 'error',
+summary: 'Erreurs',
+detail: 'Merci de corrigé les erreurs sur le formulaire'
+});
+With :
+this.notificationService.error('Formulaire invalide', 'Merci de corriger les erreurs sur le formulaire');
+
+> In update request block :
+Replace :
+this.service.edit().subscribe(religion=>{
+With :
+this.service.edit().subscribe({
+
+> In update error callback :
+Replace :
+console.log(error);
+With :
+console.error(err);
+
+> In update success callback :
+Add :
+this.notificationService.success('Commande mise à jour', 'La commande a été modifiée avec succès');
+
+> In update error callback :
+Add :
+this.notificationService.error('Erreur modification', 'Une erreur est survenue lors de la mise à jour');
+
+> In method `addCommandeItems()` :
+Add :
+this.notificationService.info('Article ajouté', 'L'article a été ajouté à la commande');
+
+> In method `editCommandeItems()` :
+Add :
+this.notificationService.info('Article modifié', 'L'article a été mis à jour');
+
+> In method `deleteCommandeItems()` :
+Add :
+this.notificationService.warn('Article supprimé', 'L'article a été retiré de la commande');
+
+------------------------------------------------------------
+
+18/- In 'frontend/src/app/module/admin/view/core/commande/list/commande-list-admin.component.ts' :
+
+> In imports section :
+Add :
+import {AppNotificationService} from 'src/app/shared/service/AppNotification.service';
+
+> In class variables :
+Add :
+protected notificationService: AppNotificationService;
+
+> In constructor :
+Add :
+this.notificationService = ServiceLocator.injector.get(AppNotificationService);
+
+> In edit/load flow before opening dialog :
+Add guard :
+if (!res.commandeItems) {
+res.commandeItems = [];
 }
 
-------------------------------------------------------------
+> In delete success flow :
+Add refresh :
+this.dataGridList()?.refresh();
 
-21/- In all files 'frontend/src/app/pages/components/data-grid/list/data-table/data-table.component.html' and 'frontend/src/app/pages/components/data-grid/list/server-data-table/server-data-table.component.html' :
-
-> Replace :
-[value]="displayItems()"
+> In selected delete success message :
+Replace :
+this.messageService.add({ severity: 'success', summary: 'Succès', detail: 'Les éléments sélectionnés ont été supprimés', life: 3000 });
 With :
-[value]="loading() ? skeletonItems : displayItems()"
+this.notificationService.success('Suppression réussie', 'Les éléments sélectionnés ont été supprimés');
 
-> Add :
-[scrollable]="true"
-scrollDirection="horizontal"
-
-> Replace :
-[groupRowsBy]="activeGroupFields.length ? '_groupKey' : undefined"
+> In duplicate create branch :
+Replace :
+this.messageService.add({severity: 'error', summary: 'Erreurs', detail: 'Element existant'});
 With :
-[groupRowsBy]="!loading() && activeGroupFields.length ? '_groupSortKey' : undefined"
+this.notificationService.error('Erreur', 'Cet élément existe déjà');
 
-> Replace :
-[sortField]="activeGroupFields.length ? '_groupKey' : undefined"
+> In error logging :
+Replace :
+console.log(error);
 With :
-[sortField]="!loading() && activeGroupFields.length ? '_groupSortKey' : undefined"
+console.error(error);
 
-> Replace :
-{{ 'actions' | translate }}
-With :
-<th style="width: 3.5rem"></th>
-
-> Replace :
-@if (isGroupExpanded(item._groupKey)) {
-With :
-@if (loading()) {
-
-> Add :
-<td><p-skeleton shape="circle" size="1.25rem" /></td>
-<p-button icon="pi pi-ellipsis-v" [rounded]="true" [text]="true" severity="secondary"
-<p-menu #rowMenu [model]="rowMenuItems()" [popup]="true" appendTo="body" />
-
-------------------------------------------------------------
-
-22/- In 'frontend/src/app/pages/components/data-grid/list/server-data-table/server-data-table.component.html' :
-
-> Replace :
-(onClick)="onDeleteSelected.emit(selectedItems())"
-With :
-(onClick)="handleDeleteSelected(selectedItems())"
-
-------------------------------------------------------------
-
-23/- In 'frontend/src/app/pages/components/data-grid/list/data-table/data-table.component.ts' :
-
-> Add :
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { SkeletonModule } from 'primeng/skeleton';
-import { Menu, MenuModule } from 'primeng/menu';
-import { MenuItem } from 'primeng/api';
-import { DataDisplayService } from '../../services/data-display.service';
-rowMenu = viewChild<Menu>('rowMenu');
-service = input<DataGridServiceContract | null>(null);
-readonly skeletonItems = Array.from({ length: 6 }, () => ({}));
-rowMenuItems = signal<MenuItem[]>([]);
-expandedGroups = signal<Record<string, boolean>>({});
-
-> Replace :
-return item[col.field]
-    ? this.translate.instant(col.booleanTrueLabel || 'common.active')
-    : this.translate.instant(col.booleanFalseLabel || 'common.inactive');
-With :
-return this.display.getBooleanLabel(item[col.field], col);
-
-> Replace :
-return item[col.field]
-    ? (col.booleanTrueSeverity || 'success')
-    : (col.booleanFalseSeverity || 'danger');
-With :
-return this.display.getBooleanSeverity(item[col.field], col);
-
-> Replace :
-return this.activeFilters.map(c => this.getFilterChipLabel(c));
-With :
-return this.activeFilters.map(c => this.display.getFilterChipLabel(c, this.columns()));
-
-> Add :
-openRowMenu(event: MouseEvent, item: any) {
-
-> Replace :
-this.expandedGroups = { ...this.expandedGroups, [key]: !this.expandedGroups[key] };
-With :
-this.expandedGroups.update(g => ({ ...g, [key]: !g[key] }));
-
-> Replace :
-this.displayItems.set(
-    this.groupingService.applyGroupVisibility(filtered, this.expandedGroups)
-);
-With :
-this.displayItems.set(filtered);
-
-> Replace :
-this.exportService.exportPdf(titleStr, data, this.getExportCriteria(), this.exportFileName(), filterLabel);
-With :
-svc.exportPdf(null)
-
-------------------------------------------------------------
-
-24/- In 'frontend/src/app/pages/components/data-grid/list/server-data-table/server-data-table.component.ts' :
-
-> Add :
-import { SkeletonModule } from 'primeng/skeleton';
-import { Menu, MenuModule } from 'primeng/menu';
-import { MenuItem } from 'primeng/api';
-import { DataGridServiceContract } from '../../models/data-grid.models';
-import { DataDisplayService } from '../../services/data-display.service';
-rowMenu = viewChild<Menu>('rowMenu');
-service = input<DataGridServiceContract | null>(null);
-readonly skeletonItems = Array.from({ length: 6 }, () => ({}));
-rowMenuItems = signal<MenuItem[]>([]);
-expandedGroups = signal<Record<string, boolean>>({});
-handleDelete(item: any) {
-handleDeleteSelected(items: any[]) {
-
-> Replace :
-return item[col.field]
-    ? this.translate.instant(col.booleanTrueLabel || 'common.active')
-    : this.translate.instant(col.booleanFalseLabel || 'common.inactive');
-With :
-return this.display.getBooleanLabel(item[col.field], col);
-
-> Replace :
-this.expandedGroups = { ...this.expandedGroups, [key]: !this.expandedGroups[key] };
-With :
-this.expandedGroups.update(g => ({ ...g, [key]: !g[key] }));
-
-> Replace :
-this.displayItems.set(
-    this.groupingService.applyGroupVisibility(grouped, this.expandedGroups)
-);
-With :
-this.displayItems.set(grouped);
-
-> Replace :
-this.doExport((title, data, criteria, fileName, filterLabel) =>
-    this.exportService.exportPdf(title, data, criteria, fileName, filterLabel));
-With :
-const svc = this.service();
-if (!svc) return;
-svc.exportPdf(serverCriteria)
-
-------------------------------------------------------------
-
-25/- In 'frontend/src/app/pages/components/data-grid/models/data-grid.models.ts' :
-
-> Add :
-export interface DataGridServiceContract {
-delete(dto: any): Observable<any>;
-deleteMultiple(): Observable<any>;
-exportPdf(element: any): Observable<ArrayBuffer>;
-selections: any[];
-}
-
-> Add :
-service?: DataGridServiceContract;
-
-------------------------------------------------------------
-
-26/- In 'frontend/src/app/pages/components/data-grid/services/data-grid-grouping.service.ts' :
-
-> Add :
-item._groupSortKey = groupFields
-.map(f => this.getFieldSortValue(item, f, columns))
-items.sort((a, b) =>
-(a._groupSortKey ?? '').localeCompare(b._groupSortKey ?? '', undefined, { sensitivity: 'base' })
-getFieldSortValue(item: any, field: string, columns: ColumnConfig[]): string {
-
-> Remove :
-applyGroupVisibility(
-
-------------------------------------------------------------
-
-27/- In 'frontend/src/app/pages/components/data-grid/view/view-detail-dialog/view-detail-dialog.component.ts' :
-
-> Replace :
-import { TranslateService } from '@ngx-translate/core';
-With :
-import { DataDisplayService } from '../../services/data-display.service';
-
-> Replace :
-private readonly translate = inject(TranslateService);
-With :
-private readonly display = inject(DataDisplayService);
-
-> Replace :
-return this.item()[col.field]
-    ? this.translate.instant(col.booleanTrueLabel || 'common.active')
-    : this.translate.instant(col.booleanFalseLabel || 'common.inactive');
-With :
-return this.display.getBooleanLabel(this.item()![col.field], col);
-
-------------------------------------------------------------
-
-28/- In all files 'frontend/src/app/pages/uikit/action-menu.component.ts', 'frontend/src/app/pages/uikit/app-datepicker.component.ts', 'frontend/src/app/pages/uikit/app-editor.component.ts', 'frontend/src/app/pages/uikit/app-file-upload.component.ts', 'frontend/src/app/pages/uikit/app-input-number.component.ts', 'frontend/src/app/pages/uikit/app-input.component.ts', 'frontend/src/app/pages/uikit/app-multiSelect.component.ts', 'frontend/src/app/pages/uikit/app-select.component.ts', 'frontend/src/app/pages/uikit/app-textarea.component.ts' and 'frontend/src/app/pages/uikit/app-toggle.component.ts' :
-
-> Replace :
-import {Component, Input, ViewChild} from '@angular/core';
-import {Component, forwardRef, Input} from '@angular/core';
-import { Component, Input } from '@angular/core';
-import { Component, EventEmitter, Input, Output, forwardRef } from '@angular/core';
-import { Component, Input, forwardRef } from '@angular/core';
-import { Component, Input, forwardRef } from '@angular/core';
-import { Component, forwardRef, Input } from '@angular/core';
-import { Component, Input, forwardRef } from '@angular/core';
-import { Component, Input, forwardRef } from '@angular/core';
-import { Component, Input, forwardRef } from '@angular/core';
-With :
-export { ActionMenuComponent } from './action-menu/action-menu.component';
-export { AppDatepickerComponent } from './app-datepicker/app-datepicker.component';
-export { AppEditorComponent } from './app-editor/app-editor.component';
-export { AppFileUploadComponent } from './app-file-upload/app-file-upload.component';
-export { AppInputNumberComponent } from './app-input-number/app-input-number.component';
-export { AppInputComponent } from './app-input/app-input.component';
-export { AppMultiSelectComponent } from './app-multiSelect/app-multiSelect.component';
-export { AppSelectComponent } from './app-select/app-select.component';
-export { AppTextareaComponent } from './app-textarea/app-textarea.component';
-export { AppToggleComponent } from './app-toggle/app-toggle.component';
-
-------------------------------------------------------------
-
-29/- In 'frontend/src/app/pages/uikit/commun-create.ts' :
-
-> Replace :
-import { AppInputComponent } from '@/app/pages/uikit/app-input.component';
-With :
-import { AppInputComponent } from './app-input/app-input.component';
-
-> Add :
-import { DataGridCreateComponent, DataGridInlineTableComponent } from '@/app/pages/components/data-grid';
-import { AppCollapsibleSectionComponent } from './app-collapsible-section/app-collapsible-section.component';
-AppCollapsibleSectionComponent,
-DataGridInlineTableComponent,
-export {
-
-------------------------------------------------------------
-
-30/- In 'frontend/src/app/pages/uikit/commun-edit.ts' :
-
-> Replace :
-import { AppInputComponent } from '@/app/pages/uikit/app-input.component';
-With :
-import { AppInputComponent } from './app-input/app-input.component';
-
-> Add :
-import { DataGridEditComponent, DataGridInlineTableComponent } from '@/app/pages/components/data-grid';
-import { AppCollapsibleSectionComponent } from './app-collapsible-section/app-collapsible-section.component';
-AppCollapsibleSectionComponent,
-DataGridInlineTableComponent,
-export {
-
-------------------------------------------------------------
-
-31/- In 'frontend/src/app/pages/uikit/commun-view.ts' :
-
-> Replace :
-import { AppInputComponent } from '@/app/pages/uikit/app-input.component';
-With :
-import { AppInputComponent } from './app-input/app-input.component';
-
-> Add :
-import { AppDialogFormComponent } from './app-dialog-form/app-dialog-form.component';
-AppDialogFormComponent,
-export {
-
-------------------------------------------------------------
+> In import, delete and create flows :
+Add :
+this.notificationService.success('Import réussi', 'Fichier importé avec succès');
+this.notificationService.error('Erreur import', 'Une erreur est survenue lors de l'importation');
+this.notificationService.success('Suppression réussie', 'La commande a été supprimée');
+this.notificationService.success('Succès', 'Commande créée avec succès');
