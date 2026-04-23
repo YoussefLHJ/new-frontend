@@ -1,47 +1,45 @@
 <div class="flex flex-col gap-3">
 
-    <!-- ── Mode Switcher (visible only when existing items are provided) ─── -->
-    @if (existingItems().length > 0) {
-        <div class="flex items-center rounded-lg border border-surface-200 dark:border-surface-600 w-fit overflow-hidden">
-            <button type="button"
-                    [class]="mode() === 'create'
-                        ? 'flex items-center gap-1.5 px-4 py-2 text-xs font-semibold bg-primary text-primary-contrast transition-colors duration-150'
-                        : 'flex items-center gap-1.5 px-4 py-2 text-xs font-medium text-muted-color hover:bg-surface-50 dark:hover:bg-surface-800 transition-colors duration-150'"
-                    (click)="setMode('create')">
-                <i class="pi pi-plus-circle text-xs"></i>
-                {{ 'dataGrid.inline.createNew' | translate }}
-            </button>
-            <div class="w-px self-stretch bg-surface-200 dark:bg-surface-600"></div>
-            <button type="button"
-                    [class]="mode() === 'select'
-                        ? 'flex items-center gap-1.5 px-4 py-2 text-xs font-semibold bg-primary text-primary-contrast transition-colors duration-150'
-                        : 'flex items-center gap-1.5 px-4 py-2 text-xs font-medium text-muted-color hover:bg-surface-50 dark:hover:bg-surface-800 transition-colors duration-150'"
-                    (click)="setMode('select')">
-                <i class="pi pi-search text-xs"></i>
-                {{ 'dataGrid.inline.selectExisting' | translate }}
-            </button>
+    <!-- ── Header: count badge + Add button ─────────────────────────────── -->
+    <div class="flex items-center justify-between">
+        <div class="flex items-center gap-2">
+            <span class="inline-flex items-center justify-center min-w-[1.5rem] h-6 px-1.5 rounded-full
+                         bg-primary/10 text-primary text-xs font-bold">
+                {{ items().length }}
+            </span>
+            <span class="text-sm text-muted-color font-medium">
+                {{ 'dataGrid.inline.itemCount' | translate }}
+            </span>
         </div>
-    }
+        @if (!showForm) {
+            <p-button [label]="'new' | translate" icon="pi pi-plus" size="small"
+                      (click)="addItem()" />
+        }
+    </div>
 
-    <!-- ── CREATE MODE ──────────────────────────────────────────────────── -->
-    @if (mode() === 'create') {
-        <!-- Item list table -->
-        <p-table [value]="items()" [scrollable]="true" scrollHeight="220px" styleClass="p-datatable-sm">
+    <!-- ── Items table ───────────────────────────────────────────────────── -->
+    <div class="rounded-xl border border-surface-200 dark:border-surface-700 overflow-hidden">
+        <p-table [value]="items()" [scrollable]="true" scrollHeight="200px" styleClass="p-datatable-sm">
             <ng-template #header>
                 <tr>
                     @for (col of columns(); track col.field) {
                         @if (col.visible !== false) {
-                            <th>{{ col.header | translate }}</th>
+                            <th class="!text-[0.7rem] !font-semibold !uppercase !tracking-wider !text-muted-color">
+                                {{ col.header | translate }}
+                            </th>
                         }
                     }
-                    <th style="width: 6rem; text-align: center">{{ 'actions' | translate }}</th>
+                    <th class="!w-20 !text-center !text-[0.7rem] !font-semibold !uppercase !tracking-wider !text-muted-color">
+                        {{ 'actions' | translate }}
+                    </th>
                 </tr>
             </ng-template>
+
             <ng-template #body let-item let-i="rowIndex">
-                <tr>
+                <tr class="hover:bg-surface-50 dark:hover:bg-surface-800/60 transition-colors duration-100">
                     @for (col of columns(); track col.field) {
                         @if (col.visible !== false) {
-                            <td>
+                            <td class="!py-2.5 !text-sm">
                                 @switch (col.type) {
                                     @case ('boolean') {
                                         <p-tag [value]="item[col.field] ? (col.booleanTrueLabel || 'common.active' | translate) : (col.booleanFalseLabel || 'common.inactive' | translate)"
@@ -60,120 +58,74 @@
                             </td>
                         }
                     }
-                    <td class="text-center">
-                        <p-button icon="pi pi-pencil" [rounded]="true" [text]="true" size="small"
-                                  (click)="editItem(item, i)" />
-                        <p-button icon="pi pi-times" severity="danger" [rounded]="true" [text]="true" size="small"
-                                  (click)="deleteItem(i)" />
+                    <td class="!py-2.5">
+                        <div class="flex items-center justify-center gap-0.5">
+                            <!-- Edit -->
+                            <button type="button" (click)="editItem(item, i)"
+                                    class="flex items-center justify-center w-7 h-7 rounded-lg
+                                           hover:bg-primary/10 text-muted-color hover:text-primary
+                                           transition-colors duration-150 border-none bg-transparent cursor-pointer
+                                           outline-none focus-visible:ring-2 focus-visible:ring-primary/40">
+                                <i class="pi pi-pencil" style="font-size: 0.7rem"></i>
+                            </button>
+                            <!-- Delete -->
+                            <button type="button" (click)="deleteItem(i)"
+                                    class="flex items-center justify-center w-7 h-7 rounded-lg
+                                           hover:bg-red-500/10 text-muted-color hover:text-red-500
+                                           transition-colors duration-150 border-none bg-transparent cursor-pointer
+                                           outline-none focus-visible:ring-2 focus-visible:ring-red-500/40">
+                                <i class="pi pi-trash" style="font-size: 0.7rem"></i>
+                            </button>
+                        </div>
                     </td>
                 </tr>
             </ng-template>
+
             <ng-template #emptymessage>
                 <tr>
-                    <td [attr.colspan]="columns().length + 1" class="text-center py-4 text-muted-color text-sm">
-                        {{ 'common.noData' | translate }}
+                    <td [attr.colspan]="columns().length + 1">
+                        <div class="flex flex-col items-center justify-center py-10 text-muted-color gap-2">
+                            <i class="pi pi-inbox text-3xl opacity-30"></i>
+                            <span class="text-sm">{{ 'common.noData' | translate }}</span>
+                        </div>
                     </td>
                 </tr>
             </ng-template>
         </p-table>
+    </div>
 
-        <!-- Add button -->
-        @if (!showForm) {
-            <div class="flex justify-start">
-                <p-button [label]="'new' | translate" icon="pi pi-plus" severity="secondary" size="small"
-                          (click)="addItem()" />
+    <!-- ── Add / Edit form card ───────────────────────────────────────────── -->
+    @if (showForm && editingItem !== null) {
+        <div class="rounded-xl border border-primary/20 dark:border-primary/30 overflow-hidden
+                    bg-primary/[0.03] dark:bg-primary/[0.06]">
+
+            <!-- Form card header -->
+            <div class="flex items-center gap-2.5 px-4 py-3
+                        border-b border-primary/10 dark:border-primary/20">
+                <div class="flex items-center justify-center w-7 h-7 rounded-lg bg-primary/10 shrink-0">
+                    <i [class]="'pi text-primary ' + (editingIndex >= 0 ? 'pi-pencil' : 'pi-plus')"
+                       style="font-size: 0.7rem"></i>
+                </div>
+                <span class="text-sm font-semibold text-color">
+                    {{ (editingIndex >= 0 ? 'dataGrid.inline.editItem' : 'dataGrid.inline.newItem') | translate }}
+                </span>
             </div>
-        }
 
-        <!-- Inline add/edit form -->
-        @if (showForm && editingItem !== null) {
-            <p-divider />
-            <div>
+            <!-- Form content -->
+            <div class="p-4">
                 @if (formTpl()) {
                     <ng-container [ngTemplateOutlet]="formTpl()!"
                                   [ngTemplateOutletContext]="{ $implicit: editingItem }" />
                 }
-                <div class="flex justify-end gap-2 pt-3">
+
+                <!-- Form actions -->
+                <div class="flex justify-end gap-2 pt-4 mt-3
+                            border-t border-primary/10 dark:border-primary/20">
                     <p-button [label]="'validate' | translate" icon="pi pi-check" size="small"
                               (click)="confirmItem()" />
                     <p-button [label]="'cancel' | translate" icon="pi pi-times" [outlined]="true"
                               severity="secondary" size="small" (click)="cancelEdit()" />
                 </div>
-            </div>
-        }
-    }
-
-    <!-- ── SELECT MODE ──────────────────────────────────────────────────── -->
-    @if (mode() === 'select') {
-        <div class="flex flex-col gap-3">
-
-            <!-- Search input -->
-            <div class="relative">
-                <i class="pi pi-search absolute left-3 top-1/2 -translate-y-1/2 text-muted-color text-xs pointer-events-none"></i>
-                <input type="text"
-                       class="w-full pl-8 pr-3 py-2 text-sm
-                              border border-surface-300 dark:border-surface-600 rounded-lg
-                              bg-surface-0 dark:bg-surface-900 text-color
-                              placeholder-muted-color
-                              focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary
-                              transition-colors"
-                       [placeholder]="'common.searchPlaceholder' | translate"
-                       [value]="existingSearch()"
-                       (input)="existingSearch.set($any($event.target).value)" />
-            </div>
-
-            <!-- Scrollable item list -->
-            <div class="border border-surface-200 dark:border-surface-700 rounded-lg overflow-auto"
-                 style="max-height: 220px">
-                @if (filteredExisting().length === 0) {
-                    <div class="py-10 text-center text-muted-color text-sm">
-                        <i class="pi pi-inbox text-2xl block mb-2 opacity-40"></i>
-                        {{ 'common.noData' | translate }}
-                    </div>
-                }
-                @for (ei of filteredExisting(); track $index) {
-                    <div class="flex items-center gap-3 px-4 py-2.5 cursor-pointer
-                                border-b border-surface-100 dark:border-surface-800 last:border-0
-                                hover:bg-surface-50 dark:hover:bg-surface-800
-                                transition-colors duration-100"
-                         [class.bg-primary/5]="isExistingSelected(ei)"
-                         (click)="toggleExistingSelection(ei)">
-                        <!-- Custom checkbox -->
-                        <span class="flex items-center justify-center w-4 h-4 rounded border-2 shrink-0 transition-all"
-                              [class.border-primary]="isExistingSelected(ei)"
-                              [class.bg-primary]="isExistingSelected(ei)"
-                              [class.border-surface-400]="!isExistingSelected(ei)">
-                            @if (isExistingSelected(ei)) {
-                                <i class="pi pi-check text-white" style="font-size: 8px"></i>
-                            }
-                        </span>
-                        <!-- Label -->
-                        <div class="flex-1 min-w-0">
-                            <p class="text-sm font-medium text-color m-0 truncate">
-                                {{ ei[existingItemLabelField()] ?? '—' }}
-                            </p>
-                            @if (existingItemSubLabelField() && ei[existingItemSubLabelField()]) {
-                                <p class="text-xs text-muted-color m-0 truncate mt-0.5">
-                                    {{ ei[existingItemSubLabelField()] }}
-                                </p>
-                            }
-                        </div>
-                    </div>
-                }
-            </div>
-
-            <!-- Footer: count + add button -->
-            <div class="flex items-center justify-between">
-                <span class="text-xs text-muted-color">
-                    @if (selectedExistingItems().length > 0) {
-                        {{ selectedExistingItems().length }}&nbsp;{{ 'dataGrid.inline.selected' | translate }}
-                    }
-                </span>
-                <p-button [label]="'dataGrid.inline.addSelected' | translate"
-                          icon="pi pi-arrow-up-left"
-                          size="small"
-                          [disabled]="selectedExistingItems().length === 0"
-                          (click)="addSelectedItems()" />
             </div>
         </div>
     }

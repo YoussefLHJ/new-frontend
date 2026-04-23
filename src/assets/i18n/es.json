@@ -144,5 +144,12 @@
             "scheduling": "Programación"
         }
     },
+    "dataGrid": {
+        "inline": {
+            "newItem": "Nuevo elemento",
+            "editItem": "Editar elemento",
+            "itemCount": "elemento(s)"
+        }
+    },
     "appName": "GED"
 }

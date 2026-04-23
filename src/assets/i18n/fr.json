@@ -208,7 +208,10 @@
             "createNew": "Créer nouveau",
             "selectExisting": "Sélectionner existant",
             "selected": "sélectionné(s)",
-            "addSelected": "Ajouter la sélection"
+            "addSelected": "Ajouter la sélection",
+            "newItem": "Nouvel élément",
+            "editItem": "Modifier l'élément",
+            "itemCount": "élément(s)"
         }
     },
     "appName": "GED"

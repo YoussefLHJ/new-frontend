@@ -14,8 +14,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { TagModule } from 'primeng/tag';
 import { TooltipModule } from 'primeng/tooltip';
 import { SkeletonModule } from 'primeng/skeleton';
-import { Menu, MenuModule } from 'primeng/menu';
-import { MenuItem } from 'primeng/api';
+import { Popover, PopoverModule } from 'primeng/popover';
 import { TranslateService } from '@ngx-translate/core';
 import { SignalTranslatePipe } from '@/app/pages/pipe/signal-translate.pipe';
 import { ExportService } from '@/app/zynerator/util/Export.service';
@@ -31,7 +30,7 @@ import { DataDisplayService } from '../../services/data-display.service';
     imports: [
         FormsModule, TableModule, ButtonModule, ToolbarModule,
         IconFieldModule, InputIconModule, InputTextModule, TagModule, TooltipModule,
-        MenuModule, SkeletonModule, NgTemplateOutlet, SignalTranslatePipe, DataGridToolbarComponent,
+        PopoverModule, SkeletonModule, NgTemplateOutlet, SignalTranslatePipe, DataGridToolbarComponent,
         ViewDetailDialogComponent, DatePipe
     ],
     templateUrl: './data-table.component.html',
@@ -41,7 +40,7 @@ export class DataTableComponent {
     // --- Queries ---
     dt = viewChild<Table>('dt');
     toolbar = viewChild(DataGridToolbarComponent);
-    rowMenu = viewChild<Menu>('rowMenu');
+    rowMenu = viewChild<Popover>('rowMenu');
     customCellTpl = contentChild<TemplateRef<any>>('customCell');
 
     // --- Inputs ---
@@ -78,7 +77,7 @@ export class DataTableComponent {
     readonly skeletonItems = Array.from({ length: 6 }, () => ({}));
     displayItems = signal<any[]>([]);
     selectedItems = signal<any[]>([]);
-    rowMenuItems = signal<MenuItem[]>([]);
+    activeRowItem = signal<any>(null);
     expandedGroups = signal<Record<string, boolean>>({});
     viewDialogVisible = false;
     viewItem: any = null;
@@ -122,12 +121,7 @@ export class DataTableComponent {
     // --- Row menu ---
 
     openRowMenu(event: MouseEvent, item: any) {
-        this.rowMenuItems.set([
-            { label: this.translate.instant('common.view'), icon: 'pi pi-eye', command: () => this.openViewDialog(item) },
-            { label: this.translate.instant('common.edit'), icon: 'pi pi-pencil', command: () => this.onEdit.emit(item) },
-            { separator: true },
-            { label: this.translate.instant('common.delete'), icon: 'pi pi-trash', styleClass: 'text-red-500', command: () => this.onDelete.emit(item) },
-        ]);
+        this.activeRowItem.set(item);
         this.rowMenu()?.toggle(event);
     }
 

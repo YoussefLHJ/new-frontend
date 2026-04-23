@@ -1,47 +1,48 @@
 <app-data-grid-create [(visible)]="createDialog" title="{{'commande.tabPan' | translate}}"
                      dialogWidth="80vw" (onSave)="save()" (onCancel)="hideCreateDialog()">
     <ng-template #formContent>
-        <div class="flex flex-col divide-y divide-surface-200 dark:divide-surface-700">
+        <p-tabs [value]="0">
+            <p-tablist>
+                <p-tab [value]="0">{{'commande.tabPan' | translate}}</p-tab>
+                <p-tab [value]="1">{{'commande.commandeItems' | translate}}</p-tab>
+            </p-tablist>
+            <p-tabpanels>
 
-            <!-- ── Section 1: General Info ──────────────────────────────── -->
-            <app-collapsible-section title="commande.tabPan"
-                                     subtitle="commande.sectionGeneral"
-                                     icon="pi-file-edit">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-                    <app-input [placeholder]="'commande.code'" [(ngModel)]="item.code"
-                               [required]="true" [isInvalid]="!validCommandeCode"
-                               [errorMessage]="'common.fieldRequired'" />
-                    <app-input [placeholder]="'commande.etatComande'" [(ngModel)]="item.etatComande" />
-                    <app-input-number [placeholder]="'commande.total'" [(ngModel)]="item.total" />
-                    <app-input-number [placeholder]="'commande.totalPayer'" [(ngModel)]="item.totalPayer" />
-                    <app-datepicker [placeholder]="'commande.dateCommande'" [(ngModel)]="item.dateCommande" />
-                </div>
-            </app-collapsible-section>
+                <!-- ── Tab 1: General Info ─────────────────────────────────── -->
+                <p-tabpanel [value]="0">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5 p-4">
+                        <app-input [placeholder]="'commande.code'" [(ngModel)]="item.code"
+                                   [required]="true" [isInvalid]="!validCommandeCode"
+                                   [errorMessage]="'common.fieldRequired'" />
+                        <app-input [placeholder]="'commande.etatComande'" [(ngModel)]="item.etatComande" />
+                        <app-input-number [placeholder]="'commande.total'" [(ngModel)]="item.total" />
+                        <app-input-number [placeholder]="'commande.totalPayer'" [(ngModel)]="item.totalPayer" />
+                        <app-datepicker [placeholder]="'commande.dateCommande'" [(ngModel)]="item.dateCommande" />
+                    </div>
+                </p-tabpanel>
 
-            <!-- ── Section 2: Commande Items ────────────────────────────── -->
-            <app-collapsible-section title="commande.commandeItems"
-                                     subtitle="commande.sectionItems"
-                                     icon="pi-list">
-                <app-data-grid-inline-table [(items)]="item.commandeItems"
-                                            [columns]="commandeItemColumns"
-                                            [itemFactory]="commandeItemFactory"
-                                            [existingItems]="availableCommandeItems"
-                                            existingItemLabelField="produit"
-                                            existingItemSubLabelField="code">
-                    <ng-template #form let-el>
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                            <app-input [placeholder]="'commandeItem.produit'" [(ngModel)]="el.produit" />
-                            <app-input-number [placeholder]="'commandeItem.prix'" [(ngModel)]="el.prix" />
-                            <app-input-number [placeholder]="'commandeItem.quantite'" [(ngModel)]="el.quantite" />
-                            <app-input [placeholder]="'commandeItem.code'" [(ngModel)]="el.code" />
-                            <app-textarea [placeholder]="'commandeItem.description'" [(ngModel)]="el.description" />
-                            <app-textarea [placeholder]="'commandeItem.commentaireClient'" [(ngModel)]="el.commentaireClient" />
-                            <app-textarea [placeholder]="'commandeItem.commentaireVendeur'" [(ngModel)]="el.commentaireVendeur" />
-                        </div>
-                    </ng-template>
-                </app-data-grid-inline-table>
-            </app-collapsible-section>
+                <!-- ── Tab 2: Commande Items ───────────────────────────────── -->
+                <p-tabpanel [value]="1">
+                    <div class="p-4">
+                        <app-data-grid-inline-table [(items)]="item.commandeItems"
+                                                    [columns]="commandeItemColumns"
+                                                    [itemFactory]="commandeItemFactory">
+                            <ng-template #form let-el>
+                                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                    <app-input [placeholder]="'commandeItem.produit'" [(ngModel)]="el.produit" />
+                                    <app-input-number [placeholder]="'commandeItem.prix'" [(ngModel)]="el.prix" />
+                                    <app-input-number [placeholder]="'commandeItem.quantite'" [(ngModel)]="el.quantite" />
+                                    <app-input [placeholder]="'commandeItem.code'" [(ngModel)]="el.code" />
+                                    <app-textarea [placeholder]="'commandeItem.description'" [(ngModel)]="el.description" />
+                                    <app-textarea [placeholder]="'commandeItem.commentaireClient'" [(ngModel)]="el.commentaireClient" />
+                                    <app-textarea [placeholder]="'commandeItem.commentaireVendeur'" [(ngModel)]="el.commentaireVendeur" />
+                                </div>
+                            </ng-template>
+                        </app-data-grid-inline-table>
+                    </div>
+                </p-tabpanel>
 
-        </div>
+            </p-tabpanels>
+        </p-tabs>
     </ng-template>
 </app-data-grid-create>

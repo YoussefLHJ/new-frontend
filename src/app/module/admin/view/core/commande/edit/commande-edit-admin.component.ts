@@ -25,7 +25,6 @@ import {CommandeCriteria} from 'src/app/shared/criteria/core/CommandeCriteria.mo
 
 
 import {CommandeItemDto} from 'src/app/shared/model/core/CommandeItem.model';
-import {CommandeItemAdminService} from 'src/app/shared/service/admin/core/CommandeItemAdmin.service';
 
 @Component({
   selector: 'app-commande-edit-admin',
@@ -59,8 +58,6 @@ export class CommandeEditAdminComponent implements OnInit {
 
     private _validCommandeCode = true;
 
-    availableCommandeItems: any[] = [];
-
     readonly commandeItemColumns: ColumnConfig[] = [
         { field: 'produit', header: 'commandeItem.produit', type: 'text' },
         { field: 'prix', header: 'commandeItem.prix', type: 'numeric' },
@@ -72,7 +69,7 @@ export class CommandeEditAdminComponent implements OnInit {
     ];
     readonly commandeItemFactory = () => new CommandeItemDto();
 
-    constructor(private service: CommandeAdminService , private commandeItemService: CommandeItemAdminService, @Inject(PLATFORM_ID) private platformId?: Object) {
+    constructor(private service: CommandeAdminService, @Inject(PLATFORM_ID) private platformId?: Object) {
         this.datePipe = ServiceLocator.injector.get(DatePipe);
         this.messageService = ServiceLocator.injector.get(MessageService);
         this.confirmationService = ServiceLocator.injector.get(ConfirmationService);
@@ -81,11 +78,7 @@ export class CommandeEditAdminComponent implements OnInit {
         this.stringUtilService = ServiceLocator.injector.get(StringUtilService);
     }
 
-    ngOnInit(): void {
-        this.commandeItemService.findAll().subscribe(items => {
-            this.availableCommandeItems = items ?? [];
-        });
-    }
+    ngOnInit(): void {}
 
     public prepareEdit() {
         const raw = this.item.dateCommande as any;
@@ -120,15 +113,18 @@ export class CommandeEditAdminComponent implements OnInit {
     }
 
     public editWithShowOption(showList: boolean) {
-        this.service.edit().subscribe(religion=>{
-            const myIndex = this.items.findIndex(e => e.id === this.item.id);
-            this.items[myIndex] = religion;
-            this.editDialog = false;
-            this.submitted = false;
-            this.item = new CommandeDto();
-            this.onUpdated.emit();
-        } , error =>{
-            console.log(error);
+        this.service.edit().subscribe({
+            next: () => {
+                this.editDialog = false;
+                this.submitted = false;
+                this.item = new CommandeDto();
+                this.onUpdated.emit();
+                this.messageService.add({ severity: 'success', summary: 'Succès', detail: 'Commande mise à jour avec succès', life: 3000 });
+            },
+            error: err => {
+                console.error(err);
+                this.messageService.add({ severity: 'error', summary: 'Erreur', detail: 'Une erreur est survenue lors de la mise à jour', life: 4000 });
+            }
         });
     }
 

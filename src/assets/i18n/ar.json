@@ -190,6 +190,15 @@
         },
         "columns": {
             "title": "الأعمدة"
+        },
+        "inline": {
+            "createNew": "إنشاء جديد",
+            "selectExisting": "اختيار موجود",
+            "selected": "محدد",
+            "addSelected": "إضافة المحدد",
+            "newItem": "عنصر جديد",
+            "editItem": "تعديل العنصر",
+            "itemCount": "عنصر"
         }
     },
     "appName": "GED"

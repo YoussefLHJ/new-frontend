@@ -209,7 +209,10 @@
             "createNew": "Create New",
             "selectExisting": "Select Existing",
             "selected": "selected",
-            "addSelected": "Add Selected"
+            "addSelected": "Add Selected",
+            "newItem": "New item",
+            "editItem": "Edit item",
+            "itemCount": "item(s)"
         }
     },
 

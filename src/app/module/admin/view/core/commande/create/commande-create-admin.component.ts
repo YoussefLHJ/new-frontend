@@ -25,7 +25,6 @@ import {CommandeAdminService} from 'src/app/shared/service/admin/core/CommandeAd
 import {CommandeDto} from 'src/app/shared/model/core/Commande.model';
 import {CommandeCriteria} from 'src/app/shared/criteria/core/CommandeCriteria.model';
 import {CommandeItemDto} from 'src/app/shared/model/core/CommandeItem.model';
-import {CommandeItemAdminService} from 'src/app/shared/service/admin/core/CommandeItemAdmin.service';
 @Component({
   selector: 'app-commande-create-admin',
   standalone: true,
@@ -55,8 +54,6 @@ export class CommandeCreateAdminComponent  implements OnInit {
 
     public onSaved = output<void>();
 
-    availableCommandeItems: any[] = [];
-
     readonly commandeItemColumns: ColumnConfig[] = [
         { field: 'produit', header: 'commandeItem.produit', type: 'text' },
         { field: 'prix', header: 'commandeItem.prix', type: 'numeric' },
@@ -68,7 +65,7 @@ export class CommandeCreateAdminComponent  implements OnInit {
     ];
     readonly commandeItemFactory = () => new CommandeItemDto();
 
-	constructor(private service: CommandeAdminService , private commandeItemService: CommandeItemAdminService, @Inject(PLATFORM_ID) private platformId?: Object ) {
+	constructor(private service: CommandeAdminService, @Inject(PLATFORM_ID) private platformId?: Object) {
         this.datePipe = ServiceLocator.injector.get(DatePipe);
         this.messageService = ServiceLocator.injector.get(MessageService);
         this.confirmationService = ServiceLocator.injector.get(ConfirmationService);
@@ -77,11 +74,7 @@ export class CommandeCreateAdminComponent  implements OnInit {
         this.stringUtilService = ServiceLocator.injector.get(StringUtilService);
     }
 
-    ngOnInit(): void {
-        this.commandeItemService.findAll().subscribe(items => {
-            this.availableCommandeItems = items ?? [];
-        });
-    }
+    ngOnInit(): void {}
 
 
 
@@ -110,19 +103,22 @@ export class CommandeCreateAdminComponent  implements OnInit {
     }
 
     public saveWithShowOption(showList: boolean) {
-        this.service.save().subscribe(item => {
-            if (item != null) {
-                this.items.push({...item});
-                this.createDialog = false;
-                this.submitted = false;
-                this.item = new CommandeDto();
-                this.onSaved.emit();
-            } else {
-                this.messageService.add({severity: 'error', summary: 'Erreurs', detail: 'Element existant'});
+        this.service.save().subscribe({
+            next: item => {
+                if (item != null) {
+                    this.createDialog = false;
+                    this.submitted = false;
+                    this.item = new CommandeDto();
+                    this.onSaved.emit();
+                    this.messageService.add({ severity: 'success', summary: 'Succès', detail: 'Commande créée avec succès', life: 3000 });
+                } else {
+                    this.messageService.add({ severity: 'error', summary: 'Erreur', detail: 'Cet élément existe déjà', life: 3000 });
+                }
+            },
+            error: err => {
+                console.error(err);
+                this.messageService.add({ severity: 'error', summary: 'Erreur', detail: 'Une erreur est survenue lors de la sauvegarde', life: 4000 });
             }
-
-        }, error => {
-            console.log(error);
         });
     }
 
