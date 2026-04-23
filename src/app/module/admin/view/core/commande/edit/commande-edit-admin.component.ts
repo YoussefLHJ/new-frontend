@@ -1,6 +1,6 @@
 import { Component, inject, OnInit, output } from '@angular/core';
 import {ConfirmationService, MessageService} from 'primeng/api';
-
+import { AppNotificationService } from 'src/app/shared/service/AppNotification.service';
 
 import {CommunEdit} from '@/app/pages/uikit/commun-edit';
 import { ColumnConfig } from '@/app/pages/components/data-grid';
@@ -46,6 +46,7 @@ export class CommandeEditAdminComponent implements OnInit {
     protected roleService: RoleService;
     protected router: Router;
     protected stringUtilService: StringUtilService;
+    protected notificationService: AppNotificationService;
     private _activeTab = 0;
     private _file: any;
     private _files: any;
@@ -76,6 +77,7 @@ export class CommandeEditAdminComponent implements OnInit {
         this.roleService = ServiceLocator.injector.get(RoleService);
         this.router = ServiceLocator.injector.get(Router);
         this.stringUtilService = ServiceLocator.injector.get(StringUtilService);
+        this.notificationService = ServiceLocator.injector.get(AppNotificationService);
     }
 
     ngOnInit(): void {}
@@ -104,11 +106,7 @@ export class CommandeEditAdminComponent implements OnInit {
         if (this.errorMessages.length === 0) {
             this.editWithShowOption(false);
         } else {
-            this.messageService.add({
-                severity: 'error',
-                summary: 'Erreurs',
-                detail: 'Merci de corrigé les erreurs sur le formulaire'
-            });
+            this.notificationService.error('Formulaire invalide', 'Merci de corriger les erreurs sur le formulaire');
         }
     }
 
@@ -119,11 +117,11 @@ export class CommandeEditAdminComponent implements OnInit {
                 this.submitted = false;
                 this.item = new CommandeDto();
                 this.onUpdated.emit();
-                this.messageService.add({ severity: 'success', summary: 'Succès', detail: 'Commande mise à jour avec succès', life: 3000 });
+                this.notificationService.success('Commande mise à jour', 'La commande a été modifiée avec succès');
             },
             error: err => {
                 console.error(err);
-                this.messageService.add({ severity: 'error', summary: 'Erreur', detail: 'Une erreur est survenue lors de la mise à jour', life: 4000 });
+                this.notificationService.error('Erreur modification', 'Une erreur est survenue lors de la mise à jour');
             }
         });
     }
@@ -154,18 +152,21 @@ export class CommandeEditAdminComponent implements OnInit {
        if (this.errorMessages.length === 0) {
             if (this.commandeItemsIndex == -1){
                 this.item.commandeItems.push({... this.commandeItemsElement});
+                this.notificationService.info('Article ajouté', 'L\'article a été ajouté à la commande');
             }else {
-                this.item.commandeItems[this.commandeItemsIndex] =this.commandeItemsElement;
+                this.item.commandeItems[this.commandeItemsIndex] = this.commandeItemsElement;
+                this.notificationService.info('Article modifié', 'L\'article a été mis à jour');
             }
               this.commandeItemsElement = new CommandeItemDto();
               this.commandeItemsIndex = -1;
        }else{
-           this.messageService.add({severity: 'error',summary: 'Erreurs',detail: 'Merci de corrigé les erreurs suivant : ' + this.errorMessages});
+           this.notificationService.error('Erreur article', 'Merci de corriger les erreurs : ' + this.errorMessages);
        }
     }
 
     public deleteCommandeItems(p: CommandeItemDto, index: number) {
         this.item.commandeItems.splice(index, 1);
+        this.notificationService.warn('Article supprimé', 'L\'article a été retiré de la commande');
     }
 
     public editCommandeItems(p: CommandeItemDto, index: number) {

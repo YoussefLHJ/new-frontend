@@ -2,7 +2,7 @@ import {Component, viewChild, OnInit} from '@angular/core';
 import {CommandeAdminService} from 'src/app/shared/service/admin/core/CommandeAdmin.service';
 import {CommandeDto} from 'src/app/shared/model/core/Commande.model';
 import {CommandeCriteria} from 'src/app/shared/criteria/core/CommandeCriteria.model';
-
+import {AppNotificationService} from 'src/app/shared/service/AppNotification.service';
 
 import {ConfirmationService, MessageService,MenuItem} from 'primeng/api';
 import {FileTempDto} from 'src/app/zynerator/dto/FileTempDto.model';
@@ -140,6 +140,7 @@ export class CommandeListAdminComponent implements OnInit {
     protected stringUtilService: StringUtilService;
     protected authService: AuthService;
     protected exportService: ExportService;
+    protected notificationService: AppNotificationService;
     protected excelFile: File | undefined;
     protected enableSecurity = false;
 
@@ -163,6 +164,7 @@ export class CommandeListAdminComponent implements OnInit {
         this.router = ServiceLocator.injector.get(Router);
         this.authService = ServiceLocator.injector.get(AuthService);
         this.exportService = ServiceLocator.injector.get(ExportService);
+        this.notificationService = ServiceLocator.injector.get(AppNotificationService);
     }
 
     ngOnInit(): void {
@@ -191,20 +193,11 @@ export class CommandeListAdminComponent implements OnInit {
             this.service.importExcel(this.excelFile).subscribe(
                 response => {
                     this.items = response;
-                    this.messageService.add({
-                        severity: 'success',
-                        summary: 'Success',
-                        detail: 'File uploaded successfully!',
-                        life: 3000
-                    });
+                    this.notificationService.success('Import réussi', 'Fichier importé avec succès');
                 },
                 (error: any) => {
-                    this.messageService.add({
-                        severity: 'error',
-                        summary: 'Error',
-                        detail: 'File uploaded with Error!',
-                        life: 3000
-                    });
+                    console.error(error);
+                    this.notificationService.error('Erreur import', 'Une erreur est survenue lors de l\'importation');
                 }
             );
         }
@@ -263,9 +256,12 @@ export class CommandeListAdminComponent implements OnInit {
             accept: () => {
                 this.service.selections = dtos;
                 this.service.deleteMultiple().subscribe(() => {
-                    this.messageService.add({ severity: 'success', summary: 'Succès', detail: 'Les éléments sélectionnés ont été supprimés', life: 3000 });
+                    this.notificationService.success('Suppression réussie', 'Les éléments sélectionnés ont été supprimés');
                     this.dataGridList()?.refresh();
-                }, (error: any) => console.log(error));
+                }, (error: any) => {
+                    console.error(error);
+                    this.notificationService.error('Erreur suppression', 'Une erreur est survenue lors de la suppression');
+                });
             }
         });
     }
@@ -293,15 +289,12 @@ export class CommandeListAdminComponent implements OnInit {
                     if (status > 0) {
                         const position = this.items.indexOf(dto);
                         position > -1 ? this.items.splice(position, 1) : false;
-                        this.messageService.add({
-                            severity: 'success',
-                            summary: 'Succès',
-                            detail: 'Element Supprimé',
-                            life: 3000
-                        });
+                        this.notificationService.success('Suppression réussie', 'La commande a été supprimée');
                     }
-
-                }, (error: any) => console.log(error));
+                }, (error: any) => {
+                    console.error(error);
+                    this.notificationService.error('Erreur suppression', 'Une erreur est survenue lors de la suppression');
+                });
             }
         });
     }
@@ -376,14 +369,14 @@ export class CommandeListAdminComponent implements OnInit {
             if (item != null) {
                 this.items.push({...item});
                 this.createDialog = false;
-
-
                 this.item = new CommandeDto();
+                this.notificationService.success('Succès', 'Commande créée avec succès');
             } else {
-                this.messageService.add({severity: 'error', summary: 'Erreurs', detail: 'Element existant'});
+                this.notificationService.error('Erreur', 'Cet élément existe déjà');
             }
         }, (error: any) => {
-            console.log(error);
+            console.error(error);
+            this.notificationService.error('Erreur', 'Une erreur est survenue lors de la sauvegarde');
         });
     }
 

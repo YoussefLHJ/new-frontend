@@ -6,11 +6,12 @@ import { NgClass } from '@angular/common';
 import { AppTopBarComponent } from './app.topbar.component';
 import { AppSidebarComponent } from './app.sidebar.component';
 import { AppLayoutModule } from './app.layout.module';
+import { AppMessageComponent } from 'src/app/pages/uikit/app-message/app-message.component';
 
 
 @Component({
     selector: 'app-layout',
-    imports: [AppLayoutModule, RouterOutlet, AppTopBarComponent, AppSidebarComponent, NgClass],
+    imports: [AppLayoutModule, RouterOutlet, AppTopBarComponent, AppSidebarComponent, NgClass, AppMessageComponent],
     templateUrl: './app.layout.component.html'
 })
 export class AppLayout {

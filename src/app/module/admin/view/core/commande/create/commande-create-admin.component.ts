@@ -1,7 +1,7 @@
 import { Component, inject, OnInit, output } from '@angular/core';
 import { TranslateModule } from '@ngx-translate/core';
 import { ConfirmationService, MessageService } from 'primeng/api';
-
+import { AppNotificationService } from 'src/app/shared/service/AppNotification.service';
 
 import {CommunCreate} from '@/app/pages/uikit/commun-create';
 import { ColumnConfig } from '@/app/pages/components/data-grid';
@@ -44,6 +44,7 @@ export class CommandeCreateAdminComponent  implements OnInit {
     protected roleService: RoleService;
     protected router: Router;
     protected stringUtilService: StringUtilService;
+    protected notificationService: AppNotificationService;
     private _activeTab = 0;
     protected commandeItemsIndex = -1;
 
@@ -72,6 +73,7 @@ export class CommandeCreateAdminComponent  implements OnInit {
         this.roleService = ServiceLocator.injector.get(RoleService);
         this.router = ServiceLocator.injector.get(Router);
         this.stringUtilService = ServiceLocator.injector.get(StringUtilService);
+        this.notificationService = ServiceLocator.injector.get(AppNotificationService);
     }
 
     ngOnInit(): void {}
@@ -85,7 +87,7 @@ export class CommandeCreateAdminComponent  implements OnInit {
         if (this.errorMessages.length === 0) {
             this.saveWithShowOption(false);
         } else {
-            this.messageService.add({severity: 'error',summary: 'Erreurs',detail: 'Merci de corrigé les erreurs sur le formulaire'});
+            this.notificationService.error('Formulaire invalide', 'Merci de corriger les erreurs sur le formulaire');
         }
     }
 
@@ -110,14 +112,14 @@ export class CommandeCreateAdminComponent  implements OnInit {
                     this.submitted = false;
                     this.item = new CommandeDto();
                     this.onSaved.emit();
-                    this.messageService.add({ severity: 'success', summary: 'Succès', detail: 'Commande créée avec succès', life: 3000 });
+                    this.notificationService.success('Commande créée', 'Commande créée avec succès');
                 } else {
-                    this.messageService.add({ severity: 'error', summary: 'Erreur', detail: 'Cet élément existe déjà', life: 3000 });
+                    this.notificationService.error('Erreur création', 'Cet élément existe déjà');
                 }
             },
             error: err => {
                 console.error(err);
-                this.messageService.add({ severity: 'error', summary: 'Erreur', detail: 'Une erreur est survenue lors de la sauvegarde', life: 4000 });
+                this.notificationService.error('Erreur création', 'Une erreur est survenue lors de la sauvegarde');
             }
         });
     }
@@ -148,18 +150,21 @@ export class CommandeCreateAdminComponent  implements OnInit {
        if (this.errorMessages.length === 0) {
             if (this.commandeItemsIndex == -1){
                 this.item.commandeItems.push({... this.commandeItemsElement});
+                this.notificationService.info('Article ajouté', 'L\'article a été ajouté à la commande');
             }else {
-                this.item.commandeItems[this.commandeItemsIndex] =this.commandeItemsElement;
+                this.item.commandeItems[this.commandeItemsIndex] = this.commandeItemsElement;
+                this.notificationService.info('Article modifié', 'L\'article a été mis à jour');
             }
               this.commandeItemsElement = new CommandeItemDto();
               this.commandeItemsIndex = -1;
        }else{
-           this.messageService.add({severity: 'error',summary: 'Erreurs',detail: 'Merci de corrigé les erreurs suivant : ' + this.errorMessages});
+           this.notificationService.error('Erreur article', 'Merci de corriger les erreurs : ' + this.errorMessages);
        }
     }
 
     public deleteCommandeItems(p: CommandeItemDto, index: number) {
         this.item.commandeItems.splice(index, 1);
+        this.notificationService.warn('Article supprimé', 'L\'article a été retiré de la commande');
     }
 
     public editCommandeItems(p: CommandeItemDto, index: number) {
